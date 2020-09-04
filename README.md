@@ -96,6 +96,8 @@ yarn start:electron-dev
 
 ### `Export`
 
+The `build` and `dist` folders will be generated after running:
+
 ```
 yarn build:electron
 yarn dist
@@ -103,7 +105,7 @@ yarn dist
 
 ### `On Windows`
 
-Please consult `package.json` files in the two references.
+Please consult the `scripts` in `package.json` files in the two references.
 
 ## Other scripts
 
