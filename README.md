@@ -1,3 +1,28 @@
+packages to install: react-player, react-sortable, react-draggable
+
+put media files in ./public/asset
+
+put IAVMedia.js / Playlist.js / Preview.js in ./src/components
+
+
+    // "start": "react-scripts start",
+    // "build": "react-scripts build",
+
+    "start": "yarn start:electron",
+    "start:web": "env-cmd -f .env.web craco start",
+    "start:electron": "electron .",
+    "start:electron-dev": "electron electron-dev.js",
+    "build": "yarn build:electron",
+    "build:web": "craco build",
+    "build:electron": "env-cmd -f .env.electron craco build",
+    "watch:electron": "npm-watch",
+    "test": "craco test",
+    "eject": "react-scripts eject",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+
+=======================================
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
