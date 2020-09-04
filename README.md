@@ -1,41 +1,111 @@
-packages to install: react-player, react-sortable, react-draggable
+A universal media file opener / player desktop app developed in `React.js` and `Electron`.  
+Uses `craco` for accessing local file system on client side.  
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).  
+Go to [Slasher blog](https://www.slashers.blog) for more development details! 
 
-put media files in ./public/asset
+## TODO
 
-put IAVMedia.js / Playlist.js / Preview.js in ./src/components
+- Integrate grid system
+- CSS incompatibility
 
+## Functions
 
-    // "start": "react-scripts start",
-    // "build": "react-scripts build",
+Install the `.dmg` file in `dist` folder.  
+Double click open `backslash.app`, there should be 3 preloaded files for testing purpose.  
+Drag and drop any file from the computer into the drag-drop zone would load that file.  
+Multiple files can be drag-drop-loaded in one operation.  
+Click on a black bar to show the image / play the audio video file.  
+Shift click multiple bars together will show / play multiple files.  
+Click the cross to delete the file.  
+Click "clear playlist" to delete all loaded files.  
+The app would "remember" what files are added. Feel free to quit, same status will be loaded upon re-opening the app.  
+The shown files could be dragged and placed anywhere within the window as you like.  
+The black bars themselves could be dragged and re-ordered.  
+Click "hide / show" to toggle the visibility of the list.  
+Click "prev / next" to show prev / next file. (Disabled when selecting multiple files.)  
+Click "clear preview" to reset the file area.  
 
-    "start": "yarn start:electron",
-    "start:web": "env-cmd -f .env.web craco start",
-    "start:electron": "electron .",
-    "start:electron-dev": "electron electron-dev.js",
-    "build": "yarn build:electron",
-    "build:web": "craco build",
-    "build:electron": "env-cmd -f .env.electron craco build",
-    "watch:electron": "npm-watch",
-    "test": "craco test",
-    "eject": "react-scripts eject",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+## Folder Structure
+```
+.
+├── build                               Assets for test will be built into this folder 
+│   └── ...
+├── dist    
+│   ├── backslash-0.1.0-mac.zip
+│   ├── backslash-0.1.0.dmg             The installer
+│   ├── ...
+│   └── mac
+│       └── backslash.app               The exebutable
+├── node_modules
+│   └── {depedencies}
+├── public
+│   ├── asset
+│   │   └── {img / av files}            The assets for test
+│   ├── electron.js                     Entry point for electron-builder
+│   ├── index.html
+│   └── ...
+├── src
+│   ├── App.css
+│   ├── App.js                          Main logic
+│   ├── index.js                        Entry point for React app
+│   ├── ...
+│   └── components
+│       ├── DragAndDrop.js              Drag and drop area for "uploading" files from local machine
+│       ├── IAVMedia.js                 Holder component for an img / av media
+│       ├── Playlist.js                 Drag-sortable list to show "uploaded" files
+│       └── Preview.js                  Player area w/ ctrls
+├── craco.config.js                     Enables Node.js file system on client side
+├── electron-dev.js                     Entry point for electron app in dev mode
+├── package.json
+├── .env.electron                       Environment configuration for desktop app
+├── .env.web                            Environment configuration for web app
+└── ...
 
-=======================================
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+```
 
 ## Available Scripts
 
-In the project directory, you can run:
+### `Installation`
 
-### `yarn start`
+To install dependencies, run: 
+```
+yarn
+```
+
+### `Web dev mode`
 
 Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.  
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
+
+```
+yarn start:web
+```
+
+### `Electron dev mode`
+
+Runs the app on desktop. Launch an electron window and reload electron automatically while developing:
+```
+yarn watch:electron
+```
+and in another console tab:
+```
+yarn start:electron-dev
+```
+
+### `Export`
+
+```
+yarn build:electron
+yarn dist
+```
+
+### `On Windows`
+
+Please consult `package.json` files in the two references.
+
+## Other scripts
 
 ### `yarn test`
 
@@ -91,3 +161,13 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `yarn build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+## Slashers
+
+- Devin Kenny
+- William Leon
+- Kelly Sun
+
+## References
+- [Building a production electron/create-react-app application with shared code using electron-builder](https://github.com/johndyer24/electron-cra-example/)
+- [Using Create-React-App + Craco + Typescript to build apps for both the Web and Electron2](https://github.com/wwlib/cra-craco-electron-example)
