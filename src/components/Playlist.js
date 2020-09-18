@@ -19,7 +19,7 @@ const Playlist = (props) => {
     const style = {
         width: '50%',
         maxWidth: '500px',
-        margin: '16px', 
+        margin: '16px',
         padding: '16px',
         textAlign: 'center',
         border: '10px outset white',
@@ -30,7 +30,7 @@ const Playlist = (props) => {
     const activeStyle = {
         width: '50%',
         maxWidth: '500px',
-        margin: '16px', 
+        margin: '16px',
         border: '10px inset white',
         padding: '16px',
         textAlign: 'center',
@@ -43,24 +43,29 @@ const Playlist = (props) => {
 
     return (
         <table>
-        <ReactSortable
-            list={props.data}
-            setList={props.updated}
-        >
-            {props.data.map((item, index) => {
-                let isActive = props.selectedId.includes(index)
-                return (
-                    <tr>
-                        <td style={isActive ? activeStyle : style} key={item.id} onClick={props.clicked(index)}>{[item.name, item.id, index]}</td>
-                        <td style={isActive ? activeStyle : style} onClick={props.clickDeleted(index)}>x</td>
-                    </tr>
-                    // <StyledTD key={item.id} onClick={props.clicked(index)}>
-                    //     {[item.name, item.id, index]}
-                    // </StyledTD>
-                )
+            <tbody>
+                <ReactSortable
+                    list={props.data}
+                    setList={props.updated}
+                >
+                    {props.data.map((item, index) => {
+                        let isActive = props.selectedId.includes(index)
+                        return (
+                            <tr>
+                                <td style={isActive ? activeStyle : style} key={item.id} onClick={props.clicked(index)}>{[item.name, item.id, index]}</td>
+                                <td style={isActive ? activeStyle : style} onClick={props.clickDeleted(index)}>x</td>
+                            </tr>
+                            // <tr key={item.id} >
+                            //     <StyledTD onClick={props.clicked(index)}>
+                            //         {[item.name, item.id, index]}
+                            //     </StyledTD>
+                            // </tr>
 
-            })}
-        </ReactSortable>
+                        )
+
+                    })}
+                </ReactSortable>
+            </tbody>
         </table>
     )
 }

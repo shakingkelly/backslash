@@ -53,7 +53,7 @@ class DragAndDrop extends Component {
         return (
             <div
                 // style={{ display: 'inline-block', position: 'relative' }}
-                style={{ border: 'dashed red 4px', height: 100, width: 300, margin: 30 }}
+                style={{ border: 'dashed red 4px', height: 100, width: 300, margin: 30, position: 'relative' }}
                 ref={this.dropRef}
             >
                 {this.state.drag &&
@@ -73,11 +73,10 @@ class DragAndDrop extends Component {
                             style={{
                                 position: 'absolute',
                                 top: '50%',
-                                right: 0,
-                                left: 0,
+                                left: '50%',
                                 textAlign: 'center',
                                 color: 'green',
-                                fontSize: 36
+                                fontSize: 24
                             }}
                         >
                             <div>drop here :)</div>

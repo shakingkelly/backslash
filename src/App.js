@@ -25,8 +25,10 @@ class App extends Component {
 		// 	}
 		// })
 
-		const data = JSON.parse(localStorage.getItem('files'))
-		console.log('[localStorage.getItem]', data)
+		// const data = JSON.parse(localStorage.getItem('files'))
+		// console.log('[localStorage.getItem]', data)
+
+		const data = [{id: 10, name: 'outside file', url: './asset/cave.jpg', type: 'img'}]
 
 		this.state = { data: data || [], selectedId: [], showList: true }
 		console.log(this.state)
@@ -91,6 +93,7 @@ class App extends Component {
 	clearLS = () => {
 		localStorage.clear();
 		this.setState({ data: [] })
+		this.setState({ selectedId: [] })
 	}
 
 	// not sure if use index or id
@@ -100,7 +103,7 @@ class App extends Component {
 		let data = this.state.data
 		data.splice(index, 1)
 		selectedIdArr.splice(index, 1)
-		this.setState({ data: data, selectedId: [...selectedIdArr] }) 
+		this.setState({ data: data, selectedId: [...selectedIdArr] })
 		localStorage.setItem('files', JSON.stringify(data))
 	}
 
@@ -109,11 +112,18 @@ class App extends Component {
 		return (
 			<div>
 				<DragAndDrop handleDrop={this.addFiles}>
-					<div>
-						Drop Here!!!
+					<div style={{position: 'absolute',
+								top: 0,
+								botton: 0,
+								left: 0,
+								right: 0,
+								textAlign: 'center',
+                                color: 'salmon',
+                                fontSize: 24}}>
+						Drop Zone
 					</div>
 				</DragAndDrop>
-				<div className='playlist' style={{width: '50%'}}>
+				<div className='playlist' style={{ width: '50%' }}>
 					{
 						this.state.showList &&
 						<Playlist data={this.state.data} selectedId={this.state.selectedId} updated={this.updateSortable} clicked={this.changeSelection} clickDeleted={this.deleteSelection} />
@@ -127,7 +137,7 @@ class App extends Component {
 					<button onClick={this.prevNext('next')}>next</button>
 					<button onClick={this.clearPreview}>clear preview</button>
 				</div>
-				<div style={{border: '2px solid', padding: '20px', width: '300px', resize: 'both'}}> this should be resizable! </div>
+				<div style={{ border: '2px solid', padding: '20px', width: '300px', resize: 'both' }}> this should be resizable! </div>
 			</div>
 		)
 
