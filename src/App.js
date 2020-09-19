@@ -28,7 +28,8 @@ class App extends Component {
 		// const data = JSON.parse(localStorage.getItem('files'))
 		// console.log('[localStorage.getItem]', data)
 
-		const data = [{id: 10, name: 'outside file', url: './asset/cave.jpg', type: 'img'}]
+		const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img' },
+		{ id: 20, name: 'cant lose cant lose cant lose cant lose', url: './asset/break_it_to_me.png', type: 'img' }]
 
 		this.state = { data: data || [], selectedId: [], showList: true }
 		console.log(this.state)
@@ -108,18 +109,20 @@ class App extends Component {
 	}
 
 	render() {
-		console.log('[render]', this.state.selectedId)
+		console.log('[render]', this.state.data.length)
 		return (
 			<div>
 				<DragAndDrop handleDrop={this.addFiles}>
-					<div style={{position: 'absolute',
-								top: 0,
-								botton: 0,
-								left: 0,
-								right: 0,
-								textAlign: 'center',
-                                color: 'salmon',
-                                fontSize: 24}}>
+					<div style={{
+						position: 'absolute',
+						top: 0,
+						botton: 0,
+						left: 0,
+						right: 0,
+						textAlign: 'center',
+						color: 'salmon',
+						fontSize: 24
+					}}>
 						Drop Zone
 					</div>
 				</DragAndDrop>
