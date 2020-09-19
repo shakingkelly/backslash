@@ -4,6 +4,11 @@ import ReactPlayer from 'react-player';
 class IAVMedia extends Component {
 
 
+    // style = {
+    //     maxWidth: '500px',
+    //     overflow: 'auto', 
+    //     resize: 'both'
+    // }
     style = {
         maxWidth: '500px'
     }
@@ -30,20 +35,39 @@ class IAVMedia extends Component {
         this.type = this.props.item.type;
     }
 
-        name = this.props.item.name;
-        url = this.props.item.url;
-        type = this.props.item.type;
+    name = this.props.item.name;
+    url = this.props.item.url;
+    type = this.props.item.type;
+
+    state = { width: 500 }
 
     mediaClickHandler = (event) => { console.log('[IAVMedia] should play media file') }
+
+    larger = () => {
+        console.log('[larger]')
+        if (this.state.width < 1000) {
+            this.setState({width: this.state.width + 100})
+        }
+    }
+
+    smaller = () => {
+        console.log('[smaller]')
+        if (this.state.width > 100) {
+            this.setState({width: this.state.width - 100})
+        }
+    }
 
     render() {
         console.log('[render]', this.url) // worked after put in pulics
         return (
-            <div onClick={this.mediaClickHandler} style={{resize: 'both'}}>
-                {this.type === 'img' && <img style={this.style} src={this.url} alt={this.url} />}
-                {this.type === 'av' && <ReactPlayer style={this.style} url={this.url} controls={true} playing={true}/>}
+            <div style={{ display: 'inline-block' }}>
+                {this.type === 'img' && <img width={this.state.width} src={this.url} alt={this.url} />}
+                {this.type === 'av' && <ReactPlayer style={this.style} url={this.url} controls={true} playing={true} />}
                 {/* {this.type === 'av' && <ReactPlayer url='https://www.youtube.com/watch?v=ysz5S6PUM-U' controls={true}/>} */}
-                
+
+                <button onClick={this.larger.bind(this)}>+</button>
+                <button onClick={this.smaller.bind(this)}>-</button>
+
             </div>
         )
 

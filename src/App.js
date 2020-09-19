@@ -163,7 +163,7 @@ class App extends Component {
 					<button onClick={this.prevNext('next')}>next</button>
 					<button onClick={this.clearPreview}>clear preview</button>
 				</div>
-				<div style={{ border: '2px solid', padding: '20px', width: '300px', resize: 'both' }}> this should be resizable! </div>
+				<div style={{ border: '2px solid', padding: '20px', width: '300px', overflow: 'auto', resize: 'both' }}> this should be resizable! </div>
 			</div>
 		)
 
