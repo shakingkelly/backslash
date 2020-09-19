@@ -93,16 +93,16 @@ const Playlist = (props) => {
             setList={props.updated}
         >
             {props.data.map((item, index) => {
-                let isActive = props.selectedId.includes(index)
+                let isActive = props.selectedIndex.includes(index)
                 return (
                     <div key={item.id} style={{ display: 'flex', flexDirection: 'row', maxWidth: '800px' }}>
                         {isActive ?
-                            <StyledActiveListDiv onClick={props.clicked(index)}>{[item.name, item.id, index]}</StyledActiveListDiv>
-                            : <StyledListDiv onClick={props.clicked(index)}>{[item.name, item.id, index]}</StyledListDiv>
+                            <StyledActiveListDiv onClick={props.clicked(item.id)}>{[item.name, item.id, index]}</StyledActiveListDiv>
+                            : <StyledListDiv onClick={props.clicked(item.id)}>{[item.name, item.id, index]}</StyledListDiv>
                         }
                         {isActive ?
-                            <StyledActiveDeleteButton onClick={props.clickDeleted(index)}>x</StyledActiveDeleteButton>
-                            : <StyledDeleteButton onClick={props.clickDeleted(index)}>x</StyledDeleteButton>
+                            <StyledActiveDeleteButton onClick={props.clickDeleted(item.id)}>x</StyledActiveDeleteButton>
+                            : <StyledDeleteButton onClick={props.clickDeleted(item.id)}>x</StyledDeleteButton>
                         }
                     </div>
                     // <tr>

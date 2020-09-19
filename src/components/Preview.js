@@ -7,7 +7,7 @@ const Preview = (props) => {
     return (
         <div>
             {
-                props.selectedId.map((selected, index) => {
+                props.selectedIndex.map((selected, index) => {
                     return (
                         <Draggable key={selected}>
                             <div><IAVMedia item={props.data[selected]} /></div>

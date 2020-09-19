@@ -31,34 +31,35 @@ class App extends Component {
 		const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img' },
 		{ id: 20, name: 'cant lose cant lose cant lose cant lose', url: './asset/break_it_to_me.png', type: 'img' }]
 
-		this.state = { data: data || [], selectedId: [], showList: true }
+		this.state = { data: data || [], selectedIndex: [], id2index: {10:0, 20:1}, index2id: {0:10, 1:20}, showList: true }
 		console.log(this.state)
 	}
 
-	changeSelection = index => event => {
-		console.log('[changeSelection]', event.shiftKey, index)
-		let selectedIdArr = this.state.selectedId
+	changeSelection = id => event => {
+		console.log('[changeSelection]', event.shiftKey, 'item.id:', id)
+		const index = this.state.id2index[id]
+		let selectedArr = this.state.selectedIndex
 		if (event.shiftKey) {
-			if (!this.state.selectedId.includes(index)) {
-				selectedIdArr.push(index)
+			if (!this.state.selectedIndex.includes(index)) {
+				selectedArr.push(index)
 			}
 		} else {
-			selectedIdArr = [index]
+			selectedArr = [index]
 		}
-		this.setState({ selectedId: [...selectedIdArr] }, () => { console.log('[callback]', this.state.selectedId) }) // so only after render, it reset the states
-		console.log(this.state.selectedId)
+		this.setState({ selectedIndex: [...selectedArr] }, () => { console.log('[callback]', this.state.selectedIndex) }) // so only after render, it reset the states
+		console.log(this.state.selectedIndex)
 	}
 
 	prevNext = direction => event => {
 		console.log('[prevNext]')
-		if (this.state.selectedId.length === 1) {
+		if (this.state.selectedIndex.length === 1) {
 			direction === 'prev' ?
-				this.setState({ selectedId: this.state.selectedId[0] === 0 ? [this.state.data.length - 1] : [this.state.selectedId[0] - 1] }) :
-				this.setState({ selectedId: this.state.selectedId[0] === this.state.data.length - 1 ? [0] : [this.state.selectedId[0] + 1] })
+				this.setState({ selectedIndex: this.state.selectedIndex[0] === 0 ? [this.state.data.length - 1] : [this.state.selectedIndex[0] - 1] }) :
+				this.setState({ selectedIndex: this.state.selectedIndex[0] === this.state.data.length - 1 ? [0] : [this.state.selectedIndex[0] + 1] })
 		} else {
 			console.log('Prev/next is disabled when multiselection!')
 		}
-		console.log(this.state.selectedId)
+		console.log(this.state.selectedIndex)
 	}
 
 	toggleList = () => {
@@ -66,11 +67,32 @@ class App extends Component {
 	}
 
 	clearPreview = () => {
-		this.setState({ selectedId: [] })
+		this.setState({ selectedIndex: [] })
 	}
 
 	updateSortable = (newState) => {
-		this.setState({ data: newState })
+		let newId2index = {}
+		let newIndex2id = {}
+		let newSelectedIndex = []
+		let selectedId = []
+
+		// get currently selected items' id
+		this.state.selectedIndex.forEach((selected, i) => {
+			selectedId.push(this.state.index2id[selected])
+		})
+
+		// update the relationship dicts
+		newState.forEach((item, index) => {
+			newId2index[item.id] = index
+			newIndex2id[index] = item.id
+		})
+
+		// map current selected item ids to new index 
+		selectedId.forEach((selected, i) => {
+			newSelectedIndex.push(newId2index[selected])
+		})
+
+		this.setState({ data: newState, id2index: newId2index, index2id: newIndex2id, selectedIndex: newSelectedIndex })
 	}
 
 	addFiles = (files) => {
@@ -93,18 +115,19 @@ class App extends Component {
 
 	clearLS = () => {
 		localStorage.clear();
-		this.setState({ data: [] })
-		this.setState({ selectedId: [] })
+		this.setState({ data: [], selectedIndex: [] })
 	}
 
 	// not sure if use index or id
-	deleteSelection = index => event => {
+	// update 9.18: should use id
+	deleteSelection = id => event => {
 		console.log('[deleteSelection]')
-		let selectedIdArr = this.state.selectedId
+		let selectedArr = this.state.selectedIndex
 		let data = this.state.data
+		const index = this.state.id2index[id]
 		data.splice(index, 1)
-		selectedIdArr.splice(index, 1)
-		this.setState({ data: data, selectedId: [...selectedIdArr] })
+		selectedArr.splice(index, 1)
+		this.setState({ data: data, selectedIndex: [...selectedArr] })
 		localStorage.setItem('files', JSON.stringify(data))
 	}
 
@@ -129,13 +152,13 @@ class App extends Component {
 				<div className='playlist' style={{ width: '50%' }}>
 					{
 						this.state.showList &&
-						<Playlist data={this.state.data} selectedId={this.state.selectedId} updated={this.updateSortable} clicked={this.changeSelection} clickDeleted={this.deleteSelection} />
+						<Playlist data={this.state.data} selectedIndex={this.state.selectedIndex} updated={this.updateSortable} clicked={this.changeSelection} clickDeleted={this.deleteSelection} />
 					}
 					<button onClick={this.toggleList}>{this.state.showList ? 'hide' : 'show'}</button>
 					<button onClick={this.clearLS}>clear playlist</button>
 				</div>
 				<div className='preview'>
-					<Preview data={this.state.data} selectedId={this.state.selectedId} />
+					<Preview data={this.state.data} selectedIndex={this.state.selectedIndex} />
 					<button onClick={this.prevNext('prev')}>prev</button>
 					<button onClick={this.prevNext('next')}>next</button>
 					<button onClick={this.clearPreview}>clear preview</button>
