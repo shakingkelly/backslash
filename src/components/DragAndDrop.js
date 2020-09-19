@@ -52,8 +52,8 @@ class DragAndDrop extends Component {
     render() {
         return (
             <div
-                // style={{ display: 'inline-block', position: 'relative' }}
-                style={{ border: 'dashed red 4px', height: 100, width: 300, margin: 30, position: 'relative' }}
+                // style={{ border: 'dashed red 4px', height: 100, width: 300, margin: 30, position: 'relative' }}
+                style={{ border: 'dashed red 4px', height: 100, position: 'relative' }}
                 ref={this.dropRef}
             >
                 {this.state.drag &&

@@ -31,7 +31,7 @@ class App extends Component {
 		const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img' },
 		{ id: 20, name: 'cant lose cant lose cant lose cant lose', url: './asset/break_it_to_me.png', type: 'img' }]
 
-		this.state = { data: data || [], selectedIndex: [], id2index: {10:0, 20:1}, index2id: {0:10, 1:20}, showList: true }
+		this.state = { data: data || [], selectedIndex: [], id2index: { 10: 0, 20: 1 }, index2id: { 0: 10, 1: 20 }, showList: true, showZone: true }
 		console.log(this.state)
 	}
 
@@ -64,6 +64,10 @@ class App extends Component {
 
 	toggleList = () => {
 		this.setState({ showList: !this.state.showList })
+	}
+
+	toggleZone = () => {
+		this.setState({ showZone: !this.state.showZone })
 	}
 
 	clearPreview = () => {
@@ -135,35 +139,45 @@ class App extends Component {
 		console.log('[render]', this.state.data.length)
 		return (
 			<div>
-				<DragAndDrop handleDrop={this.addFiles}>
-					<div style={{
-						position: 'absolute',
-						top: 0,
-						botton: 0,
-						left: 0,
-						right: 0,
-						textAlign: 'center',
-						color: 'salmon',
-						fontSize: 24
-					}}>
-						Drop Zone
+				<div style={{ display: 'flex', flexDirection: 'row' }}>
+					<div className='dropzone' style={{ width: '50%', margin: 30 }}>
+						{
+							this.state.showZone &&
+							<DragAndDrop handleDrop={this.addFiles}>
+								<div style={{
+									position: 'absolute',
+									top: 0,
+									botton: 0,
+									left: 0,
+									right: 0,
+									textAlign: 'center',
+									color: 'salmon',
+									fontSize: 24
+								}}>
+									Drop Zone
+								</div>
+							</DragAndDrop>
+						}
+						<button onClick={this.toggleZone}>{this.state.showZone ? 'hide' : 'show'}</button>
 					</div>
-				</DragAndDrop>
-				<div className='playlist' style={{ width: '50%' }}>
-					{
-						this.state.showList &&
-						<Playlist data={this.state.data} selectedIndex={this.state.selectedIndex} updated={this.updateSortable} clicked={this.changeSelection} clickDeleted={this.deleteSelection} />
-					}
-					<button onClick={this.toggleList}>{this.state.showList ? 'hide' : 'show'}</button>
-					<button onClick={this.clearLS}>clear playlist</button>
+
+					<div className='playlist' style={{ width: '50%', margin: 30 }}>
+						{
+							this.state.showList &&
+							<Playlist data={this.state.data} selectedIndex={this.state.selectedIndex} updated={this.updateSortable} clicked={this.changeSelection} clickDeleted={this.deleteSelection} />
+						}
+						<button onClick={this.toggleList}>{this.state.showList ? 'hide' : 'show'}</button>
+						<button onClick={this.clearLS}>clear playlist</button>
+					</div>
 				</div>
-				<div className='preview'>
+
+				<div className='preview' style={{ width: '50%', margin: 30 }}>
 					<Preview data={this.state.data} selectedIndex={this.state.selectedIndex} />
 					<button onClick={this.prevNext('prev')}>prev</button>
 					<button onClick={this.prevNext('next')}>next</button>
 					<button onClick={this.clearPreview}>clear preview</button>
 				</div>
-				<div style={{ border: '2px solid', padding: '20px', width: '300px', overflow: 'auto', resize: 'both' }}> this should be resizable! </div>
+				{/* <div style={{ border: '2px solid', padding: '20px', width: '300px', overflow: 'auto', resize: 'both' }}> this should be resizable! </div> */}
 			</div>
 		)
 
