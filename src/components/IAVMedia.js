@@ -13,6 +13,8 @@ class IAVMedia extends Component {
         maxWidth: '500px'
     }
 
+    colors = {0: 'red', 1: 'orange', 2: 'Yellow', 3: 'lime', 4: 'green', 5: 'blue', 6: 'navy', 7: 'purple', 8: 'indigo', 9: 'dimgray'}
+
     // 这个是移动之后selected index不变（所以media自动变了）
     // componentWillReceiveProps(nextProps) {
     //     this.name = nextProps.item.name;
@@ -33,11 +35,13 @@ class IAVMedia extends Component {
         this.name = this.props.item.name;
         this.url = this.props.item.url;
         this.type = this.props.item.type;
+        this.order = this.props.order;
     }
 
     name = this.props.item.name;
     url = this.props.item.url;
     type = this.props.item.type;
+    order = this.props.order;
 
     state = { width: 500 }
 
@@ -60,11 +64,12 @@ class IAVMedia extends Component {
     render() {
         console.log('[render]', this.url) // worked after put in pulics
         return (
-            <div style={{ display: 'inline-block' }}>
+            <div style={{ display: 'inline-block', border: ['dashed', this.colors[this.order], '4px'].join(' ') }}>
                 {this.type === 'img' && <img width={this.state.width} src={this.url} alt={this.url} />}
                 {this.type === 'av' && <ReactPlayer style={this.style} url={this.url} controls={true} playing={true} />}
                 {/* {this.type === 'av' && <ReactPlayer url='https://www.youtube.com/watch?v=ysz5S6PUM-U' controls={true}/>} */}
 
+                <button>{this.order}</button>
                 <button onClick={this.larger.bind(this)}>+</button>
                 <button onClick={this.smaller.bind(this)}>-</button>
 
