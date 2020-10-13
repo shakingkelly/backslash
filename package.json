@@ -15,6 +15,7 @@
     "@types/react-dom": "16.9.3",
     "electron-store": "^6.0.0",
     "env-cmd": "^10.0.1",
+    "immutable": "^4.0.0-rc.12",
     "npm-watch": "^0.6.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
