@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { setSyntheticTrailingComments } from 'typescript';
 import DrawArea from './components/DrawArea'
 
 class Cover extends Component {
@@ -22,21 +21,21 @@ class Cover extends Component {
         console.log(this.state);
     }
 
-    relativeCoordinatesForEvent(mouseEvent) {
-        const boundingRect = this.refs.coverImg.getBoundingClientRect();
+    // relativeCoordinatesForEvent(mouseEvent) {
+    //     const boundingRect = this.refs.coverImg.getBoundingClientRect();
 
-        if (mouseEvent.clientX > boundingRect.right || mouseEvent.clientX < boundingRect.left || mouseEvent.clientY > boundingRect.bottom || mouseEvent.clientY < boundingRect.top) {
-            console.log('out of canvas, clicking button?')
-            return null;
-        } else {
-            // console.log(relativeX, relativeY)
-        }
+    //     if (mouseEvent.clientX > boundingRect.right || mouseEvent.clientX < boundingRect.left || mouseEvent.clientY > boundingRect.bottom || mouseEvent.clientY < boundingRect.top) {
+    //         console.log('out of canvas, clicking button?')
+    //         return null;
+    //     } else {
+    //         // console.log(relativeX, relativeY)
+    //     }
 
-        return {
-            x: mouseEvent.clientX,
-            y: mouseEvent.clientY,
-        };
-    }
+    //     return {
+    //         x: mouseEvent.clientX,
+    //         y: mouseEvent.clientY,
+    //     };
+    // }
 
     render() {
         return (

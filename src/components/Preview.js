@@ -1,6 +1,6 @@
 import React from 'react';
 import IAVMedia from './IAVMedia';
-import Draggable from 'react-draggable';
+// import Draggable from 'react-draggable';
 
 const Preview = (props) => {
 
@@ -9,9 +9,11 @@ const Preview = (props) => {
             {
                 props.selectedIndex.map((selected, index) => {
                     return (
-                        <Draggable key={selected}>
-                            <div><IAVMedia item={props.data[selected]} order={index} /></div>
-                        </Draggable>
+                        // <Draggable key={selected}>
+                            // <div>
+                                <IAVMedia key={selected} item={props.data[selected]} order={index} />
+                            // </div>
+                        // </Draggable>
                     )
                 })
             }
@@ -22,13 +24,3 @@ const Preview = (props) => {
 
 export default Preview;
 
-// original in App.js
-// {
-//     this.state.selectedId.map((selected, index) => {
-//         return (
-//             <Draggable key={selected}>
-//                 <div><IAVMedia item={this.state.data[selected]} /></div>
-//             </Draggable>
-//         )
-//     })
-// }

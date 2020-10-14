@@ -172,10 +172,10 @@ class App extends Component {
 				</div>
 
 				<div className='preview' style={{ width: '50%', margin: 30 }}>
-					<Preview data={this.state.data} selectedIndex={this.state.selectedIndex} />
 					<button onClick={this.prevNext('prev')}>prev</button>
 					<button onClick={this.prevNext('next')}>next</button>
 					<button onClick={this.clearPreview}>clear preview</button>
+					<Preview data={this.state.data} selectedIndex={this.state.selectedIndex} />
 				</div>
 				{/* <div style={{ border: '2px solid', padding: '20px', width: '300px', overflow: 'auto', resize: 'both' }}> this should be resizable! </div> */}
 			</div>

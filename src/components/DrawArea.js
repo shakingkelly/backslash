@@ -75,7 +75,7 @@ class DrawArea extends React.Component {
         const relativeY = mouseEvent.clientY - boundingRect.top;
 
         if (mouseEvent.clientX > boundingRect.right || mouseEvent.clientX < boundingRect.left || mouseEvent.clientY > boundingRect.bottom || mouseEvent.clientY < boundingRect.top) {
-        // if (relativeX > 400 || relativeX < 0 || relativeY > 400 || relativeY < 0) 
+            // if (relativeX > 400 || relativeX < 0 || relativeY > 400 || relativeY < 0) 
             console.log('out of box, clicking button?')
             return null;
         } else {
@@ -112,13 +112,13 @@ class DrawArea extends React.Component {
             return;
         }
         newUndoLines.push(newRedoLines.pop());
-        
+
         console.log('[redo] after:', newUndoLines.length, newRedoLines.length)
         this.setState({ undolines: newUndoLines, redolines: newRedoLines });
     }
 
     clearCanvas() {
-        this.setState({ undolines: [], redolines: [], isDrawing: false})
+        this.setState({ undolines: [], redolines: [], isDrawing: false })
     }
 
     render() {
@@ -128,7 +128,15 @@ class DrawArea extends React.Component {
                 ref="drawArea"
                 onMouseDown={this.handleMouseDown}
                 onMouseMove={this.handleMouseMove}
-                style={{width: this.props.canvasWidth, height: this.props.canvasHeight, border: '1px solid red', zIndex: 100, position: 'absolute'}}
+                style={{
+                    width: this.props.canvasWidth,
+                    height: this.props.canvasHeight,
+                    // left: this.props.canvasLeft,
+                    // top: this.props.canvasTop,
+                    border: '1px solid red',
+                    zIndex: 100,
+                    position: 'absolute'
+                }}
             >
                 <Drawing lines={this.state.undolines} />
                 <button onClick={this.undo}>undo</button>
@@ -141,7 +149,7 @@ class DrawArea extends React.Component {
 
 function Drawing({ lines }) {
     return (
-        <svg className="drawing" style={{width: '100%', height: '100%'}}>
+        <svg className="drawing" style={{ width: '100%', height: '100%' }}>
             {lines.map((line, index) => (
                 <DrawingLine key={index} line={line} />
             ))}
@@ -157,7 +165,7 @@ function DrawingLine({ line }) {
             })
             .join(" L ");
 
-    return <path className="path" d={pathData} style={{fill: 'none', strokeWidth: 1, stroke: 'red', strokeLinejoin: 'round', strokeLinecap: 'round'}} />;
+    return <path className="path" d={pathData} style={{ fill: 'none', strokeWidth: 1, stroke: 'red', strokeLinejoin: 'round', strokeLinecap: 'round' }} />;
 }
 
 
