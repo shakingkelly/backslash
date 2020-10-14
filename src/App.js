@@ -177,7 +177,6 @@ class App extends Component {
 					<button onClick={this.clearPreview}>clear preview</button>
 					<Preview data={this.state.data} selectedIndex={this.state.selectedIndex} />
 				</div>
-				{/* <div style={{ border: '2px solid', padding: '20px', width: '300px', overflow: 'auto', resize: 'both' }}> this should be resizable! </div> */}
 			</div>
 		)
 

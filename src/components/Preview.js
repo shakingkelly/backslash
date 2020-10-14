@@ -9,9 +9,10 @@ const Preview = (props) => {
             {
                 props.selectedIndex.map((selected, index) => {
                     return (
+                        <IAVMedia key={selected} item={props.data[selected]} order={index} />
                         // <Draggable key={selected}>
                             // <div>
-                                <IAVMedia key={selected} item={props.data[selected]} order={index} />
+                                
                             // </div>
                         // </Draggable>
                     )
