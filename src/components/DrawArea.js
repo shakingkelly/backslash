@@ -1,5 +1,6 @@
 import React from 'react';
 // import './DrawArea.css';
+import { SketchPicker } from 'react-color';
 
 class DrawArea extends React.Component {
     constructor() {
@@ -8,7 +9,10 @@ class DrawArea extends React.Component {
         this.state = {
             undolines: [],
             redolines: [],
-            isDrawing: false
+            isDrawing: false,
+            currStrokeWidth: 1,
+            currStrokeColor: '#fff',
+            showColors: false
         };
 
         this.handleMouseDown = this.handleMouseDown.bind(this);
@@ -18,6 +22,9 @@ class DrawArea extends React.Component {
         this.undo = this.undo.bind(this);
         this.redo = this.redo.bind(this);
         this.clearCanvas = this.clearCanvas.bind(this);
+        this.toggleStroke = this.toggleStroke.bind(this);
+        this.togglePicker = this.togglePicker.bind(this);
+        this.pickColor = this.pickColor.bind(this);
     }
 
     componentDidMount() {
@@ -38,7 +45,7 @@ class DrawArea extends React.Component {
             return;
         }
         let newUndoLines = this.state.undolines;
-        let newLine = [point];
+        let newLine = [[point], this.state.currStrokeWidth, this.state.currStrokeColor];
         newUndoLines.push(newLine);
 
         this.setState({
@@ -59,7 +66,7 @@ class DrawArea extends React.Component {
         }
         let newUndoLines = this.state.undolines;
         let lastLine = newUndoLines.pop();
-        lastLine.push(point);
+        lastLine[0].push(point);
         newUndoLines.push(lastLine);
 
         this.setState({ undolines: newUndoLines });
@@ -121,6 +128,22 @@ class DrawArea extends React.Component {
         this.setState({ undolines: [], redolines: [], isDrawing: false })
     }
 
+    toggleStroke() {
+        if (this.state.currStrokeWidth === 1) {
+            this.setState({currStrokeWidth: 10})
+        } else {
+            this.setState({currStrokeWidth: 1})
+        }
+    }
+
+    togglePicker() {
+        this.setState({showColors: !this.state.showColors})
+    }
+
+    pickColor(color) {
+        this.setState({currStrokeColor: color.hex})
+    }
+
     render() {
         return (
             <div
@@ -142,6 +165,9 @@ class DrawArea extends React.Component {
                 <button onClick={this.undo}>undo</button>
                 <button onClick={this.redo}>redo</button>
                 <button onClick={this.clearCanvas}>clear canvas</button>
+                <button onClick={this.toggleStroke}>{this.state.currStrokeWidth === 1 ? 'L' : 'S'}</button>
+                <button onClick={this.togglePicker}>{this.state.showColors ? 'hide colors' : 'show colors'}</button>
+                {this.state.showColors && <SketchPicker color={this.state.currStrokeColor} onChangeComplete={this.pickColor} />}
             </div>
         );
     }
@@ -151,13 +177,13 @@ function Drawing({ lines }) {
     return (
         <svg className="drawing" style={{ width: '100%', height: '100%' }}>
             {lines.map((line, index) => (
-                <DrawingLine key={index} line={line} />
+                <DrawingLine key={index} line={line[0]} strokeWidth={line[1]} strokeColor={line[2]}/>
             ))}
         </svg>
     );
 }
 
-function DrawingLine({ line }) {
+function DrawingLine({ line, strokeWidth, strokeColor }) {
     const pathData = "M " +
         line
             .map(p => {
@@ -165,7 +191,7 @@ function DrawingLine({ line }) {
             })
             .join(" L ");
 
-    return <path className="path" d={pathData} style={{ fill: 'none', strokeWidth: 1, stroke: 'red', strokeLinejoin: 'round', strokeLinecap: 'round' }} />;
+    return <path className="path" d={pathData} style={{ fill: 'none', strokeWidth: strokeWidth, stroke: strokeColor, strokeLinejoin: 'round', strokeLinecap: 'round' }} />;
 }
 
 
