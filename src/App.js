@@ -4,6 +4,7 @@ import Playlist from './components/Playlist';
 import Preview from './components/Preview';
 // import TestFs from './TestFs.ts';
 import DragAndDrop from './components/DragAndDrop';
+import GlobalDrawArea from './components/GlobalDrawArea';
 
 
 class App extends Component {
@@ -31,7 +32,15 @@ class App extends Component {
 		const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img' },
 		{ id: 20, name: 'cant lose cant lose cant lose cant lose', url: './asset/break_it_to_me.png', type: 'img' }]
 
-		this.state = { data: data || [], selectedIndex: [], id2index: { 10: 0, 20: 1 }, index2id: { 0: 10, 1: 20 }, showList: true, showZone: true }
+		this.state = { 
+			data: data || [], 
+			selectedIndex: [], 
+			id2index: { 10: 0, 20: 1 }, 
+			index2id: { 0: 10, 1: 20 }, 
+			showList: true, 
+			showZone: true,
+			showGlobalCanvas: false 
+		}
 		console.log(this.state)
 	}
 
@@ -135,6 +144,11 @@ class App extends Component {
 		localStorage.setItem('files', JSON.stringify(data))
 	}
 
+	toggleGlobalCanvas = () => {
+		this.setState({showGlobalCanvas: !this.state.showGlobalCanvas})
+	}
+
+
 	render() {
 		console.log('[render]', this.state.data.length)
 		return (
@@ -170,6 +184,9 @@ class App extends Component {
 						<button onClick={this.clearLS}>clear playlist</button>
 					</div>
 				</div>
+
+				<button onClick={this.toggleGlobalCanvas}>global canvas</button>
+				{this.state.showGlobalCanvas && <GlobalDrawArea canvasWidth={window.innerWidth} canvasHeight={window.innerHeight} />}
 
 				<div className='preview' style={{ width: '50%', margin: 30 }}>
 					<button onClick={this.prevNext('prev')}>prev</button>
