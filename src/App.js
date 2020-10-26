@@ -5,7 +5,7 @@ import Preview from './components/Preview';
 // import TestFs from './TestFs.ts';
 import DragAndDrop from './components/DragAndDrop';
 import GlobalDrawArea from './components/GlobalDrawArea';
-
+import Audio from './components/Audio';
 
 class App extends Component {
 
@@ -154,7 +154,9 @@ class App extends Component {
 		return (
 			<div>
 				<div style={{ display: 'flex', flexDirection: 'row' }}>
-					<div className='dropzone' style={{ width: '50%', margin: 30 }}>
+					<div classname='audioRecord' style={{ margin: 30 }}><Audio /></div>
+					
+					<div className='dropzone' style={{ width: '40%', margin: 30 }}>
 						{
 							this.state.showZone &&
 							<DragAndDrop handleDrop={this.addFiles}>
@@ -175,7 +177,7 @@ class App extends Component {
 						<button onClick={this.toggleZone}>{this.state.showZone ? 'hide' : 'show'}</button>
 					</div>
 
-					<div className='playlist' style={{ width: '50%', margin: 30 }}>
+					<div className='playlist' style={{ width: '40%', margin: 30 }}>
 						{
 							this.state.showList &&
 							<Playlist data={this.state.data} selectedIndex={this.state.selectedIndex} updated={this.updateSortable} clicked={this.changeSelection} clickDeleted={this.deleteSelection} />
