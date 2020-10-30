@@ -104,11 +104,13 @@ class IAVMedia extends Component {
                             <div style={{ position: 'absolute', left: this.state.dragX, top: this.state.dragY }}>
                                 {this.type === 'img' && <img ref='coverImg' width={this.state.imgWidth} src={this.url} alt={this.url} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' ') }} />}
                                 {this.type === 'av' && <ReactPlayer style={this.style} url={this.url} controls={true} playing={true} />}
-
-                                <button style={{ zIndex: 200, position: 'relative' }}>{this.order}</button>
-                                <button style={{ zIndex: 200, position: 'relative' }} onClick={this.larger.bind(this)}>+</button>
-                                <button style={{ zIndex: 200, position: 'relative' }} onClick={this.smaller.bind(this)}>-</button>
-                                {this.type === 'img' && <button onClick={this.toggleCanvas} style={{ zIndex: 200, position: 'relative' }}>show canvas</button>}
+                                <div class="divider"/>
+                                <button class="button-order-num pure-button" style={{ zIndex: 200, position: 'relative' }}>{this.order}</button>
+                                <div class="divider"/>
+                                <button class="button-sizer pure-button"style={{ zIndex: 200, position: 'relative' }} onClick={this.smaller.bind(this)}>-</button>
+                                <button class="button-sizer pure-button"style={{ zIndex: 200, position: 'relative' }} onClick={this.larger.bind(this)}>+</button>
+                                <div class="divider"/>
+                                {this.type === 'img' && <button class="button-canvas pure-button" onClick={this.toggleCanvas} style={{ zIndex: 200, position: 'relative' }}>SHOW CANVAS</button>}
                             </div>
                         </Draggable>
                 }

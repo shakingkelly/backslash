@@ -162,11 +162,11 @@ class DrawArea extends React.Component {
                 }}
             >
                 <Drawing lines={this.state.undolines} />
-                <button onClick={this.undo}>undo</button>
-                <button onClick={this.redo}>redo</button>
-                <button onClick={this.clearCanvas}>clear canvas</button>
-                <button onClick={this.toggleStroke}>{this.state.currStrokeWidth === 1 ? 'L' : 'S'}</button>
-                <button onClick={this.togglePicker}>{this.state.showColors ? 'hide colors' : 'show colors'}</button>
+                <button class="pure-button" onClick={this.undo}>undo</button>
+                <button class="pure-button" onClick={this.redo}>redo</button>
+                <button class="pure-button" onClick={this.clearCanvas}>clear canvas</button>
+                <button class="pure-button" onClick={this.toggleStroke}>{this.state.currStrokeWidth === 1 ? 'L' : 'S'}</button>
+                <button class="pure-button" onClick={this.togglePicker}>{this.state.showColors ? 'hide colors' : 'show colors'}</button>
                 {this.state.showColors && <SketchPicker color={this.state.currStrokeColor} onChangeComplete={this.pickColor} />}
             </div>
         );

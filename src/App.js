@@ -172,26 +172,31 @@ class App extends Component {
 								</div>
 							</DragAndDrop>
 						}
-						<button onClick={this.toggleZone}>{this.state.showZone ? 'hide' : 'show'}</button>
+						<button class="button-hide pure-button" onClick={this.toggleZone}>{this.state.showZone ? 'HIDE' : 'SHOW'}</button>
 					</div>
 
-					<div className='playlist' style={{ width: '50%', margin: 30 }}>
+					<div className='playlist'>
 						{
 							this.state.showList &&
 							<Playlist data={this.state.data} selectedIndex={this.state.selectedIndex} updated={this.updateSortable} clicked={this.changeSelection} clickDeleted={this.deleteSelection} />
 						}
-						<button onClick={this.toggleList}>{this.state.showList ? 'hide' : 'show'}</button>
-						<button onClick={this.clearLS}>clear playlist</button>
+						<button class="button-hide pure-button" onClick={this.toggleList}>{this.state.showList ? 'HIDE' : 'SHOW'}</button>
+						<div class="divider"/>
+						<button class="button-clear pure-button" onClick={this.clearLS}>CLEAR PLAYLIST</button>
 					</div>
 				</div>
 
-				<button onClick={this.toggleGlobalCanvas}>global canvas</button>
+				
+				<button class="button-global pure-button" onClick={this.toggleGlobalCanvas}>GLOBAL CANVAS</button>
 				{this.state.showGlobalCanvas && <GlobalDrawArea canvasWidth={window.innerWidth} canvasHeight={window.innerHeight} />}
+				
 
 				<div className='preview' style={{ width: '50%', margin: 30 }}>
-					<button onClick={this.prevNext('prev')}>prev</button>
-					<button onClick={this.prevNext('next')}>next</button>
-					<button onClick={this.clearPreview}>clear preview</button>
+					<button class="button-prev pure-button" onClick={this.prevNext('prev')}>PREV</button>
+					<div class="divider"/>
+					<button class="button-next pure-button" onClick={this.prevNext('next')}>NEXT</button>
+					<div class="divider"/>
+					<button class="button-clear pure-button" onClick={this.clearPreview}>CLEAR PREVIEW</button>
 					<Preview data={this.state.data} selectedIndex={this.state.selectedIndex} />
 				</div>
 			</div>
