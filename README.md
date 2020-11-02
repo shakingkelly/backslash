@@ -5,8 +5,7 @@ Go to [Slasher blog](https://www.slashers.blog) for more development details!
 
 ## TODO
 
-- Integrate grid system
-- CSS incompatibility
+- Check issues
 
 ## Functions
 

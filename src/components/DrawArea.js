@@ -83,7 +83,7 @@ class DrawArea extends React.Component {
 
         if (mouseEvent.clientX > boundingRect.right || mouseEvent.clientX < boundingRect.left || mouseEvent.clientY > boundingRect.bottom || mouseEvent.clientY < boundingRect.top) {
             // if (relativeX > 400 || relativeX < 0 || relativeY > 400 || relativeY < 0) 
-            console.log('out of box, clicking button?')
+            console.log('[DrawArea:coord] out of box, clicking button?')
             return null;
         } else {
             // console.log(relativeX, relativeY)
@@ -101,7 +101,7 @@ class DrawArea extends React.Component {
         console.log('[undo] before:', newUndoLines.length, newRedoLines.length)
 
         if (newUndoLines.length <= 0) {
-            console.log('hahah undo')
+            console.log('[undo] nothing there!')
             return;
         }
         newRedoLines.push(newUndoLines.pop());
@@ -115,7 +115,7 @@ class DrawArea extends React.Component {
         let newRedoLines = [...this.state.redolines];
         console.log('[redo] before:', newUndoLines.length, newRedoLines.length)
         if (newRedoLines.length <= 0) {
-            console.log('hahaha redo')
+            console.log('[redo] nothing there!')
             return;
         }
         newUndoLines.push(newRedoLines.pop());
@@ -156,18 +156,18 @@ class DrawArea extends React.Component {
                     height: this.props.canvasHeight,
                     // left: this.props.canvasLeft,
                     // top: this.props.canvasTop,
-                    border: '1px solid red',
+                    // border: '1px solid red',
                     zIndex: '100',
                     position: 'absolute'
                 }}
             >
                 <Drawing lines={this.state.undolines} />
-                <button class="pure-button" onClick={this.undo}>undo</button>
-                <button class="pure-button" onClick={this.redo}>redo</button>
-                <button class="pure-button" onClick={this.clearCanvas}>clear canvas</button>
-                <button class="pure-button" onClick={this.toggleStroke}>{this.state.currStrokeWidth === 1 ? 'L' : 'S'}</button>
-                <button class="pure-button" onClick={this.togglePicker}>{this.state.showColors ? 'hide colors' : 'show colors'}</button>
-                {this.state.showColors && <SketchPicker class="color-picker" color={this.state.currStrokeColor} onChangeComplete={this.pickColor} />}
+                <button className="pure-button" onClick={this.undo}>undo</button>
+                <button className="pure-button" onClick={this.redo}>redo</button>
+                <button className="pure-button" onClick={this.clearCanvas}>clear canvas</button>
+                <button className="pure-button" onClick={this.toggleStroke}>{this.state.currStrokeWidth === 1 ? 'L' : 'S'}</button>
+                <button className="pure-button" onClick={this.togglePicker}>{this.state.showColors ? 'hide colors' : 'show colors'}</button>
+                {this.state.showColors && <SketchPicker className="color-picker" color={this.state.currStrokeColor} onChangeComplete={this.pickColor} />}
             </div>
         );
     }
@@ -195,6 +195,4 @@ function DrawingLine({ line, strokeWidth, strokeColor }) {
 }
 
 
-
-// //   ReactDOM.render(<DrawArea />, document.getElementById("container"));
 export default DrawArea;

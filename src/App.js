@@ -12,6 +12,7 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 
+		// deprecated: fetch data from json file 
 		// let data = [{ id: 10, name: 'outside file', url: '/Users/sjx/Pictures/2001_A_Space_Odyssey_1.jpg', type: 'img' }]
 		// const files_json = TestFs.getDirectoryListing()
 		// console.log('[files_json]', files_json)
@@ -26,22 +27,24 @@ class App extends Component {
 		// 	}
 		// })
 
+		// desktop
 		// const data = JSON.parse(localStorage.getItem('files'))
 		// console.log('[localStorage.getItem]', data)
 
+		// web 
 		const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img' },
 		{ id: 20, name: 'cant lose cant lose cant lose cant lose', url: './asset/break_it_to_me.png', type: 'img' }]
 
-		this.state = { 
-			data: data || [], 
-			selectedIndex: [], 
-			id2index: { 10: 0, 20: 1 }, 
-			index2id: { 0: 10, 1: 20 }, 
-			showList: true, 
+		this.state = {
+			data: data || [],
+			selectedIndex: [],
+			id2index: { 10: 0, 20: 1 },
+			index2id: { 0: 10, 1: 20 },
+			showList: true,
 			showZone: true,
-			showGlobalCanvas: false 
+			showGlobalCanvas: false
 		}
-		console.log(this.state)
+		console.log('[START]', this.state)
 	}
 
 	changeSelection = id => event => {
@@ -55,7 +58,7 @@ class App extends Component {
 		} else {
 			selectedArr = [index]
 		}
-		this.setState({ selectedIndex: [...selectedArr] }, () => { console.log('[callback]', this.state.selectedIndex) }) // so only after render, it reset the states
+		this.setState({ selectedIndex: [...selectedArr] }, () => { console.log('[changeSelection:callback]', this.state.selectedIndex) }) // so only after render, it reset the states
 		console.log(this.state.selectedIndex)
 	}
 
@@ -131,8 +134,6 @@ class App extends Component {
 		this.setState({ data: [], selectedIndex: [] })
 	}
 
-	// not sure if use index or id
-	// update 9.18: should use id
 	deleteSelection = id => event => {
 		console.log('[deleteSelection]')
 		let selectedArr = this.state.selectedIndex
@@ -145,7 +146,7 @@ class App extends Component {
 	}
 
 	toggleGlobalCanvas = () => {
-		this.setState({showGlobalCanvas: !this.state.showGlobalCanvas})
+		this.setState({ showGlobalCanvas: !this.state.showGlobalCanvas })
 	}
 
 
@@ -155,7 +156,7 @@ class App extends Component {
 			<div>
 				<div style={{ display: 'flex', flexDirection: 'row' }}>
 					<div className='audioRecord' style={{ margin: 30 }}><Audio /></div>
-					
+
 					<div className='dropzone' style={{ width: '40%', margin: 30 }}>
 						{
 							this.state.showZone &&
@@ -183,21 +184,20 @@ class App extends Component {
 							<Playlist data={this.state.data} selectedIndex={this.state.selectedIndex} updated={this.updateSortable} clicked={this.changeSelection} clickDeleted={this.deleteSelection} />
 						}
 						<button className="button-hide pure-button" onClick={this.toggleList}>{this.state.showList ? 'HIDE' : 'SHOW'}</button>
-						<div className="divider"/>
+						<div className="divider" />
 						<button className="button-clear pure-button" onClick={this.clearLS}>CLEAR PLAYLIST</button>
 					</div>
 				</div>
 
-				
+
 				<button className="button-global pure-button" onClick={this.toggleGlobalCanvas}>GLOBAL CANVAS</button>
 				{this.state.showGlobalCanvas && <GlobalDrawArea canvasWidth={window.innerWidth} canvasHeight={window.innerHeight} />}
-				
 
 				<div className='preview' style={{ width: '50%', margin: 30 }}>
 					<button className="button-prev pure-button" onClick={this.prevNext('prev')}>PREV</button>
-					<div className="divider"/>
+					<div className="divider" />
 					<button className="button-next pure-button" onClick={this.prevNext('next')}>NEXT</button>
-					<div className="divider"/>
+					<div className="divider" />
 					<button className="button-clear pure-button" onClick={this.clearPreview}>CLEAR PREVIEW</button>
 					<Preview data={this.state.data} selectedIndex={this.state.selectedIndex} />
 				</div>

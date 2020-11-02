@@ -23,7 +23,7 @@ class Audio extends Component {
   }
 
   onStop(recordedBlob) {
-    console.log('recordedBlob is: ', recordedBlob.blobURL);
+    console.log('[Audio:onStop] recordedBlob is: ', recordedBlob.blobURL);
     const url = URL.createObjectURL(recordedBlob.blob);
     this.setState({ src: url });
   }
@@ -32,21 +32,20 @@ class Audio extends Component {
     return (
       <div>
         <div>
-        <ReactMic
-          record={this.state.record}
-          className="sound-wave"
-          onStop={data => this.onStop(data)}
-          onData={this.onData}
-          strokeColor="red"
-          backgroundColor="black"
-          width={60}
-          height={60} />
+          <ReactMic
+            record={this.state.record}
+            className="sound-wave"
+            onStop={data => this.onStop(data)}
+            onData={this.onData}
+            strokeColor="red"
+            backgroundColor="black"
+            width={60}
+            height={60} />
         </div>
-        <button onClick={this.startRecording} type="button" style={{ width: 30, height: 30}}>▶</button>
+        <button onClick={this.startRecording} type="button" style={{ width: 30, height: 30 }}>▶</button>
         {/* eslint-disable-next-line */}
-        <button onClick={this.stopRecording} type="button" style={{ width: 30, height: 30}}>◼️</button>
-        <button style={{ width: 60, height: 30}}><a href={this.state.src} download="Blah.webm">⬇</a></button>
-
+        <button onClick={this.stopRecording} type="button" style={{ width: 30, height: 30 }}>◼️</button>
+        <button style={{ width: 60, height: 30 }}><a href={this.state.src} download="Blah.webm">⬇</a></button>
       </div>
     );
   }

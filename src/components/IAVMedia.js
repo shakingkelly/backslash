@@ -5,14 +5,8 @@ import Draggable from 'react-draggable';
 
 class IAVMedia extends Component {
 
-
-    // style = {
-    //     maxWidth: '500px',
-    //     overflow: 'auto', 
-    //     resize: 'both'
-    // }
     style = {
-        maxWidth: '500px'
+        maxWidth: '640px'
     }
 
     colors = { 0: 'red', 1: 'orange', 2: 'Yellow', 3: 'lime', 4: 'green', 5: 'blue', 6: 'navy', 7: 'purple', 8: 'indigo', 9: 'dimgray' }
@@ -46,7 +40,8 @@ class IAVMedia extends Component {
     order = this.props.order;
 
     state = {
-        imgWidth: 800,
+        imgWidth: 640,
+        imgHeight: 360,
         showCanvas: false,
         canvasWidth: 800,
         canvasHeight: 800,
@@ -54,17 +49,15 @@ class IAVMedia extends Component {
         dragY: 0
     }
 
-    mediaClickHandler = (event) => { console.log('[IAVMedia] should play media file') }
+    mediaClickHandler = (event) => { console.log('[IAVMedia] playing') }
 
     larger = () => {
-        console.log('[larger]')
         if (this.state.imgWidth < 1000) {
             this.setState({ imgWidth: this.state.imgWidth + 100 })
         }
     }
 
     smaller = () => {
-        console.log('[smaller]')
         if (this.state.imgWidth > 100) {
             this.setState({ imgWidth: this.state.imgWidth - 100 })
         }
@@ -79,11 +72,13 @@ class IAVMedia extends Component {
             dragX: boundingRect.left,
             dragY: boundingRect.top
         });
-        console.log('[toggleCanvas]', this.state);
     }
 
     render() {
-        console.log('[render]', this.url) // worked after put in publics
+        console.log('[IAVMedia:render]', this.url) // worked after put in publics
+        const avWidth = this.state.imgWidth.toString() + 'px'
+        const avHeight = (this.state.imgWidth * 9 / 16).toString() + 'px'
+        
         return (
             <div>
                 {
@@ -91,8 +86,6 @@ class IAVMedia extends Component {
                         <div style={{ position: 'absolute', left: this.state.dragX, top: this.state.dragY }}>
                             {this.type === 'img' && <img ref='coverImg' width={this.state.imgWidth} src={this.url} alt={this.url} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' ') }} />}
                             {this.type === 'img' && <DrawArea canvasWidth={this.state.canvasWidth} canvasHeight={this.state.canvasHeight} />}
-                            {this.type === 'av' && <ReactPlayer style={this.style} url={this.url} controls={true} playing={true} />}
-                            {/* {this.type === 'av' && <ReactPlayer url='https://www.youtube.com/watch?v=ysz5S6PUM-U' controls={true}/>} */}
 
                             <button style={{ zIndex: 200, position: 'relative' }}>{this.order}</button>
                             <button style={{ zIndex: 200, position: 'relative' }} onClick={this.larger.bind(this)}>+</button>
@@ -103,14 +96,14 @@ class IAVMedia extends Component {
                         <Draggable>
                             <div style={{ position: 'absolute', left: this.state.dragX, top: this.state.dragY }}>
                                 {this.type === 'img' && <img ref='coverImg' width={this.state.imgWidth} src={this.url} alt={this.url} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' ') }} />}
-                                {this.type === 'av' && <ReactPlayer style={this.style} url={this.url} controls={true} playing={true} />}
-                                <div class="divider"/>
-                                <button class="button-order-num pure-button" style={{ zIndex: 200, position: 'relative' }}>{this.order}</button>
-                                <div class="divider"/>
-                                <button class="button-sizer pure-button"style={{ zIndex: 200, position: 'relative' }} onClick={this.smaller.bind(this)}>-</button>
-                                <button class="button-sizer pure-button"style={{ zIndex: 200, position: 'relative' }} onClick={this.larger.bind(this)}>+</button>
-                                <div class="divider"/>
-                                {this.type === 'img' && <button class="button-canvas pure-button" onClick={this.toggleCanvas} style={{ zIndex: 200, position: 'relative' }}>SHOW CANVAS</button>}
+                                {this.type === 'av' && <ReactPlayer url={this.url} controls={true} width={avWidth} height={avHeight} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' ') }} />}
+                                <div className="divider" />
+                                <button className="button-order-num pure-button" style={{ zIndex: 200, position: 'relative' }}>{this.order}</button>
+                                <div className="divider" />
+                                <button className="button-sizer pure-button" style={{ zIndex: 200, position: 'relative' }} onClick={this.smaller.bind(this)}>-</button>
+                                <button className="button-sizer pure-button" style={{ zIndex: 200, position: 'relative' }} onClick={this.larger.bind(this)}>+</button>
+                                <div className="divider" />
+                                {this.type === 'img' && <button className="button-canvas pure-button" onClick={this.toggleCanvas} style={{ zIndex: 200, position: 'relative' }}>SHOW CANVAS</button>}
                             </div>
                         </Draggable>
                 }

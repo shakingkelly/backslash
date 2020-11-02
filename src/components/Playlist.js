@@ -12,7 +12,7 @@ const StyledListDiv = styled.div`
     color: white;  
     font-family: Syne Mono;
     border-radius: 10px;
-    margin-bottom:10px;
+    // margin-bottom:10px;
     &:hover {
         background-color: #2a9d8f;
     }
@@ -28,7 +28,7 @@ const StyledDeleteButton = styled.div`
     color: white;  
     font-family: Syne Mono;
     border-radius: 10px;
-    margin-bottom:10px;
+    // margin-bottom:10px;
     &:hover {
         background-color: #2a9d8f;
     }
@@ -45,7 +45,7 @@ const StyledActiveListDiv = styled.div`
     font-family: Syne Mono;
     font-weight: bold;
     border-radius: 10px;
-    margin-bottom:10px;
+    // margin-bottom:10px;
     &:hover {
         background-color: #e76f51;
     }
@@ -62,7 +62,7 @@ const StyledActiveDeleteButton = styled.div`
     font-family: Syne Mono;
     font-weight: bold;
     border-radius: 10px;
-    margin-bottom:10px;
+    // margin-bottom:10px;
     &:hover {
         background-color: #e76f51;
     }
@@ -80,8 +80,8 @@ const Playlist = (props) => {
                 return (
                     <div key={item.id} style={{ display: 'flex', flexDirection: 'row', maxWidth: '800px' }}>
                         {isActive ?
-                            <StyledActiveListDiv onClick={props.clicked(item.id)}>{[item.name, item.id, index]}</StyledActiveListDiv>
-                            : <StyledListDiv onClick={props.clicked(item.id)}>{[item.name, item.id, index]}</StyledListDiv>
+                            <StyledActiveListDiv onClick={props.clicked(item.id)}>{item.name}</StyledActiveListDiv>
+                            : <StyledListDiv onClick={props.clicked(item.id)}>{item.name}</StyledListDiv>
                         }
                         {isActive ?
                             <StyledActiveDeleteButton onClick={props.clickDeleted(item.id)}>x</StyledActiveDeleteButton>
