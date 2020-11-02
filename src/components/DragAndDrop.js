@@ -72,8 +72,8 @@ class DragAndDrop extends Component {
                         <div
                             style={{
                                 position: 'absolute',
-                                top: '50%',
-                                left: '50%',
+                                top: '20%',
+                                left: '20%',
                                 textAlign: 'center',
                                 color: 'green',
                                 fontSize: 24

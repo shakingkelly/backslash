@@ -28,12 +28,16 @@ class App extends Component {
 		// })
 
 		// desktop
-		// const data = JSON.parse(localStorage.getItem('files'))
-		// console.log('[localStorage.getItem]', data)
+		let data = JSON.parse(localStorage.getItem('files'))
+		if (data.length === 0) {
+			data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img' },
+			{ id: 20, name: 'cant lose cant lose cant lose cant lose', url: './asset/break_it_to_me.png', type: 'img' }]
+		}
+		console.log('[localStorage.getItem]', data)
 
 		// web 
-		const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img' },
-		{ id: 20, name: 'cant lose cant lose cant lose cant lose', url: './asset/break_it_to_me.png', type: 'img' }]
+		// const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img' },
+		// { id: 20, name: 'cant lose cant lose cant lose cant lose', url: './asset/break_it_to_me.png', type: 'img' }]
 
 		this.state = {
 			data: data || [],
@@ -51,13 +55,20 @@ class App extends Component {
 		console.log('[changeSelection]', event.shiftKey, 'item.id:', id)
 		const index = this.state.id2index[id]
 		let selectedArr = this.state.selectedIndex
-		if (event.shiftKey) {
-			if (!this.state.selectedIndex.includes(index)) {
+		if (!this.state.selectedIndex.includes(index)) {
+			if (event.shiftKey) {
 				selectedArr.push(index)
+			} else {
+				selectedArr = [index]
 			}
 		} else {
-			selectedArr = [index]
+			if (event.shiftKey) {
+				selectedArr.splice(index, 1)
+			} else {
+				selectedArr = []
+			}
 		}
+
 		this.setState({ selectedIndex: [...selectedArr] }, () => { console.log('[changeSelection:callback]', this.state.selectedIndex) }) // so only after render, it reset the states
 		console.log(this.state.selectedIndex)
 	}
@@ -134,15 +145,47 @@ class App extends Component {
 		this.setState({ data: [], selectedIndex: [] })
 	}
 
+	deleteFromLS = id => event => {
+		console.log('[deleteFromLS]')
+		if (this.state.selectedIndex.length > 0) {
+			console.log('disabled when showing preview!')
+		} else {
+			// let selectedArr = this.state.selectedIndex
+			let data = this.state.data
+			let id2index = this.state.id2index
+			let index2id = {}
+			const index = id2index[id]
+
+			delete id2index[id]
+			for (var key in id2index) {
+				if (id2index[key] > index) {
+					id2index[key]--
+				}
+			}
+			for (var key in id2index) {
+				index2id[id2index[key]] = key
+			}
+
+			data.splice(index, 1)
+			// selectedArr.splice(index, 1)
+			// selectedArr.forEach((selected, i) => {
+			// 	if (selected > index) {
+			// 		selectedArr[i]--
+			// 	}
+			// })
+			console.log('[data]', data)
+			// console.log('[selected index]', selectedArr)
+			console.log('[id2index]', id2index)
+			console.log('[index2id]', index2id)
+
+			// this.setState({ data: data, selectedIndex: [...selectedArr], id2index: id2index, index2id: index2id })
+			this.setState({ data: data, id2index: id2index, index2id: index2id })
+			localStorage.setItem('files', JSON.stringify(data))
+		}
+	}
+
 	deleteSelection = id => event => {
-		console.log('[deleteSelection]')
-		let selectedArr = this.state.selectedIndex
-		let data = this.state.data
-		const index = this.state.id2index[id]
-		data.splice(index, 1)
-		selectedArr.splice(index, 1)
-		this.setState({ data: data, selectedIndex: [...selectedArr] })
-		localStorage.setItem('files', JSON.stringify(data))
+
 	}
 
 	toggleGlobalCanvas = () => {
@@ -181,7 +224,7 @@ class App extends Component {
 					<div className='playlist' style={{ width: '40%', margin: 30 }}>
 						{
 							this.state.showList &&
-							<Playlist data={this.state.data} selectedIndex={this.state.selectedIndex} updated={this.updateSortable} clicked={this.changeSelection} clickDeleted={this.deleteSelection} />
+							<Playlist data={this.state.data} selectedIndex={this.state.selectedIndex} updated={this.updateSortable} clicked={this.changeSelection} clickDeleted={this.deleteFromLS} />
 						}
 						<button className="button-hide pure-button" onClick={this.toggleList}>{this.state.showList ? 'HIDE' : 'SHOW'}</button>
 						<div className="divider" />
