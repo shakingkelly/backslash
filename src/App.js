@@ -154,7 +154,7 @@ class App extends Component {
 		return (
 			<div>
 				<div style={{ display: 'flex', flexDirection: 'row' }}>
-					<div classname='audioRecord' style={{ margin: 30 }}><Audio /></div>
+					<div className='audioRecord' style={{ margin: 30 }}><Audio /></div>
 					
 					<div className='dropzone' style={{ width: '40%', margin: 30 }}>
 						{
@@ -174,7 +174,7 @@ class App extends Component {
 								</div>
 							</DragAndDrop>
 						}
-						<button class="button-hide pure-button" onClick={this.toggleZone}>{this.state.showZone ? 'HIDE' : 'SHOW'}</button>
+						<button className="button-hide pure-button" onClick={this.toggleZone}>{this.state.showZone ? 'HIDE' : 'SHOW'}</button>
 					</div>
 
 					<div className='playlist' style={{ width: '40%', margin: 30 }}>
@@ -182,23 +182,23 @@ class App extends Component {
 							this.state.showList &&
 							<Playlist data={this.state.data} selectedIndex={this.state.selectedIndex} updated={this.updateSortable} clicked={this.changeSelection} clickDeleted={this.deleteSelection} />
 						}
-						<button class="button-hide pure-button" onClick={this.toggleList}>{this.state.showList ? 'HIDE' : 'SHOW'}</button>
-						<div class="divider"/>
-						<button class="button-clear pure-button" onClick={this.clearLS}>CLEAR PLAYLIST</button>
+						<button className="button-hide pure-button" onClick={this.toggleList}>{this.state.showList ? 'HIDE' : 'SHOW'}</button>
+						<div className="divider"/>
+						<button className="button-clear pure-button" onClick={this.clearLS}>CLEAR PLAYLIST</button>
 					</div>
 				</div>
 
 				
-				<button class="button-global pure-button" onClick={this.toggleGlobalCanvas}>GLOBAL CANVAS</button>
+				<button className="button-global pure-button" onClick={this.toggleGlobalCanvas}>GLOBAL CANVAS</button>
 				{this.state.showGlobalCanvas && <GlobalDrawArea canvasWidth={window.innerWidth} canvasHeight={window.innerHeight} />}
 				
 
 				<div className='preview' style={{ width: '50%', margin: 30 }}>
-					<button class="button-prev pure-button" onClick={this.prevNext('prev')}>PREV</button>
-					<div class="divider"/>
-					<button class="button-next pure-button" onClick={this.prevNext('next')}>NEXT</button>
-					<div class="divider"/>
-					<button class="button-clear pure-button" onClick={this.clearPreview}>CLEAR PREVIEW</button>
+					<button className="button-prev pure-button" onClick={this.prevNext('prev')}>PREV</button>
+					<div className="divider"/>
+					<button className="button-next pure-button" onClick={this.prevNext('next')}>NEXT</button>
+					<div className="divider"/>
+					<button className="button-clear pure-button" onClick={this.clearPreview}>CLEAR PREVIEW</button>
 					<Preview data={this.state.data} selectedIndex={this.state.selectedIndex} />
 				</div>
 			</div>

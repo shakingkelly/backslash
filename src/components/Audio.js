@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ReactMic } from 'react-mic';
 
-class Audio extends React.Component {
+class Audio extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,10 +39,11 @@ class Audio extends React.Component {
           onData={this.onData}
           strokeColor="red"
           backgroundColor="black"
-          width='60'
-          height='60' />
+          width={60}
+          height={60} />
         </div>
         <button onClick={this.startRecording} type="button" style={{ width: 30, height: 30}}>▶</button>
+        {/* eslint-disable-next-line */}
         <button onClick={this.stopRecording} type="button" style={{ width: 30, height: 30}}>◼️</button>
         <button style={{ width: 60, height: 30}}><a href={this.state.src} download="Blah.webm">⬇</a></button>
 
