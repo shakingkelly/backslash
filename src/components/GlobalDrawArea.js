@@ -97,7 +97,7 @@ class DrawArea extends React.Component {
     undo() {
         let newUndoLines = [...this.state.undolines];
         let newRedoLines = [...this.state.redolines];
-        console.log('[undo] before:', newUndoLines.length, newRedoLines.length)
+        // console.log('[undo] before:', newUndoLines.length, newRedoLines.length)
 
         if (newUndoLines.length <= 0) {
             console.log('[undo] nothing there!')
@@ -105,21 +105,21 @@ class DrawArea extends React.Component {
         }
         newRedoLines.push(newUndoLines.pop());
 
-        console.log('[undo] after:', newUndoLines.length, newRedoLines.length)
+        // console.log('[undo] after:', newUndoLines.length, newRedoLines.length)
         this.setState({ undolines: newUndoLines, redolines: newRedoLines });
     }
 
     redo() {
         let newUndoLines = [...this.state.undolines];
         let newRedoLines = [...this.state.redolines];
-        console.log('[redo] before:', newUndoLines.length, newRedoLines.length)
+        // console.log('[redo] before:', newUndoLines.length, newRedoLines.length)
         if (newRedoLines.length <= 0) {
             console.log('[redo] nothing there!')
             return;
         }
         newUndoLines.push(newRedoLines.pop());
 
-        console.log('[redo] after:', newUndoLines.length, newRedoLines.length)
+        // console.log('[redo] after:', newUndoLines.length, newRedoLines.length)
         this.setState({ undolines: newUndoLines, redolines: newRedoLines });
     }
 

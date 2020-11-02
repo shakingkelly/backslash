@@ -33,7 +33,6 @@ class App extends Component {
 			data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img' },
 			{ id: 20, name: 'cant lose cant lose cant lose cant lose', url: './asset/break_it_to_me.png', type: 'img' }]
 		}
-		console.log('[localStorage.getItem]', data)
 
 		// web 
 		// const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img' },
@@ -51,30 +50,33 @@ class App extends Component {
 		console.log('[START]', this.state)
 	}
 
-	changeSelection = id => event => {
-		console.log('[changeSelection]', event.shiftKey, 'item.id:', id)
-		const index = this.state.id2index[id]
-		let selectedArr = this.state.selectedIndex
-		if (!this.state.selectedIndex.includes(index)) {
+	changeSelection = clickedID => event => {
+		console.log('[changeSelection]', event.shiftKey, 'item.id:', clickedID)
+		const clickedIndex = this.state.id2index[clickedID]
+		let selectedIndex = [...this.state.selectedIndex]
+		let selectedID = []
+		selectedIndex.forEach((index, i) => {
+			selectedID.push(this.state.index2id[index])
+		})
+		if (!selectedID.includes(clickedID)) {
 			if (event.shiftKey) {
-				selectedArr.push(index)
+				selectedIndex.push(clickedIndex)
 			} else {
-				selectedArr = [index]
+				selectedIndex = [clickedIndex]
 			}
 		} else {
 			if (event.shiftKey) {
-				selectedArr.splice(index, 1)
+				selectedIndex.splice(selectedIndex.indexOf(clickedIndex), 1)
 			} else {
-				selectedArr = []
+				selectedIndex = []
 			}
 		}
 
-		this.setState({ selectedIndex: [...selectedArr] }, () => { console.log('[changeSelection:callback]', this.state.selectedIndex) }) // so only after render, it reset the states
-		console.log(this.state.selectedIndex)
+		this.setState({ selectedIndex: [...selectedIndex] }, () => { console.log('[changeSelection:callback]', this.state.selectedIndex) }) // so only after render, it reset the states
+		console.log('[changeSelection:selectedIndex]', this.state.selectedIndex)
 	}
 
 	prevNext = direction => event => {
-		console.log('[prevNext]')
 		if (this.state.selectedIndex.length === 1) {
 			direction === 'prev' ?
 				this.setState({ selectedIndex: this.state.selectedIndex[0] === 0 ? [this.state.data.length - 1] : [this.state.selectedIndex[0] - 1] }) :
@@ -173,19 +175,11 @@ class App extends Component {
 			// 		selectedArr[i]--
 			// 	}
 			// })
-			console.log('[data]', data)
-			// console.log('[selected index]', selectedArr)
-			console.log('[id2index]', id2index)
-			console.log('[index2id]', index2id)
 
 			// this.setState({ data: data, selectedIndex: [...selectedArr], id2index: id2index, index2id: index2id })
 			this.setState({ data: data, id2index: id2index, index2id: index2id })
 			localStorage.setItem('files', JSON.stringify(data))
 		}
-	}
-
-	deleteSelection = id => event => {
-
 	}
 
 	toggleGlobalCanvas = () => {
