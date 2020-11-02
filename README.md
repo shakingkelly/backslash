@@ -10,20 +10,41 @@ Go to [Slasher blog](https://www.slashers.blog) for more development details!
 
 ## Functions
 
+Installation:  
 Install the `.dmg` file in `dist` folder.  
 Double click open `backslash.app`, there should be 3 preloaded files for testing purpose.  
+  
+Loading files:  
 Drag and drop any file from the computer into the drag-drop zone would load that file.  
 Multiple files can be drag-drop-loaded in one operation.  
+Click "hide / show" to toggle the visibility of the dropzone.  
+  
+Playlist operations:  
 Click on a black bar to show the image / play the audio video file.  
 Shift click multiple bars together will show / play multiple files.  
-Click the cross to delete the file.  
+Click the cross right to the file name to delete the file from playlist.  
 Click "clear playlist" to delete all loaded files.  
 The app would "remember" what files are added. Feel free to quit, same status will be loaded upon re-opening the app.  
-The shown files could be dragged and placed anywhere within the window as you like.  
-The black bars themselves could be dragged and re-ordered.  
+Drag the black bars to reorder the files in the playlist as you wish.
 Click "hide / show" to toggle the visibility of the list.  
+  
+Preview operations:  
+The shown files could be dragged and placed anywhere within the window as you like.
 Click "prev / next" to show prev / next file. (Disabled when selecting multiple files.)  
+To deselect a file, just click on a different file.  
 Click "clear preview" to reset the file area.  
+The number on the top-left corner indicates the order of the layer (useful when there are multiple files shown; smaller number = near bottom). The color of the border is a visual aid for the same purpose (red = bottom, blue = top).  
+Click "+ / -" to resize the preview.
+  
+Canvas operations:  
+Click "show canvas" on the top-left corner of one previewed file to show its own local canvas.  
+Default pencil stroke is "S" (small), click "L" on the bottom of the canvas to change pencil stroke to large.  
+Click "show colors" to use the colorpicker.  
+Changes to the pencil will be applied on your next move.  
+Click "clear canvas" to remove all drawing history.  
+Clicking "hide canvas" will result in removing all drawing history local to the file.  
+When canvas is shown, dragging preview on the screen is disabled.  
+Click "global canvas" to show the top-most layer and draw the relationships between different shown files.
 
 ## Folder Structure
 ```

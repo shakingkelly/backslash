@@ -1,5 +1,4 @@
 import React from 'react';
-// import './DrawArea.css';
 import { SketchPicker } from 'react-color';
 
 class DrawArea extends React.Component {
