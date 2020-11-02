@@ -10,9 +10,11 @@ const StyledListDiv = styled.div`
     border: 10px outset white;
     background-color: black;
     color: white;  
-    font-family: Courier;
+    font-family: Syne Mono;
+    border-radius: 10px;
+    margin-bottom:10px;
     &:hover {
-        background-color: green;
+        background-color: #2a9d8f;
     }
 `;
 
@@ -24,9 +26,11 @@ const StyledDeleteButton = styled.div`
     border: 10px outset white;
     background-color: black;
     color: white;  
-    font-family: Courier;
+    font-family: Syne Mono;
+    border-radius: 10px;
+    margin-bottom:10px;
     &:hover {
-        background-color: green;
+        background-color: #2a9d8f;
     }
 `;
 
@@ -38,10 +42,12 @@ const StyledActiveListDiv = styled.div`
     border: 10px inset white;
     background-color: white;
     color: black;  
-    font-family: Courier;
+    font-family: Syne Mono;
     font-weight: bold;
+    border-radius: 10px;
+    margin-bottom:10px;
     &:hover {
-        background-color: red;
+        background-color: #e76f51;
     }
 `;
 
@@ -53,39 +59,16 @@ const StyledActiveDeleteButton = styled.div`
     border: 10px inset white;
     background-color: white;
     color: black;  
-    font-family: Courier;
+    font-family: Syne Mono;
     font-weight: bold;
+    border-radius: 10px;
+    margin-bottom:10px;
     &:hover {
-        background-color: red;
+        background-color: #e76f51;
     }
 `;
 
 const Playlist = (props) => {
-
-    // const style = {
-    //     width: '50%',
-    //     maxWidth: '500px',
-    //     margin: '16px',
-    //     padding: '16px',
-    //     textAlign: 'center',
-    //     border: '10px outset white',
-    //     backgroundColor: 'black',
-    //     color: 'white'
-    // }
-
-    // const activeStyle = {
-    //     width: '50%',
-    //     maxWidth: '500px',
-    //     margin: '16px',
-    //     border: '10px inset white',
-    //     padding: '16px',
-    //     textAlign: 'center',
-    //     backgroundColor: 'white',
-    //     color: 'black',
-    //     fontFamily: 'Courier',
-    //     fontWeight: 'bold'
-    // }
-
 
     return (
         <ReactSortable
