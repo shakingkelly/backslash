@@ -28,15 +28,15 @@ class App extends Component {
 		// })
 
 		// desktop
-		let data = JSON.parse(localStorage.getItem('files'))
-		if (data.length === 0) {
-			data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img' },
-			{ id: 20, name: 'cant lose cant lose cant lose cant lose', url: './asset/break_it_to_me.png', type: 'img' }]
-		}
+		// let data = JSON.parse(localStorage.getItem('files'))
+		// if (data.length === 0) {
+		// 	data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img' },
+		// 	{ id: 20, name: 'cant lose cant lose cant lose cant lose', url: './asset/break_it_to_me.png', type: 'img' }]
+		// }
 
 		// web 
-		// const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img' },
-		// { id: 20, name: 'cant lose cant lose cant lose cant lose', url: './asset/break_it_to_me.png', type: 'img' }]
+		const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img' },
+		{ id: 20, name: 'cant lose cant lose cant lose cant lose', url: './asset/break_it_to_me.png', type: 'img' }]
 
 		this.state = {
 			data: data || [],

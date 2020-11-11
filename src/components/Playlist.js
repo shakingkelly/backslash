@@ -4,14 +4,14 @@ import styled from 'styled-components';
 
 const StyledListDiv = styled.div`
     flex-grow: 4;
-    height: 500x;
-    padding: 16px;
+    height: 15px;
+    padding: 5px;
     text-align: center;
-    border: 10px outset white;
+    border: 1px outset white;
     background-color: black;
     color: white;  
-    font-family: Syne Mono;
-    border-radius: 10px;
+    font-family: Space Grotesk;
+    // border-radius: 10px;
     // margin-bottom:10px;
     &:hover {
         background-color: #2a9d8f;
@@ -20,14 +20,14 @@ const StyledListDiv = styled.div`
 
 const StyledDeleteButton = styled.div`
     flex-grow: 1;
-    height: 500x;
-    padding: 16px;
+    height: 15px;
+    padding: 5px;
     text-align: center;
-    border: 10px outset white;
+    border: 1px outset white;
     background-color: black;
     color: white;  
-    font-family: Syne Mono;
-    border-radius: 10px;
+    font-family: Space Grotesk;
+    // border-radius: 10px;
     // margin-bottom:10px;
     &:hover {
         background-color: #2a9d8f;
@@ -36,15 +36,15 @@ const StyledDeleteButton = styled.div`
 
 const StyledActiveListDiv = styled.div`
     flex-grow: 4;
-    height: 500x;
-    padding: 16px;
+    height: 15px;
+    padding: 5px;
     text-align: center;
-    border: 10px inset white;
+    border: 1px inset white;
     background-color: white;
     color: black;  
-    font-family: Syne Mono;
+    font-family: Space Grotesk;
     font-weight: bold;
-    border-radius: 10px;
+    // border-radius: 10px;
     // margin-bottom:10px;
     &:hover {
         background-color: #e76f51;
@@ -53,15 +53,15 @@ const StyledActiveListDiv = styled.div`
 
 const StyledActiveDeleteButton = styled.div`
     flex-grow: 1;
-    height: 500x;
-    padding: 16px;
+    height: 15px;
+    padding: 5px;
     text-align: center;
-    border: 10px inset white;
+    border: 1px inset white;
     background-color: white;
     color: black;  
-    font-family: Syne Mono;
+    font-family: Space Grotesk;
     font-weight: bold;
-    border-radius: 10px;
+    // border-radius: 10px;
     // margin-bottom:10px;
     &:hover {
         background-color: #e76f51;
