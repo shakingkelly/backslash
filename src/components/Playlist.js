@@ -8,29 +8,29 @@ const StyledListDiv = styled.div`
     padding: 5px;
     text-align: center;
     border: 1px outset white;
-    background-color: black;
-    color: white;  
+    background-color: var(--list-background);
+    color: var(--list-foreground);  
     font-family: Space Grotesk;
-    // border-radius: 10px;
+    border-radius: var(--list-roundedness);
     // margin-bottom:10px;
     &:hover {
-        background-color: #2a9d8f;
+        background-color: var(--primary-green);
     }
 `;
 
 const StyledDeleteButton = styled.div`
     flex-grow: 1;
     height: 15px;
-    padding: 5px;
+    padding: 6px;
     text-align: center;
     border: 1px outset white;
-    background-color: black;
-    color: white;  
+    background-color: var(--list-background);
+    color: var(--list-foreground);  
     font-family: Space Grotesk;
-    // border-radius: 10px;
+    border-radius: var(--list-roundedness);
     // margin-bottom:10px;
     &:hover {
-        background-color: #2a9d8f;
+        background-color: var(--primary-green);
     }
 `;
 
@@ -40,14 +40,14 @@ const StyledActiveListDiv = styled.div`
     padding: 5px;
     text-align: center;
     border: 1px inset white;
-    background-color: white;
-    color: black;  
+    background-color: var(--list-foreground);
+    color: var(--list-background);  
     font-family: Space Grotesk;
     font-weight: bold;
-    // border-radius: 10px;
+    border-radius: var(--list-roundedness);
     // margin-bottom:10px;
     &:hover {
-        background-color: #e76f51;
+        background-color: var(--primary-red);
     }
 `;
 
@@ -57,14 +57,14 @@ const StyledActiveDeleteButton = styled.div`
     padding: 5px;
     text-align: center;
     border: 1px inset white;
-    background-color: white;
-    color: black;  
+    background-color: var(--list-foreground);
+    color: var(--list-background);  
     font-family: Space Grotesk;
     font-weight: bold;
-    // border-radius: 10px;
+    border-radius: var(--list-roundedness);
     // margin-bottom:10px;
     &:hover {
-        background-color: #e76f51;
+        background-color: var(--primary-red);
     }
 `;
 

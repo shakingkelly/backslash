@@ -42,10 +42,10 @@ class Audio extends Component {
             width={120}
             height={60} />
         </div>
-        <button onClick={this.startRecording} type="button" style={{ width: 30, height: 30 }}>⦿</button>
+        <button className="button-record pure-button" onClick={this.startRecording} type="button">⦿</button>
         {/* eslint-disable-next-line */}
-        <button onClick={this.stopRecording} type="button" style={{ width: 30, height: 30 }}>◼</button>
-        <button style={{ width: 60, height: 30 }}><a href={this.state.src} download="Blah.webm">⬇</a></button>
+        <button className="button-stop pure-button" onClick={this.stopRecording} type="button" >◼</button>
+        <button className="button-download pure-button"><a href={this.state.src} download="Blah.webm">⬇</a></button>
       </div>
     );
   }

@@ -84,7 +84,7 @@ class IAVMedia extends Component {
                 {
                     this.state.showCanvas ?
                         <div style={{ position: 'absolute', left: this.state.dragX, top: this.state.dragY }}>
-                            {this.type === 'img' && <img ref='coverImg' width={this.state.imgWidth} src={this.url} alt={this.url} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' ') }} />}
+                            {this.type === 'img' && <img ref='coverImg' width={this.state.imgWidth} src={this.url} alt={this.url} style={{ zIndex: 0, position: 'absolute', borderRadius: '15px' , borderStyle: 'dashed', borderColor: [this.colors[this.order], '4px'].join(' ')}} />}
                             {this.type === 'img' && <DrawArea canvasWidth={this.state.canvasWidth} canvasHeight={this.state.canvasHeight} />}
 
                             <button style={{ zIndex: 200, position: 'relative' }}>{this.order}</button>
@@ -95,8 +95,8 @@ class IAVMedia extends Component {
                         :
                         <Draggable>
                             <div style={{ position: 'absolute', left: this.state.dragX, top: this.state.dragY }}>
-                                {this.type === 'img' && <img ref='coverImg' width={this.state.imgWidth} src={this.url} alt={this.url} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' ') }} />}
-                                {this.type === 'av' && <ReactPlayer url={this.url} controls={true} width={avWidth} height={avHeight} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' ') }} />}
+                                {this.type === 'img' && <img ref='coverImg' width={this.state.imgWidth} src={this.url} alt={this.url} style={{ zIndex: 0, position: 'absolute', borderRadius: '15px' , borderStyle: 'dashed', borderColor: [this.colors[this.order], '4px'].join(' ')}} />}
+                                {this.type === 'av' && <ReactPlayer url={this.url} controls={true} width={avWidth} height={avHeight} style={{ zIndex: 0, position: 'absolute', borderRadius: '15px' , borderStyle: 'dashed', borderColor: [this.colors[this.order], '4px'].join(' ')}} />}
                                 <div className="divider" />
                                 <button className="button-order-num pure-button" style={{ zIndex: 200, position: 'relative' }}>{this.order}</button>
                                 <div className="divider" />
