@@ -129,9 +129,15 @@ class App extends Component {
 		let len = this.state.data.length
 
 		for (var i = 0; i < files.length; i++) {
-			let type = 'av'
-			if (files[i].name.endsWith(".jpg") || files[i].name.endsWith(".png")) {
+			let type = ''
+			if (files[i].name.endsWith(".jpg") || files[i].name.endsWith(".png") || files[i].name.endsWith(".gif") || files[i].name.endsWith(".bmp")) {
 				type = 'img'
+			} else if (files[i].name.endsWith(".pdf")) {
+				type = 'pdf'
+			} else if (files[i].name.endsWith(".mp3") || files[i].name.endsWith(".mp4") || files[i].name.endsWith(".webm")) {
+				type = 'av'
+			} else {
+				// file type not supported
 			}
 			data.push({ id: len, name: files[i].name, url: files[i].path, type: type })
 			len += 1
@@ -186,11 +192,16 @@ class App extends Component {
 		this.setState({ showGlobalCanvas: !this.state.showGlobalCanvas })
 	}
 
+	onError(e) {
+		console.log(e, 'error in file-viewer');
+	}
 
 	render() {
 		console.log('[render]', this.state.data.length)
 		return (
 			<div>
+				
+
 				<div style={{ display: 'flex', flexDirection: 'row' }}>
 					<div className='audioRecord' style={{ margin: 30 }}><Audio /></div>
 

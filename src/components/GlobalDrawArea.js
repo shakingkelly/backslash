@@ -155,7 +155,7 @@ class DrawArea extends React.Component {
                     height: this.props.canvasHeight,
                     // left: this.props.canvasLeft,
                     // top: this.props.canvasTop,
-                    // border: '1px solid red',
+                    border: '1px solid red',
                     zIndex: '1000',
                     position: 'absolute'
                 }}
