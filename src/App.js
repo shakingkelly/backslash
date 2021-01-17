@@ -6,6 +6,7 @@ import Preview from './components/Preview';
 import DragAndDrop from './components/DragAndDrop';
 import GlobalDrawArea from './components/GlobalDrawArea';
 import Audio from './components/Audio';
+import Editor from './components/Editor';
 
 class App extends Component {
 
@@ -50,80 +51,8 @@ class App extends Component {
 		console.log('[START]', this.state)
 	}
 
-	changeSelection = clickedID => event => {
-		console.log('[changeSelection]', event.shiftKey, 'item.id:', clickedID)
-		const clickedIndex = this.state.id2index[clickedID]
-		let selectedIndex = [...this.state.selectedIndex]
-		let selectedID = []
-		selectedIndex.forEach((index, i) => {
-			selectedID.push(this.state.index2id[index])
-		})
-		if (!selectedID.includes(clickedID)) {
-			if (event.shiftKey) {
-				selectedIndex.push(clickedIndex)
-			} else {
-				selectedIndex = [clickedIndex]
-			}
-		} else {
-			if (event.shiftKey) {
-				selectedIndex.splice(selectedIndex.indexOf(clickedIndex), 1)
-			} else {
-				selectedIndex = []
-			}
-		}
 
-		this.setState({ selectedIndex: [...selectedIndex] }, () => { console.log('[changeSelection:callback]', this.state.selectedIndex) }) // so only after render, it reset the states
-		console.log('[changeSelection:selectedIndex]', this.state.selectedIndex)
-	}
-
-	prevNext = direction => event => {
-		if (this.state.selectedIndex.length === 1) {
-			direction === 'prev' ?
-				this.setState({ selectedIndex: this.state.selectedIndex[0] === 0 ? [this.state.data.length - 1] : [this.state.selectedIndex[0] - 1] }) :
-				this.setState({ selectedIndex: this.state.selectedIndex[0] === this.state.data.length - 1 ? [0] : [this.state.selectedIndex[0] + 1] })
-		} else {
-			console.log('Prev/next is disabled when multiselection!')
-		}
-		console.log(this.state.selectedIndex)
-	}
-
-	toggleList = () => {
-		this.setState({ showList: !this.state.showList })
-	}
-
-	toggleZone = () => {
-		this.setState({ showZone: !this.state.showZone })
-	}
-
-	clearPreview = () => {
-		this.setState({ selectedIndex: [] })
-	}
-
-	updateSortable = (newState) => {
-		let newId2index = {}
-		let newIndex2id = {}
-		let newSelectedIndex = []
-		let selectedId = []
-
-		// get currently selected items' id
-		this.state.selectedIndex.forEach((selected, i) => {
-			selectedId.push(this.state.index2id[selected])
-		})
-
-		// update the relationship dicts
-		newState.forEach((item, index) => {
-			newId2index[item.id] = index
-			newIndex2id[index] = item.id
-		})
-
-		// map current selected item ids to new index 
-		selectedId.forEach((selected, i) => {
-			newSelectedIndex.push(newId2index[selected])
-		})
-
-		this.setState({ data: newState, id2index: newId2index, index2id: newIndex2id, selectedIndex: newSelectedIndex })
-	}
-
+	/* DROPZONE */
 	addFiles = (files) => {
 		let data = this.state.data
 		let len = this.state.data.length
@@ -188,20 +117,101 @@ class App extends Component {
 		}
 	}
 
+	toggleZone = () => {
+		this.setState({ showZone: !this.state.showZone })
+	}
+	/* END DROPZONE */
+
+
+	/* PLAYLIST */
+	changeSelection = clickedID => event => {
+		console.log('[changeSelection]', event.shiftKey, 'item.id:', clickedID)
+		const clickedIndex = this.state.id2index[clickedID]
+		let selectedIndex = [...this.state.selectedIndex]
+		let selectedID = []
+		selectedIndex.forEach((index, i) => {
+			selectedID.push(this.state.index2id[index])
+		})
+		if (!selectedID.includes(clickedID)) {
+			if (event.shiftKey) {
+				selectedIndex.push(clickedIndex)
+			} else {
+				selectedIndex = [clickedIndex]
+			}
+		} else {
+			if (event.shiftKey) {
+				selectedIndex.splice(selectedIndex.indexOf(clickedIndex), 1)
+			} else {
+				selectedIndex = []
+			}
+		}
+
+		this.setState({ selectedIndex: [...selectedIndex] }, () => { console.log('[changeSelection:callback]', this.state.selectedIndex) }) // so only after render, it reset the states
+		console.log('[changeSelection:selectedIndex]', this.state.selectedIndex)
+	}
+
+	updateSortable = (newState) => {
+		let newId2index = {}
+		let newIndex2id = {}
+		let newSelectedIndex = []
+		let selectedId = []
+
+		// get currently selected items' id
+		this.state.selectedIndex.forEach((selected, i) => {
+			selectedId.push(this.state.index2id[selected])
+		})
+
+		// update the relationship dicts
+		newState.forEach((item, index) => {
+			newId2index[item.id] = index
+			newIndex2id[index] = item.id
+		})
+
+		// map current selected item ids to new index 
+		selectedId.forEach((selected, i) => {
+			newSelectedIndex.push(newId2index[selected])
+		})
+
+		this.setState({ data: newState, id2index: newId2index, index2id: newIndex2id, selectedIndex: newSelectedIndex })
+	}
+
+	toggleList = () => {
+		this.setState({ showList: !this.state.showList })
+	}
+	/* END PLAYLIST */
+
+
+	/* PREVIEW */
+	prevNext = direction => event => {
+		if (this.state.selectedIndex.length === 1) {
+			direction === 'prev' ?
+				this.setState({ selectedIndex: this.state.selectedIndex[0] === 0 ? [this.state.data.length - 1] : [this.state.selectedIndex[0] - 1] }) :
+				this.setState({ selectedIndex: this.state.selectedIndex[0] === this.state.data.length - 1 ? [0] : [this.state.selectedIndex[0] + 1] })
+		} else {
+			console.log('Prev/next is disabled when multiselection!')
+		}
+		console.log(this.state.selectedIndex)
+	}
+
+	clearPreview = () => {
+		this.setState({ selectedIndex: [] })
+	}
+
 	toggleGlobalCanvas = () => {
 		this.setState({ showGlobalCanvas: !this.state.showGlobalCanvas })
 	}
+	/* END PREVIEW */
 
-	onError(e) {
-		console.log(e, 'error in file-viewer');
-	}
+
+	/* EDITORLIST */
+	/* END EDITORLIST */
 
 	render() {
 		console.log('[render]', this.state.data.length)
 		return (
+			/* CONTAINER */
 			<div>
-				
-
+				{/* METADATA ROW */}
 				<div style={{ display: 'flex', flexDirection: 'row' }}>
 					<div className='audioRecord' style={{ margin: 30 }}><Audio /></div>
 
@@ -209,16 +219,7 @@ class App extends Component {
 						{
 							this.state.showZone &&
 							<DragAndDrop handleDrop={this.addFiles}>
-								<div style={{
-									position: 'absolute',
-									top: 0,
-									botton: 0,
-									left: 0,
-									right: 0,
-									textAlign: 'center',
-									color: 'salmon',
-									fontSize: 24
-								}}>
+								<div style={{ position: 'absolute', top: 0, botton: 0, left: 0, right: 0, textAlign: 'center', color: 'salmon', fontSize: 24 }}>
 									Drop Zone
 								</div>
 							</DragAndDrop>
@@ -235,9 +236,13 @@ class App extends Component {
 						<div className="divider" />
 						<button className="button-clear pure-button" onClick={this.clearLS}>CLEAR PLAYLIST</button>
 					</div>
+
+					<div className='editorlist'>
+						{/* editorlist */}
+					</div>
 				</div>
 
-
+				{/* PREVIEWS */}
 				<button className="button-global pure-button" onClick={this.toggleGlobalCanvas}>GLOBAL CANVAS</button>
 				{this.state.showGlobalCanvas && <GlobalDrawArea canvasWidth={window.innerWidth} canvasHeight={window.innerHeight} />}
 
@@ -248,6 +253,7 @@ class App extends Component {
 					<div className="divider" />
 					<button className="button-clear pure-button" onClick={this.clearPreview}>CLEAR PREVIEW</button>
 					<Preview data={this.state.data} selectedIndex={this.state.selectedIndex} />
+					{/* <Preview data={this.state.editors} />   // in one row o rjust sequential? */}
 				</div>
 			</div>
 		)
