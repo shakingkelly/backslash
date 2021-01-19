@@ -9,12 +9,15 @@ const Preview = (props) => {
             {
                 props.selectedIndex.map((selected, index) => {
                     return (
-                        <IAVMedia key={selected} item={props.data[selected]} order={index} />
-                        // <Draggable key={selected}>
+                        props.data[selected].type === 'md' ?
+                            <IAVMedia key={selected} item={props.data[selected]} order={index} />
+                            // <Draggable key={selected}>
                             // <div>
-                                
+
                             // </div>
-                        // </Draggable>
+                            // </Draggable>
+                            :
+                            <Editor key={selected} item={props.data[selected]} order={index} changeEditorFilenameFn={props.changeEditorFilenameFn} />
                     )
                 })
             }

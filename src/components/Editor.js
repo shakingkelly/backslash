@@ -4,8 +4,16 @@ import { convertToRaw } from 'draft-js';
 
 class Editor extends Component {
 
+  id = this.props.item.id;
+  name = this.props.item.name;
+  text = this.props.item.text;
+  changeEditorFilename = this.props.changeEditorFilenameFn;
+  order = this.props.order;
+
   state = {
-    value: RichTextEditor.createEmptyValue()
+    // value: RichTextEditor.createEmptyValue()
+    value: RichTextEditor.createValueFromString(this.text, "markdown"),
+    filename: this.name
   }
 
   _logState() {
@@ -22,7 +30,7 @@ class Editor extends Component {
   }
 
   _onChange = (value) => {
-    this.setState({value});
+    this.setState({ value });
     if (this.props.onChange) {
       // Send the changes up to the parent component as an HTML string.
       // This is here to demonstrate using `.toString()` but in a real app it
@@ -37,7 +45,7 @@ class Editor extends Component {
     let source = event.target.value;
     let oldValue = this.state.value;
     this.setState({
-      value: oldValue.setContentFromString(source, this.state.format, {customBlockFn: this.getTextAlignBlockMetadata}),
+      value: oldValue.setContentFromString(source, this.state.format, { customBlockFn: this.getTextAlignBlockMetadata }),
     });
   }
 
@@ -45,16 +53,16 @@ class Editor extends Component {
     switch (contentBlock.getData().get('textAlign')) {
       case 'ALIGN_LEFT':
         return 'text-align--left';
-  
+
       case 'ALIGN_CENTER':
         return 'text-align--center';
-  
+
       case 'ALIGN_RIGHT':
         return 'text-align--right';
-  
+
       case 'ALIGN_JUSTIFY':
         return 'text-align--justify';
-  
+
       default:
         return '';
     }
@@ -101,28 +109,28 @@ class Editor extends Component {
             textAlign: 'ALIGN_RIGHT',
           },
         };
-  
+
       case 'center':
         return {
           data: {
             textAlign: 'ALIGN_CENTER',
           },
         };
-  
+
       case 'justify':
         return {
           data: {
             textAlign: 'ALIGN_JUSTIFY',
           },
         };
-  
+
       case 'left':
         return {
           data: {
             textAlign: 'ALIGN_LEFT',
           },
         };
-  
+
       default:
         return {};
     }
@@ -130,17 +138,36 @@ class Editor extends Component {
 
   downloadTxtFile = () => {
     const element = document.createElement("a");
-    const file = new Blob([this.state.value.toString('markdown', { blockStyleFn: this.getTextAlignStyles })], {type: 'text/plain'});
+    const file = new Blob([this.state.value.toString('markdown', { blockStyleFn: this.getTextAlignStyles })], { type: 'text/plain' });
     element.href = URL.createObjectURL(file);
-    const filename = document.getElementById("filename").value; 
+    const filename = document.getElementById("filename").value;
     element.download = filename + ".md";
     document.body.appendChild(element); // Required for this to work in FireFox
     element.click();
+    return filename;
   }
-
   saveMarkdown = () => {
     this._logState();
-    this.downloadTxtFile();
+    const newFilename = this.downloadTxtFile();
+    this.setState({ filename: newFilename });
+    this.changeEditorFilename(this.id, newFilename);
+  }
+
+  save = () => {
+    this._logState();
+    const newFilename = document.getElementById("filename").value;
+    this.setState({ filename: newFilename });
+    this.changeEditorFilename(this.id, newFilename);
+    return newFilename;
+  }
+  download = () => {
+    const newFilename = this.save();
+    const element = document.createElement("a");
+    const file = new Blob([this.state.value.toString('markdown', { blockStyleFn: this.getTextAlignStyles })], { type: 'text/plain' });
+    element.href = URL.createObjectURL(file);
+    element.download = newFilename + ".md";
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
   }
 
   render() {
@@ -164,8 +191,8 @@ class Editor extends Component {
       ]
     };
     return (
-      <div style={{width: '560px'}}>
-        <input type="text" id="filename" placeholder="filename" style={{width: '553px'}}></input>
+      <div style={{ width: '560px' }}>
+        <input type="text" id="filename" placeholder="filename" value={this.state.filename} style={{ width: '553px' }}></input>
         <RichTextEditor
           // toolbarConfig={toolbarConfig}
           value={this.state.value}
@@ -173,7 +200,8 @@ class Editor extends Component {
           placeholder="Tell a story"
           blockStyleFn={this.getTextAlignClassName}
         />
-        <button onClick={this.saveMarkdown}>Download</button>
+        <button onClick={this.save}>Save</button>
+        <button onClick={this.download}>Download</button>
 
         {/* <div className="row">
           <textarea
