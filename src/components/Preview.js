@@ -2,6 +2,8 @@ import React from 'react';
 import IAVMedia from './IAVMedia';
 // import Draggable from 'react-draggable';
 
+import Editor from './components/Editor';
+
 const Preview = (props) => {
 
     return (
@@ -10,14 +12,14 @@ const Preview = (props) => {
                 props.selectedIndex.map((selected, index) => {
                     return (
                         props.data[selected].type === 'md' ?
+                            <Editor key={selected} item={props.data[selected]} order={index} changeEditorFilenameFn={props.changeEditorFilenameFn} />
+                            :
                             <IAVMedia key={selected} item={props.data[selected]} order={index} />
                             // <Draggable key={selected}>
                             // <div>
 
                             // </div>
                             // </Draggable>
-                            :
-                            <Editor key={selected} item={props.data[selected]} order={index} changeEditorFilenameFn={props.changeEditorFilenameFn} />
                     )
                 })
             }

@@ -4,6 +4,15 @@ import { convertToRaw } from 'draft-js';
 
 class Editor extends Component {
 
+  // copied from IAVMedia 
+  componentDidUpdate(prevProps, prevState) {
+    console.log('[componentDidUpdate]', prevProps.item.name, this.props.item.name);
+    this.id = this.props.item.id;
+    this.name = this.props.item.name;
+    this.text = this.props.item.text;
+    this.order = this.props.order;
+  }
+
   id = this.props.item.id;
   name = this.props.item.name;
   text = this.props.item.text;
@@ -20,13 +29,6 @@ class Editor extends Component {
     let editorState = this.state.value.getEditorState();
     let contentState = window.contentState = editorState.getCurrentContent().toJS();
     console.log(contentState);
-  }
-
-  _logStateRaw() {
-    let editorState = this.state.value.getEditorState();
-    let contentState = editorState.getCurrentContent();
-    let rawContentState = convertToRaw(contentState);
-    console.log(JSON.stringify(rawContentState));
   }
 
   _onChange = (value) => {
@@ -203,14 +205,15 @@ class Editor extends Component {
         <button onClick={this.save}>Save</button>
         <button onClick={this.download}>Download</button>
 
-        {/* <div className="row">
+        {/* debug */}
+        <div className="row">
           <textarea
             className="source"
             placeholder="Editor Source"
             value={this.state.value.toString('markdown', { blockStyleFn: this.getTextAlignStyles })}
             onChange={this._onChangeSource}
           />
-        </div> */}
+        </div>
       </div>
 
     );

@@ -6,7 +6,6 @@ import Preview from './components/Preview';
 import DragAndDrop from './components/DragAndDrop';
 import GlobalDrawArea from './components/GlobalDrawArea';
 import Audio from './components/Audio';
-import Editor from './components/Editor';
 
 class App extends Component {
 
@@ -37,21 +36,15 @@ class App extends Component {
 
 		// web 
 		const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img' },
-		{ id: 20, name: 'cant lose cant lose cant lose cant lose', url: './asset/break_it_to_me.png', type: 'img' }]
-
-		const editorData = [{ id: 11, name: 'hiya', url: './asset/desktop/hiya.md', type: 'md' }]
+		{ id: 20, name: 'cant lose cant lose cant lose cant lose', url: './asset/break_it_to_me.png', type: 'img' }, 
+		{ id: 30, name: 'hiya', url: './asset/desktop/hiya.md', type: 'md' }]
 
 		this.state = {
 			data: data || [],
 			selectedIndex: [],
-			id2index: { 10: 0, 20: 1 },
-			index2id: { 0: 10, 1: 20 },
+			id2index: { 10: 0, 20: 1, 30: 2 },
+			index2id: { 0: 10, 1: 20, 2: 30 },
 			showList: true,
-			// editorData: editorData || [],
-			// editorSelectedIndex: [],
-			// editorId2index: { 11: 0 },
-			// editorIndex2id: { 0: 11 },
-			// showEditorList: true,
 			showZone: true,
 			showGlobalCanvas: false
 		}
@@ -75,9 +68,11 @@ class App extends Component {
 			} else {
 				// file type not supported
 			}
+			//////////////////////
 			data.push({ id: len, name: files[i].name, url: files[i].path, type: type, text: type === 'md' ? files[i].text : '' })
+			//////////////////////
 			len += 1
-			console.log('[addFiles]', files[i].path)
+			console.log('[addFiles]', files[i].path, files[i].text)
 		}
 
 		localStorage.setItem('files', JSON.stringify(data));
@@ -210,100 +205,13 @@ class App extends Component {
 	}
 	/* END PREVIEW */
 
-
-	/* EDITORLIST */
-	// createEditor = () => {
-
-	// }
-	// updateEditorSortable = (newState) => {
-	// 	let newId2index = {}
-	// 	let newIndex2id = {}
-	// 	let newSelectedIndex = []
-	// 	let selectedId = []
-
-	// 	// get currently selected items' id
-	// 	this.state.editorSelectedIndex.forEach((selected, i) => {
-	// 		selectedId.push(this.state.editorIndex2id[selected])
-	// 	})
-
-	// 	// update the relationship dicts
-	// 	newState.forEach((item, index) => {
-	// 		newId2index[item.id] = index
-	// 		newIndex2id[index] = item.id
-	// 	})
-
-	// 	// map current selected item ids to new index 
-	// 	selectedId.forEach((selected, i) => {
-	// 		newSelectedIndex.push(newId2index[selected])
-	// 	})
-
-	// 	this.setState({ editorData: newState, editorId2index: newId2index, editorIndex2id: newIndex2id, editorSelectedIndex: newSelectedIndex })
-	// }
-
-	// changeEditorSelection = clickedID => event => {
-	// 	console.log('[changeEditorSelection]', event.shiftKey, 'item.id:', clickedID)
-	// 	const clickedIndex = this.state.editorId2index[clickedID]
-	// 	let selectedIndex = [...this.state.editorSelectedIndex]
-	// 	let selectedID = []
-	// 	selectedIndex.forEach((index, i) => {
-	// 		selectedID.push(this.state.editorIndex2id[index])
-	// 	})
-	// 	if (!selectedID.includes(clickedID)) {
-	// 		if (event.shiftKey) {
-	// 			selectedIndex.push(clickedIndex)
-	// 		} else {
-	// 			selectedIndex = [clickedIndex]
-	// 		}
-	// 	} else {
-	// 		if (event.shiftKey) {
-	// 			selectedIndex.splice(selectedIndex.indexOf(clickedIndex), 1)
-	// 		} else {
-	// 			selectedIndex = []
-	// 		}
-	// 	}
-
-	// 	this.setState({ editorSelectedIndex: [...selectedIndex] }, () => {})
-	// 	console.log('[changeEditorSelection:editorSelectedIndex]', this.state.editorSelectedIndex)
-	// }
-
-	// deleteEditorFromLS = id => event => {
-	// 	console.log('[deleteEditorFromLS]')
-	// 	if (this.state.editorSelectedIndex.length > 0) {
-	// 		console.log('disabled when showing preview!')
-	// 	} else {
-	// 		let data = this.state.editorData
-	// 		let id2index = this.state.editorId2index
-	// 		let index2id = {}
-	// 		const index = id2index[id]
-
-	// 		delete id2index[id]
-	// 		for (var key in id2index) {
-	// 			if (id2index[key] > index) {
-	// 				id2index[key]--
-	// 			}
-	// 		}
-	// 		for (var key in id2index) {
-	// 			index2id[id2index[key]] = key
-	// 		}
-
-	// 		data.splice(index, 1)
-	// 		this.setState({ editorData: data, editorId2index: id2index, editorIndex2id: index2id })
-	// 		localStorage.setItem('editorFiles', JSON.stringify(data))
-	// 	}
-	// }
-
-	// clearEditorLS = () => {
-	// 	// localStorage.clear();
-	// 	localStorage.setItem('editorFiles', '')
-	// 	this.setState({ editorData: [], editorSelectedIndex: [] })
-	// }
-	/* END EDITORLIST */
-
+	//////////////////////
 	changeEditorFilename = (id, newFilename) => {
 		let data = this.state.data;
 		data[id].name = newFilename;
 		this.setState({ data: data });
 	}
+	//////////////////////
 
 	render() {
 		console.log('[render]', this.state.data.length)
@@ -335,20 +243,11 @@ class App extends Component {
 						<div className="divider" />
 						<button className="button-clear pure-button" onClick={this.clearLS}>CLEAR PLAYLIST</button>
 					</div>
-
-					{/* <div className='editorlist' style={{ width: '40%', margin: 30 }}>
-						{
-							this.state.showEditorList &&
-							<Playlist data={this.state.editorData} selectedIndex={this.state.editorSelectedIndex} update={this.updateEditorSortable} clicked={this.changeEditorSelection} clickDeleted={this.deleteEditorFromLS} />
-						}
-					</div> */}
 				</div>
 
 				{/* PREVIEWS */}
 				<button className="button-global pure-button" onClick={this.toggleGlobalCanvas}>GLOBAL CANVAS</button>
 				{this.state.showGlobalCanvas && <GlobalDrawArea canvasWidth={window.innerWidth} canvasHeight={window.innerHeight} />}
-
-				{/* <button onClick={this.createEditor}>New Editor</button> */}
 
 				<div className='preview' style={{ width: '50%', margin: 30 }}>
 					<button className="button-prev pure-button" onClick={this.prevNext('prev')}>PREV</button>
@@ -356,8 +255,8 @@ class App extends Component {
 					<button className="button-next pure-button" onClick={this.prevNext('next')}>NEXT</button>
 					<div className="divider" />
 					<button className="button-clear pure-button" onClick={this.clearPreview}>CLEAR PREVIEW</button>
+					
 					<Preview data={this.state.data} selectedIndex={this.state.selectedIndex} changeEditorFilenameFn={this.changeEditorFilename}/>
-					{/* <Preview data={this.state.editors} />   // in one row o rjust sequential? */}
 				</div>
 			</div>
 		)
