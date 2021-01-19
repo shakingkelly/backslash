@@ -22,7 +22,8 @@ class Editor extends Component {
   state = {
     // value: RichTextEditor.createEmptyValue()
     value: RichTextEditor.createValueFromString(this.text, "markdown"),
-    filename: this.name
+    filename: this.name,
+    inputValue: this.name
   }
 
   _logState() {
@@ -157,9 +158,12 @@ class Editor extends Component {
 
   save = () => {
     this._logState();
-    const newFilename = document.getElementById("filename").value;
+    // const newFilename = document.getElementById("filename").value;
+    const newFilename = this.state.inputValue;
+    const newText = this.state.value.toString('markdown', { blockStyleFn: this.getTextAlignStyles });
+    console.log('[Editor.js save]', newText);
     this.setState({ filename: newFilename });
-    this.changeEditorFilename(this.id, newFilename);
+    this.changeEditorFilename(this.id, newFilename, newText);
     return newFilename;
   }
   download = () => {
@@ -194,7 +198,7 @@ class Editor extends Component {
     };
     return (
       <div style={{ width: '560px' }}>
-        <input type="text" id="filename" placeholder="filename" value={this.state.filename} style={{ width: '553px' }}></input>
+        <input type="text" id="filename" placeholder="filename" value={this.state.inputValue} onChange={e => this.setState({inputValue: e.target.value})} style={{ width: '553px' }}></input>
         <RichTextEditor
           // toolbarConfig={toolbarConfig}
           value={this.state.value}

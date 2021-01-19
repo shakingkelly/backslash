@@ -35,9 +35,9 @@ class App extends Component {
 		// }
 
 		// web 
-		const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img' },
-		{ id: 20, name: 'cant lose cant lose cant lose cant lose', url: './asset/break_it_to_me.png', type: 'img' }, 
-		{ id: 30, name: 'hiya', url: './asset/desktop/hiya.md', type: 'md' }]
+		const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
+		{ id: 20, name: 'cant lose cant lose cant lose cant lose', url: './asset/break_it_to_me.png', type: 'img', text: '' }, 
+		{ id: 30, name: 'hiya', url: './asset/desktop/hiya.md', type: 'md', text: 'hiya' }]
 
 		this.state = {
 			data: data || [],
@@ -54,25 +54,26 @@ class App extends Component {
 
 	/* DROPZONE */
 	addFiles = (files) => {
-		let data = this.state.data
-		let len = this.state.data.length
+		let data = this.state.data;
+		let len = this.state.data.length;
 
 		for (var i = 0; i < files.length; i++) {
-			let type = ''
+			let type = '';
+			let newData = { id: len, name: files[i].name, url: files[i].path, type: type, text: '' };
 			if (files[i].name.endsWith(".jpg") || files[i].name.endsWith(".png") || files[i].name.endsWith(".gif") || files[i].name.endsWith(".bmp")) {
-				type = 'img'
+				newData.type = 'img';
 			} else if (files[i].name.endsWith(".md") || files[i].name.endsWith(".txt")) {
-				type = 'md'
+				newData.type = 'md';
+				files[i].text().then(result => newData.text = result);
 			} else if (files[i].name.endsWith(".mp3") || files[i].name.endsWith(".mp4") || files[i].name.endsWith(".webm")) {
-				type = 'av'
+				newData.type = 'av';
 			} else {
 				// file type not supported
 			}
-			//////////////////////
-			data.push({ id: len, name: files[i].name, url: files[i].path, type: type, text: type === 'md' ? files[i].text : '' })
-			//////////////////////
+			
+			data.push(newData);
 			len += 1
-			console.log('[addFiles]', files[i].path, files[i].text)
+			console.log('[addFiles]', newData.url, newData.text);
 		}
 
 		localStorage.setItem('files', JSON.stringify(data));
@@ -206,9 +207,10 @@ class App extends Component {
 	/* END PREVIEW */
 
 	//////////////////////
-	changeEditorFilename = (id, newFilename) => {
+	changeEditorFilename = (id, newFilename, newText) => {
 		let data = this.state.data;
-		data[id].name = newFilename;
+		data[this.state.id2index[id]].name = newFilename;
+		data[this.state.id2index[id]].text = newText;
 		this.setState({ data: data });
 	}
 	//////////////////////
