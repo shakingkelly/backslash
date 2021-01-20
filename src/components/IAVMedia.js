@@ -46,25 +46,36 @@ class IAVMedia extends Component {
         canvasWidth: 800,
         canvasHeight: 800,
         dragX: 0,
-        dragY: 0
+        dragY: 0,
+        fullscreen: false,
+        prevImgWidth: 640
     }
 
-    mediaClickHandler = (event) => { console.log('[IAVMedia] playing') }
+    mediaClickHandler = (event) => { console.log('[IAVMedia] playing') };
 
     larger = () => {
-        if (this.state.imgWidth < 1000) {
-            this.setState({ imgWidth: this.state.imgWidth + 100 })
+        if (this.state.imgWidth < window.innerWidth) {
+            this.setState({ imgWidth: this.state.imgWidth + 100, prevImgWidth: this.state.imgWidth + 100 });
         }
     }
 
     smaller = () => {
         if (this.state.imgWidth > 100) {
-            this.setState({ imgWidth: this.state.imgWidth - 100 })
+            this.setState({ imgWidth: this.state.imgWidth - 100, prevImgWidth: this.state.imgWidth - 100 });
         }
     }
 
-    enterFullscreen = () => { }
-    exitFullscreen = () => { }
+    toggleFullscreen = () => {
+        if (!this.state.fullscreen) {
+            const tempWidth = this.state.imgWidth;
+            this.setState({ imgWidth: window.innerWidth, prevImgWidth: tempWidth, fullscreen: true });
+        } else {
+            if (this.type === 'img') {
+                this.toggleCanvas();
+            }
+            this.setState({ imgWidth: this.state.prevImgWidth, fullscreen: false });
+        }
+    }
 
     toggleCanvas = () => {
         const boundingRect = this.refs.coverImg.getBoundingClientRect();
@@ -78,9 +89,9 @@ class IAVMedia extends Component {
     }
 
     render() {
-        console.log('[IAVMedia:render]', this.url) // worked after put in publics
-        const avWidth = this.state.imgWidth.toString() + 'px'
-        const avHeight = (this.state.imgWidth * 9 / 16).toString() + 'px'
+        console.log('[IAVMedia:render]', this.url); // worked after put in publics
+        const avWidth = this.state.imgWidth.toString() + 'px';
+        const avHeight = (this.state.imgWidth * 9 / 16).toString() + 'px';
 
         return (
             <Draggable handle='.handle'>
@@ -89,9 +100,10 @@ class IAVMedia extends Component {
                     {this.type === 'img' && this.state.showCanvas && <DrawArea canvasWidth={this.state.canvasWidth} canvasHeight={this.state.canvasHeight} />}
                     {this.type === 'av' && <ReactPlayer url={this.url} controls={true} width={avWidth} height={avHeight} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' ') }} />}
                     <button className="handle button-order-num pure-button" style={{ zIndex: 200, position: 'relative' }}>{this.order}</button>
-                    <button className="button-sizer pure-button" style={{ zIndex: 200, position: 'relative' }} onClick={this.smaller.bind(this)}>-</button>
-                    <button className="button-sizer pure-button" style={{ zIndex: 200, position: 'relative' }} onClick={this.larger.bind(this)}>+</button>
+                    {!this.state.showCanvas && !this.state.fullscreen && <button className="button-sizer pure-button" style={{ zIndex: 200, position: 'relative' }} onClick={this.smaller.bind(this)}>-</button>}
+                    {!this.state.showCanvas && !this.state.fullscreen && <button className="button-sizer pure-button" style={{ zIndex: 200, position: 'relative' }} onClick={this.larger.bind(this)}>+</button>}
                     {this.type === 'img' && <button className="button-canvas pure-button" onClick={this.toggleCanvas} style={{ zIndex: 200, position: 'relative' }}>{this.state.showCanvas ? 'HIDE CANVAS' : 'SHOW CANVAS'}</button>}
+                    <button style={{ zIndex: 200, position: 'relative' }} onClick={this.toggleFullscreen}>{this.state.fullscreen ? 'ESC' : 'FULLSCREEN'}</button>
                 </div>
             </Draggable>
         )
