@@ -141,3 +141,27 @@ SketchPicker.color-picker {
   width: '50%';
   margin: 30;
 }
+
+
+.box {
+  background: #fff;
+  border: 1px solid #999;
+  border-radius: 3px;
+  width: 580px;
+  height: 240px;
+  margin: 10px;
+  padding: 10px;
+  float: left;
+}
+.no-cursor {
+  cursor: auto;
+}
+.handle {
+  background: #ddd;
+  border: 1px solid #999;
+  border-radius: 3px;
+  display: block;
+  margin-bottom: 10px;
+  padding: 3px 5px;
+  text-align: center;
+}

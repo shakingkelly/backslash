@@ -12,11 +12,12 @@ const Preview = (props) => {
                 props.selectedIndex.map((selected, index) => {
                     return (
                         props.data[selected].type === 'md' ?
-                            // <Draggable>
-                                // <div>
+                            <Draggable handle=".handle">
+                                <div className="box no-cursors">
+                                    <div className="handle">Drag me</div>
                                     <Editor key={selected} item={props.data[selected]} order={index} changeEditorFilenameFn={props.changeEditorFilenameFn} />
-                                // </div>
-                            // </Draggable>
+                                </div>
+                            </Draggable>
                             :
                             <IAVMedia key={selected} item={props.data[selected]} order={index} />
                     )
