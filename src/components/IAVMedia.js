@@ -63,17 +63,17 @@ class IAVMedia extends Component {
         }
     }
 
-    enterFullscreen = () => {}
-    exitFullscreen = () => {}
+    enterFullscreen = () => { }
+    exitFullscreen = () => { }
 
     toggleCanvas = () => {
         const boundingRect = this.refs.coverImg.getBoundingClientRect();
         this.setState({
             showCanvas: !this.state.showCanvas,
             canvasWidth: boundingRect.right - boundingRect.left,
-            canvasHeight: boundingRect.bottom - boundingRect.top,
-            dragX: boundingRect.left,
-            dragY: boundingRect.top
+            canvasHeight: boundingRect.bottom - boundingRect.top
+            // dragX: boundingRect.left,
+            // dragY: boundingRect.top
         });
     }
 
@@ -81,36 +81,19 @@ class IAVMedia extends Component {
         console.log('[IAVMedia:render]', this.url) // worked after put in publics
         const avWidth = this.state.imgWidth.toString() + 'px'
         const avHeight = (this.state.imgWidth * 9 / 16).toString() + 'px'
-        
-        return (
-            <div>
-                {
-                    this.state.showCanvas ?
-                        <div style={{ position: 'absolute', left: this.state.dragX, top: this.state.dragY }}>
-                            {this.type === 'img' && <img ref='coverImg' width={this.state.imgWidth} src={this.url} alt={this.url} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' ')}} />}
-                            {this.type === 'img' && <DrawArea canvasWidth={this.state.canvasWidth} canvasHeight={this.state.canvasHeight} />}
-                            <button style={{ zIndex: 200, position: 'relative' }}>{this.order}</button>
-                            <button style={{ zIndex: 200, position: 'relative' }} onClick={this.larger.bind(this)}>+</button>
-                            <button style={{ zIndex: 200, position: 'relative' }} onClick={this.smaller.bind(this)}>-</button>
-                            {this.type === 'img' && <button onClick={this.toggleCanvas} style={{ zIndex: 200, position: 'relative' }}>hide canvas</button>}
-                        </div>
-                        :
-                        <Draggable>
-                            <div style={{ position: 'absolute', left: this.state.dragX, top: this.state.dragY }}>
-                                {this.type === 'img' && <img ref='coverImg' width={this.state.imgWidth} src={this.url} alt={this.url} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' ')}} />}
-                                {this.type === 'av' && <ReactPlayer url={this.url} controls={true} width={avWidth} height={avHeight} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' ')}} />}
-                                <div className="divider" />
-                                <button className="button-order-num pure-button" style={{ zIndex: 200, position: 'relative' }}>{this.order}</button>
-                                <div className="divider" />
-                                <button className="button-sizer pure-button" style={{ zIndex: 200, position: 'relative' }} onClick={this.smaller.bind(this)}>-</button>
-                                <button className="button-sizer pure-button" style={{ zIndex: 200, position: 'relative' }} onClick={this.larger.bind(this)}>+</button>
-                                <div className="divider" />
-                                {this.type === 'img' && <button className="button-canvas pure-button" onClick={this.toggleCanvas} style={{ zIndex: 200, position: 'relative' }}>SHOW CANVAS</button>}
-                            </div>
-                        </Draggable>
-                }
-            </div>
 
+        return (
+            <Draggable handle='.handle'>
+                <div style={{ position: 'absolute', left: this.state.dragX, top: this.state.dragY }}>
+                    {this.type === 'img' && <img ref='coverImg' width={this.state.imgWidth} src={this.url} alt={this.url} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' ') }} />}
+                    {this.type === 'img' && this.state.showCanvas && <DrawArea canvasWidth={this.state.canvasWidth} canvasHeight={this.state.canvasHeight} />}
+                    {this.type === 'av' && <ReactPlayer url={this.url} controls={true} width={avWidth} height={avHeight} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' ') }} />}
+                    <button className="handle button-order-num pure-button" style={{ zIndex: 200, position: 'relative' }}>{this.order}</button>
+                    <button className="button-sizer pure-button" style={{ zIndex: 200, position: 'relative' }} onClick={this.smaller.bind(this)}>-</button>
+                    <button className="button-sizer pure-button" style={{ zIndex: 200, position: 'relative' }} onClick={this.larger.bind(this)}>+</button>
+                    {this.type === 'img' && <button className="button-canvas pure-button" onClick={this.toggleCanvas} style={{ zIndex: 200, position: 'relative' }}>{this.state.showCanvas ? 'HIDE CANVAS' : 'SHOW CANVAS'}</button>}
+                </div>
+            </Draggable>
         )
 
     }

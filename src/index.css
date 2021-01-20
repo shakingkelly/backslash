@@ -160,21 +160,22 @@ SketchPicker.color-picker {
   background: #ddd;
   border: 1px solid #999;
   border-radius: 3px;
-  display: block;
+  /* display: block; */
   margin-bottom: 10px;
   padding: 3px 5px;
   text-align: center;
 }
 
+/* PLAYLIST */
 #finite-list {
   background: #fff;
   padding: 15px;
   width: 90%;
-  height: 400px;
+  height: 200;
   overflow: scroll;
 }
 .snapshot-generator {
-  /* display: block; */
+  display: block;
   height: 1px;
   left: 0;
   object-fit: contain;
