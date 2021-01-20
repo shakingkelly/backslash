@@ -36,8 +36,8 @@ class App extends Component {
 
 		// web 
 		const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
-		{ id: 20, name: 'cant lose cant lose cant lose cant lose', url: './asset/break_it_to_me.png', type: 'img', text: '' }, 
-		{ id: 30, name: 'hiya', url: './asset/desktop/hiya.md', type: 'md', text: 'hiya' }]
+		{ id: 20, name: 'vid', url: './asset/JavaScript.mp4', type: 'av', text: '' }, 
+		{ id: 30, name: 'hiya', url: './asset/hiya.md', type: 'md', text: 'hiya' }]
 
 		this.state = {
 			data: data || [],

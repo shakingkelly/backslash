@@ -142,7 +142,7 @@ SketchPicker.color-picker {
   margin: 30;
 }
 
-
+/* DRAGGABLE */
 .box {
   background: #fff;
   border: 1px solid #999;
@@ -164,4 +164,22 @@ SketchPicker.color-picker {
   margin-bottom: 10px;
   padding: 3px 5px;
   text-align: center;
+}
+
+#finite-list {
+  background: #fff;
+  padding: 15px;
+  width: 90%;
+  height: 400px;
+  overflow: scroll;
+}
+.snapshot-generator {
+  /* display: block; */
+  height: 1px;
+  left: 0;
+  object-fit: contain;
+  position: fixed;
+  top: 0;
+  width: 1px;
+  z-index: -1;
 }
