@@ -99,11 +99,11 @@ class IAVMedia extends Component {
                     {this.type === 'img' && <img ref='coverImg' width={this.state.imgWidth} src={this.url} alt={this.url} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' ') }} />}
                     {this.type === 'img' && this.state.showCanvas && <DrawArea canvasWidth={this.state.canvasWidth} canvasHeight={this.state.canvasHeight} />}
                     {this.type === 'av' && <ReactPlayer url={this.url} controls={true} width={avWidth} height={avHeight} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' ') }} />}
-                    <button className="handle button-order-num pure-button" style={{ zIndex: 200, position: 'relative' }}>{this.order}</button>
-                    {!this.state.showCanvas && !this.state.fullscreen && <button className="button-sizer pure-button" style={{ zIndex: 200, position: 'relative' }} onClick={this.smaller.bind(this)}>-</button>}
-                    {!this.state.showCanvas && !this.state.fullscreen && <button className="button-sizer pure-button" style={{ zIndex: 200, position: 'relative' }} onClick={this.larger.bind(this)}>+</button>}
-                    {this.type === 'img' && <button className="button-canvas pure-button" onClick={this.toggleCanvas} style={{ zIndex: 200, position: 'relative' }}>{this.state.showCanvas ? 'HIDE CANVAS' : 'SHOW CANVAS'}</button>}
-                    <button style={{ zIndex: 200, position: 'relative' }} onClick={this.toggleFullscreen}>{this.state.fullscreen ? 'ESC' : 'FULLSCREEN'}</button>
+                    <button className="handle nonaction" style={{ zIndex: 200, position: 'relative' }}>{this.order}</button>
+                    {!this.state.showCanvas && !this.state.fullscreen && <button className="action" style={{ zIndex: 200, position: 'relative' }} onClick={this.smaller.bind(this)}>-</button>}
+                    {!this.state.showCanvas && !this.state.fullscreen && <button className="action" style={{ zIndex: 200, position: 'relative' }} onClick={this.larger.bind(this)}>+</button>}
+                    {this.type === 'img' && <button className="action" onClick={this.toggleCanvas} style={{ zIndex: 200, position: 'relative' }}>{this.state.showCanvas ? 'HIDE CANVAS' : 'SHOW CANVAS'}</button>}
+                    <button className="action" style={{ zIndex: 200, position: 'relative' }} onClick={this.toggleFullscreen}>{this.state.fullscreen ? 'ESC' : 'FULLSCREEN'}</button>
                 </div>
             </Draggable>
         )

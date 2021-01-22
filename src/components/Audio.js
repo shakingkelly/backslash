@@ -6,7 +6,9 @@ class Audio extends Component {
     super(props);
     this.state = {
       record: false,
-      src: ''
+      src: '',
+      width: 120,
+      height: 60
     }
   }
 
@@ -39,13 +41,13 @@ class Audio extends Component {
             onData={this.onData}
             strokeColor="red"
             backgroundColor="black"
-            width={120}
-            height={60} />
+            width={this.state.width}
+            height={this.state.height} />
         </div>
-        <button className="button-record pure-button" onClick={this.startRecording} type="button">⦿</button>
-        {/* eslint-disable-next-line */}
-        <button className="button-stop pure-button" onClick={this.stopRecording} type="button" >◼</button>
-        <button className="button-download pure-button"><a href={this.state.src} download="Blah.webm">⬇</a></button>
+        <button className="action" onClick={this.startRecording}>Start</button>
+        <button className="action" onClick={this.stopRecording}>Stop</button>
+        <div><button className="files"><a href={this.state.src} download="Blah.webm">Download</a></button></div>
+        
       </div>
     );
   }

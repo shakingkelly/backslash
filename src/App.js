@@ -206,14 +206,12 @@ class App extends Component {
 	}
 	/* END PREVIEW */
 
-	//////////////////////
 	changeEditorFilename = (id, newFilename, newText) => {
 		let data = this.state.data;
 		data[this.state.id2index[id]].name = newFilename;
 		data[this.state.id2index[id]].text = newText;
 		this.setState({ data: data });
 	}
-	//////////////////////
 
 	render() {
 		console.log('[render]', this.state.data.length)
@@ -221,42 +219,37 @@ class App extends Component {
 			/* CONTAINER */
 			<div>
 				{/* METADATA ROW */}
-				<div style={{ display: 'flex', flexDirection: 'row' }}>
-					<div className='audioRecord' style={{ margin: 30 }}><Audio /></div>
+				<div className="metadata">
+					<div className='audio'><Audio /></div>
 
-					<div className='dropzone' style={{ width: '40%', margin: 30 }}>
+					<div className='dropzone'>
 						{
 							this.state.showZone &&
 							<DragAndDrop handleDrop={this.addFiles}>
-								<div style={{ position: 'absolute', top: 0, botton: 0, left: 0, right: 0, textAlign: 'center', color: 'salmon', fontSize: 24 }}>
-									Drop Zone
-								</div>
+								{/* <div style={{ position: 'absolute', top: 0, botton: 0, left: 0, right: 0, textAlign: 'center', color: 'salmon', fontSize: 24 }} >Drop Zone</div> */}
 							</DragAndDrop>
 						}
-						<button className="button-hide pure-button" onClick={this.toggleZone}>{this.state.showZone ? 'HIDE' : 'SHOW'}</button>
+						<button className="action" onClick={this.toggleZone}>{this.state.showZone ? 'HIDE' : 'SHOW'}</button>
 					</div>
 
-					<div className='playlist' style={{ width: '40%', margin: 30 }}>
+					<div className='playlist'>
 						{
 							this.state.showList &&
 							<Playlist data={this.state.data} selectedIndex={this.state.selectedIndex} updated={this.updateSortable} clicked={this.changeSelection} clickDeleted={this.deleteFromLS} />
 						}
-						<button className="button-hide pure-button" onClick={this.toggleList}>{this.state.showList ? 'HIDE' : 'SHOW'}</button>
-						<div className="divider" />
-						<button className="button-clear pure-button" onClick={this.clearLS}>CLEAR PLAYLIST</button>
+						<button className="action" onClick={this.toggleList}>{this.state.showList ? 'HIDE' : 'SHOW'}</button>
+						<button className="delete" onClick={this.clearLS}>CLEAR PLAYLIST</button>
 					</div>
 				</div>
 
 				{/* PREVIEWS */}
-				<button className="button-global pure-button" onClick={this.toggleGlobalCanvas}>GLOBAL CANVAS</button>
+				<button className="action" onClick={this.toggleGlobalCanvas}>GLOBAL CANVAS</button>
 				{this.state.showGlobalCanvas && <GlobalDrawArea canvasWidth={window.innerWidth} canvasHeight={window.innerHeight} />}
 
-				<div className='preview' style={{ width: '50%', margin: 30 }}>
-					<button className="button-prev pure-button" onClick={this.prevNext('prev')}>PREV</button>
-					<div className="divider" />
-					<button className="button-next pure-button" onClick={this.prevNext('next')}>NEXT</button>
-					<div className="divider" />
-					<button className="button-clear pure-button" onClick={this.clearPreview}>CLEAR PREVIEW</button>
+				<div className='preview'>
+					<button className="action" onClick={this.prevNext('prev')}>PREV</button>
+					<button className="action" onClick={this.prevNext('next')}>NEXT</button>
+					<button className="delete" onClick={this.clearPreview}>CLEAR PREVIEW</button>
 					
 					<Preview data={this.state.data} selectedIndex={this.state.selectedIndex} changeEditorFilenameFn={this.changeEditorFilename}/>
 				</div>

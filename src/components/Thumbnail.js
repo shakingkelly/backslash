@@ -4,7 +4,6 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
-// import './video-thumbnail.css';
 
 /**
  * Simple component that renders thumbnail url
@@ -119,7 +118,6 @@ export default class VideoThumbnail extends React.Component {
         
         try {
             const { width, height } = this.props;
-            const container = this.refs.container;
             const video = this.refs.videoEl;
             const canvas = this.refs.canvas;
             // canvas.height = video.videoHeight;
@@ -138,7 +136,6 @@ export default class VideoThumbnail extends React.Component {
 
             // Remove video & canvas elements (no longer needed)
             video.src = "";  // setting to empty string stops video from loading
-            // container.remove();
             video.remove();
             canvas.remove();
 

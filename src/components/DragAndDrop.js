@@ -51,39 +51,11 @@ class DragAndDrop extends Component {
     }
     render() {
         return (
-            <div
-                // style={{ border: 'dashed red 4px', height: 100, width: 300, margin: 30, position: 'relative' }}
-                style={{ border: 'dashed red 4px', height: 100, position: 'relative', borderRadius: '15px'}}
-                ref={this.dropRef}
-            >
+            <div className="dropzone-border" ref={this.dropRef}>
                 {this.state.drag &&
-                    <div
-                        style={{
-                            border: 'dashed white 4px',
-                            backgroundColor: 'rgba(255,255,255,.8)',
-                            position: 'absolute',
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            zIndex: 9999
-                        }}
-                    >
-                        <div
-                            style={{
-                                position: 'absolute',
-                                top: '20%',
-                                left: '20%',
-                                textAlign: 'center',
-                                color: 'green',
-                                fontSize: 24
-                            }}
-                        >
-                            <div>drop here :)</div>
-                        </div>
-                    </div>
+                    <div className="dropzone-shadow">a file :)</div>
                 }
-                {this.props.children}
+                {/* {this.props.children} */}
             </div>
         )
     }

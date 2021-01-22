@@ -1,5 +1,5 @@
 :root {
-  --canvas-top-margin: 7px;
+  /* --canvas-top-margin: 0px;
   --background-all: #978897;
   --default-button: #f0f6f6;
   --secondary-button: #887ac7;
@@ -7,17 +7,29 @@
   --primary-yellow: #ffa630;
   --primary-green: #519e8a;
   --secondary-accent: #519e8a;
-
-  --button-roundedness: 10px;
-  --list-background: #000000;
-  --list-foreground: #ffffff;
-  --list-roundedness: 3px;
-
+  --button-roundedness: 3px;
   --frame-roundedness: 90px;
+  --list-roundedness: 3px; */
+
+  --background-all: #2E0927;
+  --primary-red: #D90000;     /*=button-delete*/
+  --primary-yellow: #FF8C00;  /*=button-action*/
+  --primary-green: #04756F;
+  --button-background: burlywood;
+  --button-textcolor: black;
+  --button-files: #FF2D00;
+  --button-nonaction: greenyellow;
+  --button-delete-hover: #b40c0c;
+  --button-files-hover: #f8ad9c;
+  --button-action-hover: #fccc92;  
+  --list-background: black;
+  --list-foreground: white;
 }
 
 body {
   margin: 0;
+  background-color: var(--background-all);
+  text-align: center;
   font-family: 'Space Grotesk', 'Syne Mono', monospace , 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -29,34 +41,279 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-/* */
-/* PRIMARY BACKGROUND */
-body {
-  background-color: var(--background-all);
+
+
+/* BUTTONS */
+button {
+  color: var(--button-textcolor);
+  background-color: var(--button-background);
+  /* margin: 4px 4px; =dashed border width */
 }
 
-h1 {
-  color: white;
+button.action {
+  background: var(--primary-yellow);
+}
+button.action:hover {
+  background: var(--button-action-hover);
+}
+
+button.files {
+  background-color: var(--button-files);
+}
+button.files:hover {
+  background-color: var(--button-files-hover);
+}
+
+button.delete {
+  background-color: var(--primary-red);
+}
+button.delete:hover {
+  background-color: var(--button-delete-hover);
+}
+
+button.nonaction {
+  background-color: var(--button-nonaction);
+}
+/* BUTTONS */
+
+
+/* METADATA */
+div.metadata {
+  display: flex; 
+  flex-direction: row;
+}
+div.audio {
+  margin: 30px;
+}
+div.dropzone {
+  width: 10%;
+  margin: 30px;
+}
+div.playlist{
+  width: '40%';
+  margin: 30px;
+} 
+div.preview {
+  width: 100%;
+  margin: 10px;
+}
+/* METADATA */
+
+
+/* DROPZONE */
+div.dropzone-border {
+  /* // style={{ border: 'dashed red 4px', height: 100, width: 300, margin: 30, position: 'relative' }} */
+  /* style={{ border: 'dashed red 4px', height: 100, position: 'relative', borderRadius: '3px'}} */
+  border: dashed red 4px;
+  height: 100px;
+  position: relative;
+  border-radius: 3px;
+}
+
+div.dropzone-shadow {
+  /* style={{
+    // border: 'dashed white 4px',
+    backgroundColor: 'rgba(255,255,255,.8)',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 9999
+}} */
+  background-color: rgba(255,255,255,.8);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  color: green;
+  font-size: 24px;
+  padding: 35px 0px;
+}
+/* DROPZONE */
+
+
+/* PLAYLIST */
+#finite-list {
+  background: #fff;
+  width: 100%;
+  height: 180px;  /*=(50+5*2)*3*/
+  overflow-y: scroll;
+  /* padding: 15px; */
+}
+.snapshot-generator {
+  display: block;
+  height: 1px;
+  left: 0;
+  object-fit: contain;
+  position: fixed;
+  top: 0;
+  width: 1px;
+  z-index: -1;
+}
+div.list-item {
+  /* style={{ display: 'flex', flexDirection: 'row', maxWidth: '800px', width: '500px' }} */
+  display: flex;
+  flex-direction: row;
+  max-width: 800px;
+  width: 600px;  /*=editor width*/
+  flex-wrap: nowrap;
+}
+div.preview-cell {
+  flex: 0 0 100px;  /*=preview img width*/
+  height: 50px;
+  padding: 5px;
+  text-align: center;
+  background-color: var(--list-background);
+  color: var(--list-foreground);  
+  font-family: Space Grotesk;
+  /* border: 1px outset white; */
+}
+div.preview-cell:hover {
+  background-color: var(--primary-green);
+}
+div.preview-cell-active {
+  flex: 0 0 100px;
+  height: 50px;
+  padding: 5px;
+  text-align: center;
+  background-color: var(--list-foreground);
+  color: var(--list-background);  
+  font-family: Space Grotesk;
+  font-weight: bold;
+  /* border: 1px inset white; */
+}
+div.preview-cell-active:hover {
+  background-color: var(--primary-red);
+}
+div.filename-cell {
+  flex: 0 0 150px;
+  height: 50px;
+  padding: 5px;
+  text-align: center;
+  background-color: var(--list-background);
+  color: var(--list-foreground);  
+  font-family: Space Grotesk;
+  overflow-x: auto;
+  /* border: 1px outset white; */
+}
+div.filename-cell:hover {
+  background-color: var(--primary-green);
+}
+div.filename-cell-active {
+  flex: 0 0 150px;
+  height: 50px;
+  padding: 5px;
+  text-align: center;
+  background-color: var(--list-foreground);
+  color: var(--list-background);  
+  font-family: Space Grotesk;
+  font-weight: bold;
+  overflow-x: auto;
+  /* border: 1px inset white; */
+}
+div.filename-cell-active:hover {
+  background-color: var(--primary-red);
+}
+div.delete-button {
+  flex: 0 0 20px;
+  height: 50px;
+  padding: 5px;
+  text-align: center;
+  background-color: var(--list-background);
+  color: var(--list-foreground);  
+  font-family: Space Grotesk;
+  /* border: 1px outset white; */
+}
+div.delete-button:hover {
+  background-color: var(--primary-green);
+}
+div.delete-button-active {
+  flex: 0 0 20px;
+  height: 50px;
+  padding: 5px;
+  text-align: center;
+  background-color: var(--list-foreground);
+  color: var(--list-background);  
+  font-family: Space Grotesk;
+  font-weight: bold;
+  /* border: 1px inset white; */
+}
+div.delete-button-active:hover {
+  background-color: var(--primary-red);
+}
+/* PLAYLIST*/
+
+
+/* DRAWAREA */
+div.draw-area {
+    background-color: rgb(0,0,0,0.5);
+    z-index: 100;
+    position: absolute;
+}
+/* DRAWAREA */
+
+
+/* EDITOR */
+.box {
+  background: #fff;
+  border: 1px solid #999;
+  border-radius: 3px;
+  width: 580px;
+  height: 240px;
+  margin: 10px;
+  padding: 10px;
+  float: left;
+}
+.no-cursor {
+  cursor: auto;
+}
+.handle {
+  background: greenyellow;
   text-align: center;
 }
-
-p {
-  color: rgb(245, 0, 224);
-  font-size: 20px;
+div.editor {
+  width: 600px;
 }
-
-div.playlist {
-  width: '50%';
-  margin: 30;
+input.editor-filename {
+  width: 600px;
 }
+/* EDITOR */
 
-button {
-  color: rgb(109, 101, 28);
-  background-color: burlywood;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*** deprecated button system ***/
+/* button {
+  color: rgb(109, 101, 28); 
   border-radius: 4px;
   text-shadow: 0 0px 0px rgba(0, 0, 0, 0.2);
-}
-
+} */
 /* PRIMARY DEFAULT BUTTON */
 button.pure-button {
   font-size: 100%;
@@ -64,8 +321,7 @@ button.pure-button {
   padding: 10px 32px;
   border-radius: var(--button-roundedness);
   text-align: center;
-}
-
+} 
 /* PRIMARY DEFAULT BUTTON */
 button.button-prev {
   background: var(--primary-yellow);
@@ -76,22 +332,15 @@ button.button-next {
 button.button-clear {
   background: var(--primary-red);   
 }
-/*  */
-
-
-
-
 button.button-hide {
   font-size: 100%;
   margin-top:10px;
   padding: 8px 32px;
 }
-
 button.button-order-num {
   padding: 3px 8px;
   margin-top: var(--canvas-top-margin);
 }
-
 button.button-sizer {
   background: #7584ad;
   padding: 0px 20px;
@@ -101,12 +350,10 @@ button.button-sizer {
 }
 button.button-canvas {
   color: rgb(109, 101, 28);
-  /*background: #e9c46a;*/
+  background: #e9c46a;
   padding: 3px 20px;
-  margin-top: var(--canvas-top-margin);
+  margin-top: var(--canvas-top-margin); 
 }
-
-
 /* AUDIO BUTTON DEFN */
 button.button-record {
   color: rgb(255, 255, 255);
@@ -125,62 +372,14 @@ button.button-download {
   background: var(--secondary-button);
   padding: 3px 10px;
   margin-top: var(--canvas-top-margin);
-}
+} 
 
-SketchPicker.color-picker {
+/* SketchPicker.color-picker {
   background: cadetblue;
-}
+} */
 
-.divider{
+/* .divider{
   width:10px;
   height:auto;
   display:inline-block;
-}
-
-.preview{
-  width: '50%';
-  margin: 30;
-}
-
-/* DRAGGABLE */
-.box {
-  background: #fff;
-  border: 1px solid #999;
-  border-radius: 3px;
-  width: 580px;
-  height: 240px;
-  margin: 10px;
-  padding: 10px;
-  float: left;
-}
-.no-cursor {
-  cursor: auto;
-}
-.handle {
-  background: #ddd;
-  border: 1px solid #999;
-  border-radius: 3px;
-  /* display: block; */
-  margin-bottom: 10px;
-  padding: 3px 5px;
-  text-align: center;
-}
-
-/* PLAYLIST */
-#finite-list {
-  background: #fff;
-  padding: 15px;
-  width: 90%;
-  height: 200;
-  overflow: scroll;
-}
-.snapshot-generator {
-  display: block;
-  height: 1px;
-  left: 0;
-  object-fit: contain;
-  position: fixed;
-  top: 0;
-  width: 1px;
-  z-index: -1;
-}
+} */

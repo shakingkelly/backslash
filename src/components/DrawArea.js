@@ -1,5 +1,4 @@
 import React from 'react';
-// import './DrawArea.css';
 import { SketchPicker } from 'react-color';
 
 class DrawArea extends React.Component {
@@ -147,27 +146,23 @@ class DrawArea extends React.Component {
     render() {
         return (
             <div
-                className="drawArea"
+                className="draw-area"
                 ref="drawArea"
                 onMouseDown={this.handleMouseDown}
                 onMouseMove={this.handleMouseMove}
                 style={{
                     width: this.props.canvasWidth,
-                    height: this.props.canvasHeight,
+                    height: this.props.canvasHeight
                     // left: this.props.canvasLeft,
-                    // top: this.props.canvasTop,
-                    // border: '1px solid red',
-                    backgroundColor: 'rgb(0,0,0,0.5)',
-                    zIndex: '100',
-                    position: 'absolute'
+                    // top: this.props.canvasTop
                 }}
             >
                 <Drawing lines={this.state.undolines} />
-                <button className="pure-button" onClick={this.undo}>undo</button>
-                <button className="pure-button" onClick={this.redo}>redo</button>
-                <button className="pure-button" onClick={this.clearCanvas}>clear canvas</button>
-                <button className="pure-button" onClick={this.toggleStroke}>{this.state.currStrokeWidth === 1 ? 'L' : 'S'}</button>
-                <button className="pure-button" onClick={this.togglePicker}>{this.state.showColors ? 'hide colors' : 'show colors'}</button>
+                <button className="action" onClick={this.undo}>undo</button>
+                <button className="action" onClick={this.redo}>redo</button>
+                <button className="action" onClick={this.clearCanvas}>clear canvas</button>
+                <button className="action" onClick={this.toggleStroke}>{this.state.currStrokeWidth === 1 ? 'L' : 'S'}</button>
+                <button className="action" onClick={this.togglePicker}>{this.state.showColors ? 'hide colors' : 'show colors'}</button>
                 {this.state.showColors && <SketchPicker className="color-picker" color={this.state.currStrokeColor} onChangeComplete={this.pickColor} />}
             </div>
         );
