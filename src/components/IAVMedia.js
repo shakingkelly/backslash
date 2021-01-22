@@ -45,8 +45,8 @@ class IAVMedia extends Component {
         showCanvas: false,
         canvasWidth: 800,
         canvasHeight: 800,
-        dragX: 0,
-        dragY: 0,
+        dragX: document.getElementById("preview-pos").getBoundingClientRect().left,
+        dragY: document.getElementById("preview-pos").getBoundingClientRect().top,
         fullscreen: false,
         prevImgWidth: 640
     }

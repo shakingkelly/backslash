@@ -11,24 +11,33 @@
   --frame-roundedness: 90px;
   --list-roundedness: 3px; */
 
-  --background-all: #2E0927;
-  --primary-red: #D90000;     /*=button-delete*/
-  --primary-yellow: #FF8C00;  /*=button-action*/
-  --primary-green: #04756F;
+  --background-all: rgb(83, 83, 83);
+  --primary-red: #b90505;     /*=button-delete*/
+  --primary-yellow: #b86f03;  /*=button-action*/
+  --primary-green: #037445;
   --button-background: burlywood;
   --button-textcolor: black;
-  --button-files: #FF2D00;
-  --button-nonaction: greenyellow;
-  --button-delete-hover: #b40c0c;
-  --button-files-hover: #f8ad9c;
-  --button-action-hover: #fccc92;  
+  --button-files: #037445;
+  --button-nonaction: rgb(251, 255, 0);
+  --button-delete-hover: #fd0202;
+  --button-files-hover: #03fa93;
+  --button-action-hover: #fca235;  
   --list-background: black;
   --list-foreground: white;
 }
 
+html { 
+  background: url(https://media.wired.com/photos/5ac3c5aaecb0130b0e7261e6/master/w_1600%2Cc_limit/odysseystation.jpg) no-repeat center; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  height: 100%;
+}
+
 body {
   margin: 0;
-  background-color: var(--background-all);
+  /* background-color: var(--background-all); */
   text-align: center;
   font-family: 'Space Grotesk', 'Syne Mono', monospace , 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',

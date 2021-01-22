@@ -7,7 +7,7 @@ import Editor from './Editor';
 const Preview = (props) => {
 
     return (
-        <div>
+        <div id="preview-pos">
             {
                 props.selectedIndex.map((selected, index) => {
                     return (

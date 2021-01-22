@@ -217,7 +217,7 @@ class App extends Component {
 		console.log('[render]', this.state.data.length)
 		return (
 			/* CONTAINER */
-			<div>
+			<div >
 				{/* METADATA ROW */}
 				<div className="metadata">
 					<div className='audio'><Audio /></div>
