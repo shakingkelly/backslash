@@ -5,10 +5,6 @@ import Draggable from 'react-draggable';
 
 class IAVMedia extends Component {
 
-    style = {
-        maxWidth: '640px'
-    }
-
     colors = { 0: 'red', 1: 'orange', 2: 'Yellow', 3: 'lime', 4: 'green', 5: 'blue', 6: 'navy', 7: 'purple', 8: 'indigo', 9: 'dimgray' }
 
     // 这个是移动之后selected index不变（所以media自动变了）
@@ -43,69 +39,129 @@ class IAVMedia extends Component {
         imgWidth: 640,
         imgHeight: 360,
         showCanvas: false,
-        canvasWidth: 800,
-        canvasHeight: 800,
+        canvasWidth: 0,
+        canvasHeight: 0,
         dragX: document.getElementById("preview-pos").getBoundingClientRect().left,
         dragY: document.getElementById("preview-pos").getBoundingClientRect().top,
         fullscreen: false,
-        prevImgWidth: 640
+        // prevX: document.getElementById("preview-pos").getBoundingClientRect().left,
+        // prevY: document.getElementById("preview-pos").getBoundingClientRect().top,
+        prevImgWidth: 0,
+        prevImgHeight: 0
     }
 
     mediaClickHandler = (event) => { console.log('[IAVMedia] playing') };
 
+    // resizing: all use horizontal edge as anchor (considering use cases). 
+    // AKA currently all heights are not necessary. 
+    // it's here just in case of using vertical edge as anchor.
     larger = () => {
-        if (this.state.imgWidth < window.innerWidth) {
-            this.setState({ imgWidth: this.state.imgWidth + 100, prevImgWidth: this.state.imgWidth + 100 });
+        const currWidth = this.state.imgWidth;
+        const currHeight = this.state.imgHeight;
+        if (currWidth < window.innerWidth) {
+            this.setState({ imgWidth: currWidth * 1.1, imgHeight: currHeight * 1.1, prevImgWidth: currWidth * 1.1, prevImgHeight: currHeight * 1.1 }); // 
         }
     }
 
     smaller = () => {
-        if (this.state.imgWidth > 100) {
-            this.setState({ imgWidth: this.state.imgWidth - 100, prevImgWidth: this.state.imgWidth - 100 });
+        const currWidth = this.state.imgWidth;
+        const currHeight = this.state.imgHeight;
+        if (currWidth > 100) {
+            this.setState({ imgWidth: currWidth * 0.9, imgHeight: currHeight * 0.9, prevImgWidth: currWidth * 0.9, prevImgHeight: currHeight * 0.9 }); // 
         }
     }
 
     toggleFullscreen = () => {
-        if (!this.state.fullscreen) {
-            const tempWidth = this.state.imgWidth;
-            this.setState({ imgWidth: window.innerWidth, prevImgWidth: tempWidth, fullscreen: true });
-        } else {
-            if (this.type === 'img') {
-                this.toggleCanvas();
-            }
-            this.setState({ imgWidth: this.state.prevImgWidth, fullscreen: false });
-        }
+        // if (!this.state.fullscreen) {
+        //     const tempWidth = this.state.imgWidth;
+        //     const tempX = this.state.dragX;
+        //     const tempY = this.state.dragY;
+        //     this.setState({ imgWidth: window.innerWidth, prevImgWidth: tempWidth, fullscreen: true, dragX: 0, dragY: 0, prevX: tempX, prevY: tempY, canvasWidth: window.innerWidth });
+        // } else {
+        //     this.setState({ imgWidth: this.state.prevImgWidth, fullscreen: false, dragX: this.state.prevX, dragY: this.state.prevY, canvasWidth: this.state.prevImgWidth });
+        // }
+        this.setState({ fullscreen: !this.state.fullscreen });
     }
 
     toggleCanvas = () => {
-        const boundingRect = this.refs.coverImg.getBoundingClientRect();
+        // const boundingRect = this.refs.coverImg.getBoundingClientRect();
         this.setState({
             showCanvas: !this.state.showCanvas,
-            canvasWidth: boundingRect.right - boundingRect.left,
-            canvasHeight: boundingRect.bottom - boundingRect.top
+            canvasHeight: this.state.prevImgHeight > 0 ? this.state.prevImgHeight + 8 : this.state.imgHeight + 8,
+            canvasWidth: this.state.prevImgWidth > 0 ? this.state.prevImgWidth + 8 : this.state.imgWidth + 8
+            // canvasWidth: boundingRect.right - boundingRect.left,
+            // canvasHeight: boundingRect.bottom - boundingRect.top
             // dragX: boundingRect.left,
             // dragY: boundingRect.top
         });
     }
 
+    onImgLoad = ({ target: img }) => {
+        let scale = 1;
+        if (img.width / img.height >= 1) {
+            // long img
+            scale = 640 / img.width;
+            this.setState({ imgWidth: 640, imgHeight: scale * img.height });
+            console.log('[onImgLoad] long img');
+        } else {
+            // tall img
+            scale = 360 / img.height;
+            this.setState({ imgWidth: scale * img.width, imgHeight: 360 });
+            console.log('[onImgLoad] tall img');
+        }
+    }
+
     render() {
         console.log('[IAVMedia:render]', this.url); // worked after put in publics
-        const avWidth = this.state.imgWidth.toString() + 'px';
-        const avHeight = (this.state.imgWidth * 9 / 16).toString() + 'px';
+        // const avWidth = this.state.imgWidth.toString() + 'px';
+        // const avHeight = (this.state.imgWidth * 9 / 16).toString() + 'px';
+
+        // onLoad doesn't work on react-player, so these have no effect
+        // ratio is always 640/360 as is the default width/height in react-player
+        // anyways. could always use +/- button as work-around ¯\_(ツ)_/¯
+        let fullAVWidth = '';
+        let fullAVHeight = '';
+        const imgWidth = this.state.imgWidth;
+        const imgHeight = this.state.imgHeight;        
+        const screenRatio = window.screen.width / window.screen.height;
+        const avRatio = imgWidth / imgHeight;
+        if (avRatio / screenRatio >= 1) {
+            // long av
+            console.log('[IAVMedia] long av');
+            fullAVWidth = window.screen.width.toString() + 'px';
+            fullAVHeight = (imgHeight / imgWidth * window.screen.width).toString() + 'px';
+        } else {
+            // tall av
+            console.log('[IAVMedia] tall av');
+            fullAVHeight = window.screen.height.toString() + 'px';
+            fullAVWidth = (imgWidth / imgHeight * window.screen.height).toString() + 'px';
+        }
 
         return (
-            <Draggable handle='.handle'>
-                <div style={{ position: 'absolute', left: this.state.dragX, top: this.state.dragY }}>
-                    {this.type === 'img' && <img ref='coverImg' width={this.state.imgWidth} src={this.url} alt={this.url} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' ') }} />}
-                    {this.type === 'img' && this.state.showCanvas && <DrawArea canvasWidth={this.state.canvasWidth} canvasHeight={this.state.canvasHeight} />}
-                    {this.type === 'av' && <ReactPlayer url={this.url} controls={true} width={avWidth} height={avHeight} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' ') }} />}
-                    <button className="handle nonaction" style={{ zIndex: 200, position: 'relative' }}>{this.order}</button>
-                    {!this.state.showCanvas && !this.state.fullscreen && <button className="action" style={{ zIndex: 200, position: 'relative' }} onClick={this.smaller.bind(this)}>-</button>}
-                    {!this.state.showCanvas && !this.state.fullscreen && <button className="action" style={{ zIndex: 200, position: 'relative' }} onClick={this.larger.bind(this)}>+</button>}
+
+            this.state.fullscreen ?
+                <div style={{ position: 'absolute', left: 0, top: 0 }}>
+                    {this.type === 'img' && <img ref='coverImg' width={window.screen.width} height={this.state.imgHeight / this.state.imgWidth * window.screen.width} src={this.url} alt={this.url} style={{ zIndex: 0, position: 'absolute' }} />}
+                    {this.type === 'img' && this.state.showCanvas && <DrawArea canvasWidth={window.screen.width} canvasHeight={this.state.imgHeight / this.state.imgWidth * window.screen.width} />}
+                    {this.type === 'av' && <ReactPlayer url={this.url} controls={true} width={fullAVWidth} height={fullAVHeight} style={{ zIndex: 0, position: 'absolute', left: 0, top: 0 }} />}
                     {this.type === 'img' && <button className="action" onClick={this.toggleCanvas} style={{ zIndex: 200, position: 'relative' }}>{this.state.showCanvas ? 'HIDE CANVAS' : 'SHOW CANVAS'}</button>}
                     <button className="action" style={{ zIndex: 200, position: 'relative' }} onClick={this.toggleFullscreen}>{this.state.fullscreen ? 'ESC' : 'FULLSCREEN'}</button>
                 </div>
-            </Draggable>
+                :
+                <Draggable handle='.handle'>
+                    <div style={{ position: 'absolute', left: this.state.dragX, top: this.state.dragY }}>
+                        {this.type === 'img' && <img onLoad={this.onImgLoad} ref='coverImg' width={this.state.prevImgWidth > 0 ? this.state.prevImgWidth : this.state.imgWidth} src={this.url} alt={this.url} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' ') }} />}
+                        {this.type === 'img' && this.state.showCanvas && <DrawArea canvasWidth={this.state.canvasWidth} canvasHeight={this.state.canvasHeight} />}
+                        {this.type === 'av' && <ReactPlayer url={this.url} controls={true} width={this.state.prevImgWidth > 0 ? this.state.prevImgWidth : this.state.imgWidth} height={this.state.prevImgHeight > 0 ? this.state.prevImgHeight : this.state.imgHeight} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' ') }} />}
+                        <button className="handle" style={{ zIndex: 200, position: 'relative' }}>🧲</button>
+                        {!this.state.showCanvas && !this.state.fullscreen && <button className="action" style={{ zIndex: 200, position: 'relative' }} onClick={this.smaller.bind(this)}>-</button>}
+                        {!this.state.showCanvas && !this.state.fullscreen && <button className="action" style={{ zIndex: 200, position: 'relative' }} onClick={this.larger.bind(this)}>+</button>}
+                        {this.type === 'img' && <button className="action" onClick={this.toggleCanvas} style={{ zIndex: 200, position: 'relative' }}>{this.state.showCanvas ? 'HIDE CANVAS' : 'SHOW CANVAS'}</button>}
+                        <button className="action" style={{ zIndex: 200, position: 'relative' }} onClick={this.toggleFullscreen}>{this.state.fullscreen ? 'ESC' : 'FULLSCREEN'}</button>
+                    </div>
+                </Draggable>
+
+
         )
 
     }

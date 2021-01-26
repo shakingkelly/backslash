@@ -7,6 +7,8 @@ import DragAndDrop from './components/DragAndDrop';
 import GlobalDrawArea from './components/GlobalDrawArea';
 import Audio from './components/Audio';
 
+import Draggable from 'react-draggable';
+
 class App extends Component {
 
 	constructor(props) {
@@ -36,7 +38,7 @@ class App extends Component {
 
 		// web 
 		const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
-		{ id: 20, name: 'vid', url: './asset/JavaScript.mp4', type: 'av', text: '' }, 
+		{ id: 20, name: 'vid', url: './asset/JavaScript.mp4', type: 'av', text: '' },
 		{ id: 30, name: 'hiya', url: './asset/hiya.md', type: 'md', text: 'hiya' }]
 
 		this.state = {
@@ -46,7 +48,8 @@ class App extends Component {
 			index2id: { 0: 10, 1: 20, 2: 30 },
 			showList: true,
 			showZone: true,
-			showGlobalCanvas: false
+			showGlobalCanvas: false,
+			showAudio: true
 		}
 		console.log('[START]', this.state)
 	}
@@ -59,7 +62,7 @@ class App extends Component {
 
 		for (var i = 0; i < files.length; i++) {
 			let type = '';
-			let newData = { id: len, name: files[i].name, url: files[i].path, type: type, text: '' };
+			let newData = { id: len, name: files[i].name, url: files[i].path, type: type, text: '', height: 0, width: 0 };
 			if (files[i].name.endsWith(".jpg") || files[i].name.endsWith(".png") || files[i].name.endsWith(".gif") || files[i].name.endsWith(".bmp")) {
 				newData.type = 'img';
 			} else if (files[i].name.endsWith(".md") || files[i].name.endsWith(".txt")) {
@@ -70,7 +73,7 @@ class App extends Component {
 			} else {
 				// file type not supported
 			}
-			
+
 			data.push(newData);
 			len += 1
 			console.log('[addFiles]', newData.url, newData.text);
@@ -213,45 +216,67 @@ class App extends Component {
 		this.setState({ data: data });
 	}
 
+	toggleAudio = () => {
+		this.setState({ showAudio: !this.state.showAudio });
+	}
+
 	render() {
 		console.log('[render]', this.state.data.length)
 		return (
 			/* CONTAINER */
 			<div >
+				<button className="action" onClick={this.toggleGlobalCanvas}>GLOBAL CANVAS</button>
+				{this.state.showGlobalCanvas && <GlobalDrawArea canvasWidth={window.innerWidth} canvasHeight={window.innerHeight} />}
+
 				{/* METADATA ROW */}
 				<div className="metadata">
-					<div className='audio'><Audio /></div>
+
+					<div className='audio'>
+						<Draggable handle=".handle"><div>
+							{this.state.showAudio && <Audio />}
+							<button className="handle">🧲</button>
+							<button className="action" onClick={this.toggleAudio}>{this.state.showAudio ? 'HIDE' : 'RECORDER'}</button>
+						</div></Draggable>
+					</div>
 
 					<div className='dropzone'>
-						{
-							this.state.showZone &&
-							<DragAndDrop handleDrop={this.addFiles}>
-								{/* <div style={{ position: 'absolute', top: 0, botton: 0, left: 0, right: 0, textAlign: 'center', color: 'salmon', fontSize: 24 }} >Drop Zone</div> */}
-							</DragAndDrop>
-						}
-						<button className="action" onClick={this.toggleZone}>{this.state.showZone ? 'HIDE' : 'SHOW'}</button>
+						<Draggable handle=".handle"><div>
+							{
+								this.state.showZone &&
+								<DragAndDrop handleDrop={this.addFiles}>
+									{/* <div style={{ position: 'absolute', top: 0, botton: 0, left: 0, right: 0, textAlign: 'center', color: 'salmon', fontSize: 24 }} >Drop Zone</div> */}
+								</DragAndDrop>
+							}
+							<button className="handle">🧲</button>
+							<button className="action" onClick={this.toggleZone}>{this.state.showZone ? 'HIDE' : 'DROPZONE'}</button>
+						</div></Draggable>
 					</div>
 
 					<div className='playlist'>
-						{
-							this.state.showList &&
-							<Playlist data={this.state.data} selectedIndex={this.state.selectedIndex} updated={this.updateSortable} clicked={this.changeSelection} clickDeleted={this.deleteFromLS} />
-						}
-						<button className="action" onClick={this.toggleList}>{this.state.showList ? 'HIDE' : 'SHOW'}</button>
-						<button className="delete" onClick={this.clearLS}>CLEAR PLAYLIST</button>
+						<Draggable handle=".handle"><div>
+							{
+								this.state.showList &&
+								<Playlist data={this.state.data} selectedIndex={this.state.selectedIndex} updated={this.updateSortable} clicked={this.changeSelection} clickDeleted={this.deleteFromLS} />
+							}
+							<button className="handle">🧲</button>
+							<button className="action" onClick={this.toggleList}>{this.state.showList ? 'HIDE' : 'PLAYLIST'}</button>
+							{this.state.showList && <button className="delete" onClick={this.clearLS}>CLEAR</button>}
+
+						</div></Draggable>
 					</div>
 				</div>
 
 				{/* PREVIEWS */}
-				<button className="action" onClick={this.toggleGlobalCanvas}>GLOBAL CANVAS</button>
-				{this.state.showGlobalCanvas && <GlobalDrawArea canvasWidth={window.innerWidth} canvasHeight={window.innerHeight} />}
-
 				<div className='preview'>
-					<button className="action" onClick={this.prevNext('prev')}>PREV</button>
-					<button className="action" onClick={this.prevNext('next')}>NEXT</button>
-					<button className="delete" onClick={this.clearPreview}>CLEAR PREVIEW</button>
-					
-					<Preview data={this.state.data} selectedIndex={this.state.selectedIndex} changeEditorFilenameFn={this.changeEditorFilename}/>
+					{
+						this.state.selectedIndex.length > 0 &&
+						<div>
+							<button className="action" onClick={this.prevNext('prev')}>PREV</button>
+							<button className="action" onClick={this.prevNext('next')}>NEXT</button>
+							<button className="delete" onClick={this.clearPreview}>CLEAR PREVIEW</button>
+						</div>
+					}
+					<Preview data={this.state.data} selectedIndex={this.state.selectedIndex} changeEditorFilenameFn={this.changeEditorFilename} />
 				</div>
 			</div>
 		)

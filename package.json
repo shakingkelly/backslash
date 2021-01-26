@@ -25,6 +25,7 @@
     "react-draggable": "^4.4.3",
     "react-dropzone": "^11.0.3",
     "react-file-viewer": "^1.2.1",
+    "react-full-screen": "^0.3.2-0",
     "react-mic": "^12.4.6",
     "react-player": "^2.6.1",
     "react-rte": "^0.16.3",

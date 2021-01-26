@@ -201,7 +201,7 @@ class Editor extends Component {
             <Draggable handle=".handle">
                 <div>  {/* className="box no-cursors" */}
                     <div className="list-item">
-                        <button className="handle nonaction">Drag me</button>
+                        <button className="handle">🧲</button>
                         <input className="editor-filename" type="text" placeholder="filename" value={this.state.inputValue} onChange={e => this.setState({ inputValue: e.target.value })} />
                         <button className="action" onClick={this.save}>Save</button>
                         <button className="files" onClick={this.download}>Download</button>

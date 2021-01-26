@@ -83,6 +83,15 @@ button.delete:hover {
 button.nonaction {
   background-color: var(--button-nonaction);
 }
+
+button.handle {
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+}
 /* BUTTONS */
 
 
