@@ -194,23 +194,19 @@ class App extends Component {
 
 
 	/* PREVIEW */
-	prevNext = (direction) => event => {
+	prev = (keyName, e, handle) => {
+		if (e) { console.log('[prev:Hotkeys]', keyName, e, handle); }
 		if (this.state.selectedIndex.length === 1) {
-			direction === 'prev' ?
-				this.setState({ selectedIndex: this.state.selectedIndex[0] === 0 ? [this.state.data.length - 1] : [this.state.selectedIndex[0] - 1] }) :
-				this.setState({ selectedIndex: this.state.selectedIndex[0] === this.state.data.length - 1 ? [0] : [this.state.selectedIndex[0] + 1] })
+				this.setState({ selectedIndex: this.state.selectedIndex[0] === 0 ? [this.state.data.length - 1] : [this.state.selectedIndex[0] - 1] })
 		} else {
 			console.log('Prev/next is disabled when multiselection!')
 		}
-		console.log(this.state.selectedIndex)
 	}
 
-	prevNextHotkeys = (keyName, e, handle) => {
-		console.log('[prevNext:Hotkeys]', keyName, e, handle);
+	next = (keyName, e, handle) => {
+		if (e) { console.log('[next:Hotkeys]', keyName, e, handle); }
 		if (this.state.selectedIndex.length === 1) {
-			keyName === 'left' ?
-				this.setState({ selectedIndex: this.state.selectedIndex[0] === 0 ? [this.state.data.length - 1] : [this.state.selectedIndex[0] - 1] }) :
-				this.setState({ selectedIndex: this.state.selectedIndex[0] === this.state.data.length - 1 ? [0] : [this.state.selectedIndex[0] + 1] })
+			this.setState({ selectedIndex: this.state.selectedIndex[0] === this.state.data.length - 1 ? [0] : [this.state.selectedIndex[0] + 1] })
 		} else {
 			console.log('Prev/next is disabled when multiselection!')
 		}
@@ -244,9 +240,6 @@ class App extends Component {
 		return (
 			/* CONTAINER */
 			<div>
-				{/* <Hotkeys keyName="c" onKeyDown={this.toggleGlobalCanvas}>
-					<button className="action" onClick={this.toggleGlobalCanvas}>GLOBAL CANVAS</button>
-				</Hotkeys> */}
 				<HotButton keyName="c" buttonClass="action" actionFN={this.toggleGlobalCanvas}>GLOBAL CANVAS</HotButton>
 				{this.state.showGlobalCanvas && <GlobalDrawArea canvasWidth={window.innerWidth} canvasHeight={window.innerHeight} />}
 
@@ -257,9 +250,7 @@ class App extends Component {
 						<Draggable handle=".handle"><div>
 							{this.state.showAudio && <Audio />}
 							<button className="handle">🧲</button>
-							<Hotkeys keyName={"a"} onKeyDown={this.toggleAudio}>
-								<button className="action" onClick={this.toggleAudio}>{this.state.showAudio ? 'HIDE' : 'RECORDER'}</button>
-							</Hotkeys>
+							<HotButton keyName="a" buttonClass="action" actionFN={this.toggleAudio}>{this.state.showAudio ? 'HIDE' : 'RECORDER'}</HotButton>
 						</div></Draggable>
 					</div>
 
@@ -272,9 +263,7 @@ class App extends Component {
 								</DragAndDrop>
 							}
 							<button className="handle">🧲</button>
-							<Hotkeys keyName={"z"} onKeyDown={this.toggleZone}>
-								<button className="action" onClick={this.toggleZone}>{this.state.showZone ? 'HIDE' : 'DROPZONE'}</button>
-							</Hotkeys>
+							<HotButton keyName="z" buttonClass="action" actionFN={this.toggleZone}>{this.state.showZone ? 'HIDE' : 'DROPZONE'}</HotButton>
 						</div></Draggable>
 					</div>
 
@@ -285,13 +274,8 @@ class App extends Component {
 								<Playlist data={this.state.data} selectedIndex={this.state.selectedIndex} updated={this.updateSortable} clicked={this.changeSelection} clickDeleted={this.deleteFromLS} />
 							}
 							<button className="handle">🧲</button>
-							<Hotkeys keyName={"l"} onKeyDown={this.toggleList}>
-								<button className="action" onClick={this.toggleList}>{this.state.showList ? 'HIDE' : 'PLAYLIST'}</button>
-							</Hotkeys>
-							<Hotkeys keyName={"ctrl+l"} onKeyDown={this.clearLS}>
-								{this.state.showList && <button className="delete" onClick={this.clearLS}>CLEAR</button>}
-							</Hotkeys>
-
+							<HotButton keyName="l" buttonClass="action" actionFN={this.toggleList}>{this.state.showList ? 'HIDE' : 'PLAYLIST'}</HotButton>
+							<HotButton keyName="ctrl+l" buttonClass="delete" actionFN={this.clearLS}>{this.state.showList && 'CLEAR'}</HotButton>
 						</div></Draggable>
 					</div>
 				</div>
@@ -301,13 +285,9 @@ class App extends Component {
 					{
 						this.state.selectedIndex.length > 0 &&
 						<div>
-							<Hotkeys keyName="left, right" onKeyDown={this.prevNextHotkeys}>
-								<button className="action" onClick={this.prevNext('prev')}>PREV</button>
-								<button className="action" onClick={this.prevNext('next')}>NEXT</button>
-							</Hotkeys>
-							<Hotkeys keyName="ctrl+p" onKeyDown={this.clearPreview}>
-								<button className="delete" onClick={this.clearPreview}>CLEAR PREVIEW</button>
-							</Hotkeys>
+							<HotButton keyName="left" buttonClass="action" actionFN={this.prev}>PREV</HotButton>
+							<HotButton keyName="right" buttonClass="action" actionFN={this.next}>NEXT</HotButton>
+							<HotButton keyName="ctrl+p" buttonClass="delete" actionFN={this.clearPreview}>CLEAR</HotButton>
 						</div>
 					}
 					<Preview data={this.state.data} selectedIndex={this.state.selectedIndex} changeEditorFilenameFn={this.changeEditorFilename} />
