@@ -240,7 +240,7 @@ class App extends Component {
 		return (
 			/* CONTAINER */
 			<div>
-				<HotButton keyName="c" buttonClass="action" actionFN={this.toggleGlobalCanvas}>GLOBAL CANVAS</HotButton>
+				<HotButton keyName="shift+alt+c" buttonClass="action" actionFN={this.toggleGlobalCanvas}>GLOBAL CANVAS</HotButton>
 				{this.state.showGlobalCanvas && <GlobalDrawArea canvasWidth={window.innerWidth} canvasHeight={window.innerHeight} />}
 
 				{/* METADATA ROW */}
@@ -250,7 +250,7 @@ class App extends Component {
 						<Draggable handle=".handle"><div>
 							{this.state.showAudio && <Audio />}
 							<button className="handle">🧲</button>
-							<HotButton keyName="a" buttonClass="action" actionFN={this.toggleAudio}>{this.state.showAudio ? 'HIDE' : 'RECORDER'}</HotButton>
+							<HotButton keyName="shift+a" buttonClass="action" actionFN={this.toggleAudio}>{this.state.showAudio ? 'HIDE' : 'RECORDER'}</HotButton>
 						</div></Draggable>
 					</div>
 
@@ -263,7 +263,7 @@ class App extends Component {
 								</DragAndDrop>
 							}
 							<button className="handle">🧲</button>
-							<HotButton keyName="z" buttonClass="action" actionFN={this.toggleZone}>{this.state.showZone ? 'HIDE' : 'DROPZONE'}</HotButton>
+							<HotButton keyName="shift+z" buttonClass="action" actionFN={this.toggleZone}>{this.state.showZone ? 'HIDE' : 'DROPZONE'}</HotButton>
 						</div></Draggable>
 					</div>
 
@@ -274,7 +274,7 @@ class App extends Component {
 								<Playlist data={this.state.data} selectedIndex={this.state.selectedIndex} updated={this.updateSortable} clicked={this.changeSelection} clickDeleted={this.deleteFromLS} />
 							}
 							<button className="handle">🧲</button>
-							<HotButton keyName="l" buttonClass="action" actionFN={this.toggleList}>{this.state.showList ? 'HIDE' : 'PLAYLIST'}</HotButton>
+							<HotButton keyName="shift+l" buttonClass="action" actionFN={this.toggleList}>{this.state.showList ? 'HIDE' : 'PLAYLIST'}</HotButton>
 							<HotButton keyName="ctrl+l" buttonClass="delete" actionFN={this.clearLS}>{this.state.showList && 'CLEAR'}</HotButton>
 						</div></Draggable>
 					</div>

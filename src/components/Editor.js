@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import RichTextEditor from 'react-rte';
 import { convertToRaw } from 'draft-js';
 import Draggable from 'react-draggable';
+import HotButton from './HotButton';
 
 class Editor extends Component {
 
@@ -203,8 +204,10 @@ class Editor extends Component {
                     <div className="list-item">
                         <button className="handle">🧲</button>
                         <input className="editor-filename" type="text" placeholder="filename" value={this.state.inputValue} onChange={e => this.setState({ inputValue: e.target.value })} />
-                        <button className="action" onClick={this.save}>Save</button>
-                        <button className="files" onClick={this.download}>Download</button>
+                        {/* <button className="action" onClick={this.save}>Save</button>
+                        <button className="files" onClick={this.download}>Download</button> */}
+                        <HotButton className="action" actionFN={this.save} keyName="ctrl+s">Save</HotButton>
+                        <HotButton className="action" actionFN={this.download} keyName="ctrl+d">Download</HotButton>
                     </div>
                     <div className="editor">
                         <RichTextEditor

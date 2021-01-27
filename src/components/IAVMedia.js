@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import ReactPlayer from 'react-player';
 import DrawArea from './DrawArea';
 import Draggable from 'react-draggable';
+import HotButton from './HotButton';
+import Hotkeys from 'react-hot-keys';
 
 class IAVMedia extends Component {
 
@@ -55,7 +57,8 @@ class IAVMedia extends Component {
     // resizing: all use horizontal edge as anchor (considering use cases). 
     // AKA currently all heights are not necessary. 
     // it's here just in case of using vertical edge as anchor.
-    larger = () => {
+    larger = (keyName, e, handle) => {
+        if (e) { console.log('[larger:Hotkeys]', keyName, e, handle); }
         const currWidth = this.state.imgWidth;
         const currHeight = this.state.imgHeight;
         if (currWidth < window.innerWidth) {
@@ -63,7 +66,8 @@ class IAVMedia extends Component {
         }
     }
 
-    smaller = () => {
+    smaller = (keyName, e, handle) => {
+        if (e) { console.log('[smaller:Hotkeys]', keyName, e, handle); }
         const currWidth = this.state.imgWidth;
         const currHeight = this.state.imgHeight;
         if (currWidth > 100) {
@@ -83,7 +87,17 @@ class IAVMedia extends Component {
         this.setState({ fullscreen: !this.state.fullscreen });
     }
 
-    toggleCanvas = () => {
+    enterFullscreen = (keyName, e, handle) => {
+        if (e) {console.log('[enterFullscreen:Hotkeys]', keyName, e, handle);}
+        this.setState( {fullscreen: true});
+    }
+    exitFullscreen = (keyName, e, handle) => {
+        if (e) {console.log('[exitFullscreen:Hotkeys]', keyName, e, handle);}
+        this.setState( {fullscreen: false});
+    }
+
+    toggleCanvas = (keyName, e, handle) => {
+        if (e) {console.log('[toggleCanvas:Hotkeys]', keyName, e, handle);}
         // const boundingRect = this.refs.coverImg.getBoundingClientRect();
         this.setState({
             showCanvas: !this.state.showCanvas,
@@ -144,8 +158,12 @@ class IAVMedia extends Component {
                     {this.type === 'img' && <img ref='coverImg' width={window.screen.width} height={this.state.imgHeight / this.state.imgWidth * window.screen.width} src={this.url} alt={this.url} style={{ zIndex: 0, position: 'absolute' }} />}
                     {this.type === 'img' && this.state.showCanvas && <DrawArea canvasWidth={window.screen.width} canvasHeight={this.state.imgHeight / this.state.imgWidth * window.screen.width} />}
                     {this.type === 'av' && <ReactPlayer url={this.url} controls={true} width={fullAVWidth} height={fullAVHeight} style={{ zIndex: 0, position: 'absolute', left: 0, top: 0 }} />}
-                    {this.type === 'img' && <button className="action" onClick={this.toggleCanvas} style={{ zIndex: 200, position: 'relative' }}>{this.state.showCanvas ? 'HIDE CANVAS' : 'SHOW CANVAS'}</button>}
-                    <button className="action" style={{ zIndex: 200, position: 'relative' }} onClick={this.toggleFullscreen}>{this.state.fullscreen ? 'ESC' : 'FULLSCREEN'}</button>
+                    {this.type === 'img' && 
+                        // <button className="action" onClick={this.toggleCanvas} style={{ zIndex: 200, position: 'relative' }}>{this.state.showCanvas ? 'HIDE CANVAS' : 'SHOW CANVAS'}</button>
+                        <Hotkeys onKeyDown={this.toggleCanvas} keyName="shift+c" />
+                    }
+                    {/* <button className="action" style={{ zIndex: 200, position: 'relative' }} onClick={this.toggleFullscreen}>{this.state.fullscreen ? 'ESC' : 'FULLSCREEN'}</button> */}
+                    <Hotkeys onKeyDown={this.exitFullscreen} keyName="esc"></Hotkeys>
                 </div>
                 :
                 <Draggable handle='.handle'>
@@ -154,10 +172,20 @@ class IAVMedia extends Component {
                         {this.type === 'img' && this.state.showCanvas && <DrawArea canvasWidth={this.state.canvasWidth} canvasHeight={this.state.canvasHeight} />}
                         {this.type === 'av' && <ReactPlayer url={this.url} controls={true} width={this.state.prevImgWidth > 0 ? this.state.prevImgWidth : this.state.imgWidth} height={this.state.prevImgHeight > 0 ? this.state.prevImgHeight : this.state.imgHeight} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' ') }} />}
                         <button className="handle" style={{ zIndex: 200, position: 'relative' }}>🧲</button>
-                        {!this.state.showCanvas && !this.state.fullscreen && <button className="action" style={{ zIndex: 200, position: 'relative' }} onClick={this.smaller.bind(this)}>-</button>}
-                        {!this.state.showCanvas && !this.state.fullscreen && <button className="action" style={{ zIndex: 200, position: 'relative' }} onClick={this.larger.bind(this)}>+</button>}
-                        {this.type === 'img' && <button className="action" onClick={this.toggleCanvas} style={{ zIndex: 200, position: 'relative' }}>{this.state.showCanvas ? 'HIDE CANVAS' : 'SHOW CANVAS'}</button>}
-                        <button className="action" style={{ zIndex: 200, position: 'relative' }} onClick={this.toggleFullscreen}>{this.state.fullscreen ? 'ESC' : 'FULLSCREEN'}</button>
+                        {!this.state.showCanvas && !this.state.fullscreen && 
+                            // <button className="action" style={{ zIndex: 200, position: 'relative' }} onClick={this.smaller.bind(this)}>-</button>
+                            <HotButton className="action" style={{ zIndex: 200, position: 'relative' }} actionFN={this.smaller.bind(this)} keyName="-">-</HotButton>
+                        }
+                        {!this.state.showCanvas && !this.state.fullscreen && 
+                            // <button className="action" style={{ zIndex: 200, position: 'relative' }} onClick={this.larger.bind(this)}>+</button>
+                            <HotButton className="action" style={{ zIndex: 200, position: 'relative' }} actionFN={this.larger.bind(this)} keyName="=">+</HotButton>
+                        }
+                        {this.type === 'img' && 
+                            // <button className="action" onClick={this.toggleCanvas} style={{ zIndex: 200, position: 'relative' }}>{this.state.showCanvas ? 'HIDE CANVAS' : 'SHOW CANVAS'}</button>
+                            <HotButton className="action" actionFN={this.toggleCanvas} style={{ zIndex: 200, position: 'relative' }} keyName="shift+c">{this.state.showCanvas ? 'HIDE CANVAS' : 'SHOW CANVAS'}</HotButton>
+                        }
+                        {/* <button className="action" style={{ zIndex: 200, position: 'relative' }} onClick={this.toggleFullscreen}>{this.state.fullscreen ? 'ESC' : 'FULLSCREEN'}</button> */}
+                        <HotButton className="action" style={{ zIndex: 200, position: 'relative' }} actionFN={this.enterFullscreen} keyName="f">FULLSCREEN</HotButton>
                     </div>
                 </Draggable>
 

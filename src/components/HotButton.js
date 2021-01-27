@@ -5,7 +5,12 @@ const HotButton = (props) => {
 
     return  (
         <Hotkeys keyName={props.keyName} onKeyDown={props.actionFN}>
-            <button className={props.buttonClass} onClick={props.actionFN}>{props.children}</button>
+            {
+                props.style ?
+                <button className={props.buttonClass} onClick={props.actionFN} style={props.style}>{props.children}</button>
+                : 
+                <button className={props.buttonClass} onClick={props.actionFN}>{props.children}</button>
+            }
         </Hotkeys>
     )
 }
