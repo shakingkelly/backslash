@@ -155,11 +155,13 @@ div.dropzone-shadow {
 
 /* PLAYLIST */
 #finite-list {
-  background: #fff;
-  width: 100%;
-  height: 180px;  /*=(50+5*2)*3*/
+  background: #e9c46a;
+  /* width: 100%; */
+  height: 200px; /* =(50+5*2)*3 *2 */
+  width: 480px; /* (160:90)*3 */
   overflow-y: scroll;
-  /* padding: 15px; */
+  padding: 4px;
+  /* border: 4px dashed red; */
 }
 .snapshot-generator {
   display: block;
@@ -180,57 +182,58 @@ div.list-item {
   flex-wrap: nowrap;
 }
 div.preview-cell {
-  flex: 0 0 100px;  /*=preview img width*/
-  height: 50px;
-  padding: 5px;
+  /* flex: 0 0 100px;  =preview img width */
+  /* height: 90px; */
+  padding: 7px 0 3px 0;
   text-align: center;
   background-color: var(--list-background);
   color: var(--list-foreground);  
   font-family: Space Grotesk;
-  /* border: 1px outset white; */
+  border: 1px outset white;
 }
 div.preview-cell:hover {
   background-color: var(--primary-green);
 }
 div.preview-cell-active {
-  flex: 0 0 100px;
-  height: 50px;
-  padding: 5px;
+  /* flex: 0 0 100px; */
+  /* height: 90px; */
+  padding: 7px 0 3px 0;
   text-align: center;
   background-color: var(--list-foreground);
   color: var(--list-background);  
   font-family: Space Grotesk;
   font-weight: bold;
-  /* border: 1px inset white; */
+  border: 1px inset white;
 }
 div.preview-cell-active:hover {
   background-color: var(--primary-red);
 }
 div.filename-cell {
-  flex: 0 0 150px;
-  height: 50px;
-  padding: 5px;
+  /* flex: 0 0 150px; */
+  /* height: 50px; */
+  padding: 38px 0 38px 0;
   text-align: center;
   background-color: var(--list-background);
   color: var(--list-foreground);  
   font-family: Space Grotesk;
   overflow-x: auto;
-  /* border: 1px outset white; */
+  border: 1px outset white;
 }
 div.filename-cell:hover {
   background-color: var(--primary-green);
 }
 div.filename-cell-active {
-  flex: 0 0 150px;
-  height: 50px;
-  padding: 5px;
+  /* flex: 0 0 150px;
+  height: 50px; */
+  /* padding: 5px; */
+  padding: 37px 0 37px 0;
   text-align: center;
   background-color: var(--list-foreground);
   color: var(--list-background);  
   font-family: Space Grotesk;
-  font-weight: bold;
+  /* font-weight: bold; */
   overflow-x: auto;
-  /* border: 1px inset white; */
+  border: 1px inset white;
 }
 div.filename-cell-active:hover {
   background-color: var(--primary-red);
@@ -268,21 +271,27 @@ div.delete-button-active:hover {
 
 
 
-
-
-
-div.grid-square {
-	width: 100px;
-	height: 50px;
-	display: inline-block;
-	background-color: #fff;
-	border: solid 1px rgb(0,0,0,0.2);
-	padding: 10px;
-	margin: 12px;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 100px;
+  /* gap: 0.5rem; */
 }
 
+div.overlay {
+  opacity: 0;
+  z-index: 9999;
+  position: absolute;
+  background: rgba(0, 0, 0, 1);
+  padding: 38px 0 38px 0;
+  text-align: center;
+  color: var(--list-foreground);  
+  font-family: Space Grotesk;
+}
 
-
+div.overlay:hover {
+  opacity: 1;
+}
 
 
 
