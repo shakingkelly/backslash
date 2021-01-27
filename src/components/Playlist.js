@@ -35,6 +35,16 @@ const Playlist = (props) => {
                                 : <div className="delete-button" onClick={props.clickDeleted(item.id)}>x</div>
                             }
                         </div>
+
+
+
+                        // <div className="grid-square">
+                        //     {item.type === 'img' && <img width='100px' height='50px' src={item.url} alt={item.url} />}
+                        //     {item.type === 'av' && <VideoThumbnail videoUrl={item.url} width={100} height={50} />}
+                        // </div>
+
+
+
                     )
                 })}
             </ReactSortable>

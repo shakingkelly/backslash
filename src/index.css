@@ -262,6 +262,39 @@ div.delete-button-active {
 div.delete-button-active:hover {
   background-color: var(--primary-red);
 }
+
+
+
+
+
+
+
+
+
+div.grid-square {
+	width: 100px;
+	height: 50px;
+	display: inline-block;
+	background-color: #fff;
+	border: solid 1px rgb(0,0,0,0.2);
+	padding: 10px;
+	margin: 12px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* PLAYLIST*/
 
 
