@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
  * @param {string} snapshot
  */
 const ThumbnailImage = ({ snapshot, view }) => {
-    const viewClass = view === 'list' ? 'none' : 'preview-img-grid';
+    const viewClass = view === 'list' ? 'preview-img-list' : 'preview-img-grid';
     return (
         <div className="react-thumbnail-generator" >
             <img className={viewClass} src={snapshot} alt="my video thumbnail" />

@@ -169,103 +169,122 @@ div.dropzone-shadow {
 }
 #finite-list {
   background: #e9c46a;
-  height: 200px; /* =(50+5*2)*3 *2 */
-  width: 480px; /* (160:90)*3 */
+  height: 200px; /* =50*4 or =100*2 */
+  width: 480px; /* =(160:90)*3 */
   overflow-y: scroll;
   padding: 4px;
 }
 div.list-item {
-  /* style={{ display: 'flex', flexDirection: 'row', maxWidth: '800px', width: '500px' }} */
   display: flex;
   flex-direction: row;
-  max-width: 800px;
-  width: 600px;  /*=editor width*/
+  width: 480px;  /* =inifite-list width*/
   flex-wrap: nowrap;
 }
 div.preview-cell {
-  flex: 0 0 100px;  /* =preview img width */
+  width: 100px;
   height: 50px;
-  padding: 5px;
   text-align: center;
   background-color: var(--list-background);
   color: var(--list-foreground);  
   font-family: Space Grotesk;
-  /* border: 1px outset white; */
+  border: 1px outset white;
+  box-sizing: border-box;
+  position: relative;
 }
 div.preview-cell:hover {
   background-color: var(--primary-green);
 }
-div.preview-cell-active {
-  flex: 0 0 100px;
+div.preview-cell.active {
+  /* width: 100px;
   height: 50px;
-  padding: 5px;
-  text-align: center;
+  text-align: center; */
   background-color: var(--list-foreground);
   color: var(--list-background);  
-  font-family: Space Grotesk;
-  font-weight: bold;
-  /* border: 1px inset white; */
+  /* font-family: Space Grotesk;
+  border: 1px inset white;
+  box-sizing: border-box;
+  position: relative; */
 }
-div.preview-cell-active:hover {
+div.preview-cell.active:hover {
   background-color: var(--primary-red);
 }
 div.filename-cell {
-  flex: 0 0 150px;
+  width: 360px;  /* =480-100-20*/
   height: 50px;
-  padding: 5px;
   text-align: center;
   background-color: var(--list-background);
   color: var(--list-foreground);  
   font-family: Space Grotesk;
   overflow-x: auto;
-  /* border: 1px outset white; */
+  border: 1px outset white;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
 }
 div.filename-cell:hover {
   background-color: var(--primary-green);
 }
 div.filename-cell-active {
-  flex: 0 0 150px;
+  width: 360px;
   height: 50px;
-  padding: 5px;
   text-align: center;
   background-color: var(--list-foreground);
   color: var(--list-background);  
   font-family: Space Grotesk;
-  /* font-weight: bold; */
   overflow-x: auto;
-  /* border: 1px inset white; */
+  border: 1px inset white;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
 }
 div.filename-cell-active:hover {
   background-color: var(--primary-red);
 }
 div.delete-button {
-  flex: 0 0 20px;
+  width: 20px;
   height: 50px;
-  padding: 5px;
   text-align: center;
   background-color: var(--list-background);
   color: var(--list-foreground);  
   font-family: Space Grotesk;
-  /* border: 1px outset white; */
+  border: 1px outset white;
+  box-sizing: border-box;
 }
 div.delete-button:hover {
   background-color: var(--primary-green);
 }
 div.delete-button-active {
-  flex: 0 0 20px;
+  width: 20px;
   height: 50px;
-  padding: 5px;
   text-align: center;
   background-color: var(--list-foreground);
   color: var(--list-background);  
   font-family: Space Grotesk;
   font-weight: bold;
-  /* border: 1px inset white; */
+  border: 1px inset white;
+  box-sizing: border-box;
 }
 div.delete-button-active:hover {
   background-color: var(--primary-red);
 }
 
+.preview-img-list {
+  width: 90px;  /* =100-5*2*/
+  height: 40px;  /* =50-5*2*/
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
 
 
 /* PLAYLIST GRID VIEW*/
@@ -281,13 +300,17 @@ div.overlay {
   z-index: 9999;
   position: absolute;
   background: rgba(0, 0, 0, 0.5);
-  padding: 38px 0 0 0;
   height: 90px;
   width: 160px;
   text-align: center;
   color: var(--list-foreground);  
   font-family: Space Grotesk;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
 }
 
 div.overlay:hover {

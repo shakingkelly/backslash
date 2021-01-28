@@ -24,13 +24,13 @@ const Playlist = (props) => {
                         // LIST VIEW: 
                         <div className="list-item" key={item.id} >
                             {isActive ?
-                                <div className="preview-cell-active" onClick={props.clicked(item.id)}>
-                                    {item.type === 'img' && <img width='100px' height='50px' src={item.url} alt={item.url} />}
-                                    {item.type === 'av' && <VideoThumbnail videoUrl={item.url} width={100} height={50} view='list' />}
+                                <div className="preview-cell active" onClick={props.clicked(item.id)}>
+                                    {item.type === 'img' && <img className="preview-img-list" src={item.url} alt={item.url} />}
+                                    {item.type === 'av' && <VideoThumbnail videoUrl={item.url} width={90} height={40} view='list' />}
                                 </div>
                                 : <div className="preview-cell" onClick={props.clicked(item.id)}>
-                                    {item.type === 'img' && <img width='100px' height='50px' src={item.url} alt={item.url} />}
-                                    {item.type === 'av' && <VideoThumbnail videoUrl={item.url} width={100} height={50} view='list' />}
+                                    {item.type === 'img' && <img className="preview-img-list" src={item.url} alt={item.url} />}
+                                    {item.type === 'av' && <VideoThumbnail videoUrl={item.url} width={90} height={40} view='list' />}
                                 </div>
                             }
                             {isActive ?
