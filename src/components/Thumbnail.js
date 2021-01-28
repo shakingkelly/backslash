@@ -9,10 +9,11 @@ import PropTypes from 'prop-types';
  * Simple component that renders thumbnail url
  * @param {string} snapshot
  */
-const ThumbnailImage = ({ snapshot }) => {
+const ThumbnailImage = ({ snapshot, view }) => {
+    const viewClass = view === 'list' ? 'none' : 'preview-img-grid';
     return (
         <div className="react-thumbnail-generator" >
-            <img className="preview-img-grid" src={snapshot} alt="my video thumbnail" />
+            <img className={viewClass} src={snapshot} alt="my video thumbnail" />
         </div>
     );
 }
@@ -35,11 +36,12 @@ export default class VideoThumbnail extends React.Component {
             snapshotAtTime: props.snapshotAtTime,       // number
             thumbnailHandler: props.thumbnailHandler,   // callback function
             videoUrl: props.videoUrl,                   // string
+            view: props.view
         }
     }
 
     render() {
-        const { renderThumbnail, snapshot, videoUrl } = this.state;
+        const { renderThumbnail, snapshot, videoUrl, view } = this.state;
         if (!snapshot) {
             return (
                 <div className="react-thumbnail-generator" ref="container">
@@ -58,7 +60,7 @@ export default class VideoThumbnail extends React.Component {
             )
         } else {
             if (renderThumbnail) {
-                return <ThumbnailImage snapshot={snapshot} />;
+                return <ThumbnailImage snapshot={snapshot} view={view} />;
             } else {
                 return null;
             }

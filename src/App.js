@@ -49,6 +49,7 @@ class App extends Component {
 			id2index: { 10: 0, 20: 1, 30: 2 },
 			index2id: { 0: 10, 1: 20, 2: 30 },
 			showList: true,
+			listView: 'list',
 			showZone: true,
 			showGlobalCanvas: false,
 			showAudio: true
@@ -190,6 +191,15 @@ class App extends Component {
 		if (e) { console.log('[toggleList:Hotkeys]', keyName, e, handle); }
 		this.setState({ showList: !this.state.showList })
 	}
+
+	toggleListView = () => {
+		const view = this.state.listView;
+		if (view === 'list') {
+			this.setState({ listView: 'grid' });
+		} else {
+			this.setState({ listView: 'list' });
+		}
+	}
 	/* END PLAYLIST */
 
 
@@ -197,7 +207,7 @@ class App extends Component {
 	prev = (keyName, e, handle) => {
 		if (e) { console.log('[prev:Hotkeys]', keyName, e, handle); }
 		if (this.state.selectedIndex.length === 1) {
-				this.setState({ selectedIndex: this.state.selectedIndex[0] === 0 ? [this.state.data.length - 1] : [this.state.selectedIndex[0] - 1] })
+			this.setState({ selectedIndex: this.state.selectedIndex[0] === 0 ? [this.state.data.length - 1] : [this.state.selectedIndex[0] - 1] })
 		} else {
 			console.log('Prev/next is disabled when multiselection!')
 		}
@@ -271,9 +281,10 @@ class App extends Component {
 						<Draggable handle=".handle"><div>
 							{
 								this.state.showList &&
-								<Playlist data={this.state.data} selectedIndex={this.state.selectedIndex} updated={this.updateSortable} clicked={this.changeSelection} clickDeleted={this.deleteFromLS} />
+								<Playlist data={this.state.data} selectedIndex={this.state.selectedIndex} updated={this.updateSortable} clicked={this.changeSelection} clickDeleted={this.deleteFromLS} view={this.state.listView} />
 							}
 							<button className="handle">🧲</button>
+							<button className="action" onClick={this.toggleListView}>{this.state.listView === 'list' ? 'GRID' : 'LIST'}</button>
 							<HotButton keyName="shift+l" buttonClass="action" actionFN={this.toggleList}>{this.state.showList ? 'HIDE' : 'PLAYLIST'}</HotButton>
 							<HotButton keyName="ctrl+l" buttonClass="delete" actionFN={this.clearLS}>{this.state.showList && 'CLEAR'}</HotButton>
 						</div></Draggable>

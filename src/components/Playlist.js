@@ -5,10 +5,12 @@ import VideoThumbnail from './Thumbnail';
 
 const Playlist = (props) => {
 
+    const viewClass = props.view === 'list' ? 'list' : 'grid';
+
     return (
         <div id="finite-list">
             <ReactSortable
-                className="grid"
+                className={viewClass}
                 list={props.data}
                 setList={props.updated}
             >
@@ -16,6 +18,33 @@ const Playlist = (props) => {
                     let isActive = props.selectedIndex.includes(index);
 
                     return (
+
+                        props.view === 'list' ?
+
+                        // LIST VIEW: 
+                        <div className="list-item" key={item.id} >
+                            {isActive ?
+                                <div className="preview-cell-active" onClick={props.clicked(item.id)}>
+                                    {item.type === 'img' && <img width='100px' height='50px' src={item.url} alt={item.url} />}
+                                    {item.type === 'av' && <VideoThumbnail videoUrl={item.url} width={100} height={50} view='list' />}
+                                </div>
+                                : <div className="preview-cell" onClick={props.clicked(item.id)}>
+                                    {item.type === 'img' && <img width='100px' height='50px' src={item.url} alt={item.url} />}
+                                    {item.type === 'av' && <VideoThumbnail videoUrl={item.url} width={100} height={50} view='list' />}
+                                </div>
+                            }
+                            {isActive ?
+                                <div className="filename-cell-active" onClick={props.clicked(item.id)}>{item.name}</div>
+                                : <div className="filename-cell" onClick={props.clicked(item.id)}>{item.name}</div>
+                            }
+                            {isActive ?
+                                <div className="delete-button-active" onClick={props.clickDeleted(item.id)}>x</div>
+                                : <div className="delete-button" onClick={props.clickDeleted(item.id)}>x</div>
+                            }
+                        </div>
+
+                        :
+
                         // GRID VIEW: only when inactive have the overlay
                         <div className="1">
                             {isActive ?
@@ -29,7 +58,7 @@ const Playlist = (props) => {
                                     {
                                         item.type === 'av' &&
                                         <div className="preview-cell-active-grid" onClick={props.clicked(item.id)}>
-                                            <VideoThumbnail lassName="preview-img-grid" videoUrl={item.url} width={150} height={80} />
+                                            <VideoThumbnail videoUrl={item.url} width={150} height={80} view='grid' />
                                         </div>
                                     }
                                     {
@@ -50,7 +79,7 @@ const Playlist = (props) => {
                                         item.type === 'av' &&
                                         <div className="preview-cell-grid" onClick={props.clicked(item.id)}>
                                             <div className="overlay">{item.name}</div>
-                                            <VideoThumbnail videoUrl={item.url} width={150} height={80} />
+                                            <VideoThumbnail videoUrl={item.url} width={150} height={80} view='grid' />
                                         </div>
                                     }
                                     {
@@ -59,31 +88,7 @@ const Playlist = (props) => {
                                     }
                                 </div>
                             }
-
                         </div>
-
-
-                        // <div className="list-item" key={item.id} >
-                        //     {isActive ?
-                        //         <div className="preview-cell-active" onClick={props.clicked(item.id)}>
-                        //             {item.type === 'img' && <img width='100px' height='50px' src={item.url} alt={item.url} />}
-                        //             {item.type === 'av' && <VideoThumbnail videoUrl={item.url} width={100} height={50} />}
-                        //         </div>
-                        //         : <div className="preview-cell" onClick={props.clicked(item.id)}>
-                        //             {item.type === 'img' && <img width='100px' height='50px' src={item.url} alt={item.url} />}
-                        //             {item.type === 'av' && <VideoThumbnail videoUrl={item.url} width={100} height={50} />}
-                        //         </div>
-                        //     }
-                        //     {isActive ?
-                        //         <div className="filename-cell-active" onClick={props.clicked(item.id)}>{item.name}</div>
-                        //         : <div className="filename-cell" onClick={props.clicked(item.id)}>{item.name}</div>
-                        //     }
-                        //     {isActive ?
-                        //         <div className="delete-button-active" onClick={props.clickDeleted(item.id)}>x</div>
-                        //         : <div className="delete-button" onClick={props.clickDeleted(item.id)}>x</div>
-                        //     }
-                        // </div>
-
 
                     )
                 })}
