@@ -34,11 +34,11 @@ const Playlist = (props) => {
                                 </div>
                             }
                             {isActive ?
-                                <div className="filename-cell-active" onClick={props.clicked(item.id)}>{item.name}</div>
+                                <div className="filename-cell active" onClick={props.clicked(item.id)}>{item.name}</div>
                                 : <div className="filename-cell" onClick={props.clicked(item.id)}>{item.name}</div>
                             }
                             {isActive ?
-                                <div className="delete-button-active" onClick={props.clickDeleted(item.id)}>x</div>
+                                <div className="delete-button active" onClick={props.clickDeleted(item.id)}>x</div>
                                 : <div className="delete-button" onClick={props.clickDeleted(item.id)}>x</div>
                             }
                         </div>
@@ -51,19 +51,19 @@ const Playlist = (props) => {
                                 <div className="grid-view-active">
                                     {
                                         item.type === 'img' &&
-                                        <div className="preview-cell-active-grid" onClick={props.clicked(item.id)}>
+                                        <div className="preview-cell-grid active" onClick={props.clicked(item.id)}>
                                             <img className="preview-img-grid" src={item.url} alt={item.url} />
                                         </div>
                                     }
                                     {
                                         item.type === 'av' &&
-                                        <div className="preview-cell-active-grid" onClick={props.clicked(item.id)}>
+                                        <div className="preview-cell-grid active" onClick={props.clicked(item.id)}>
                                             <VideoThumbnail videoUrl={item.url} width={150} height={80} view='grid' />
                                         </div>
                                     }
                                     {
                                         item.type === 'md' &&
-                                        <div className="filename-cell-active-grid" onClick={props.clicked(item.id)}>{item.name}</div>
+                                        <div className="filename-cell-grid active" onClick={props.clicked(item.id)}>{item.name}</div>
                                     }
                                 </div>
                                 :
