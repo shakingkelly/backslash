@@ -1,6 +1,5 @@
 import React from 'react';
 import IAVMedia from './IAVMedia';
-import Draggable from 'react-draggable';
 
 import Editor from './Editor';
 

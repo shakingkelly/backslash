@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import RichTextEditor from 'react-rte';
-import { convertToRaw } from 'draft-js';
 import Draggable from 'react-draggable';
 import HotButton from './HotButton';
 

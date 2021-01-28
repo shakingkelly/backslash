@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 const ThumbnailImage = ({ snapshot }) => {
     return (
         <div className="react-thumbnail-generator" >
-            <img src={snapshot} alt="my video thumbnail" />
+            <img className="preview-img-grid" src={snapshot} alt="my video thumbnail" />
         </div>
     );
 }
