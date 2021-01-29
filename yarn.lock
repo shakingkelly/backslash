@@ -10257,6 +10257,11 @@ react-visibility-sensor@^5.0.2:
   dependencies:
     prop-types "^15.7.2"
 
+react-voice-recorder@^2.0.7:
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/react-voice-recorder/-/react-voice-recorder-2.0.7.tgz#5a6b47a7f861b55eaceaf6f79838bcd0e2f76222"
+  integrity sha512-xbsAUqIUowY/Vq1SGzWW+YQxvODxIaMiHrpE9o9yBWKw+DugsgxdkACqgzF5KPgBTEF4jxANcRu+m0BU6/H+pA==
+
 react@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react/-/react-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"

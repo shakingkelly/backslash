@@ -53,7 +53,7 @@ class DragAndDrop extends Component {
         return (
             <div className="dropzone-border" ref={this.dropRef}>
                 {this.state.drag &&
-                    <div className="dropzone-shadow">a file :)</div>
+                    <div className="dropzone-shadow" />
                 }
                 {/* {this.props.children} */}
             </div>

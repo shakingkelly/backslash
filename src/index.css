@@ -11,38 +11,40 @@
   --frame-roundedness: 90px;
   --list-roundedness: 3px; */
 
-  --background-all: rgb(83, 83, 83);
-  --primary-red: #b90505;     /*=button-delete*/
-  --primary-yellow: #b86f03;  /*=button-action*/
-  --primary-green: #037445;
-  --button-background: burlywood;
-  --button-textcolor: black;
-  --button-files: #037445;
-  --button-nonaction: rgb(251, 255, 0);
-  --button-delete-hover: #fd0202;
-  --button-files-hover: #03fa93;
-  --button-action-hover: #fca235;  
-  --list-background: black;
-  --list-foreground: white;
+  --background-all: #140000;
+  /* --background-all: #CF9F9F; */
+  --primary-red: #D50100 ;     /* =button-delete #b90505*/ 
+  --primary-yellow: #FFCF60;  /* =button-action #b86f03*/
+  --primary-green: #309EC5;  /* =button-files #037445*/ 
+  
+  --button-nonaction:#FF9F00;  /*  rgb(251, 255, 0)*/
+  --button-delete-hover: #da4444;
+  --button-action-hover: #ffdf94; 
+  --button-files-hover: #61aac5; 
+  --list-background: #9E6060;
+  --list-foreground: #783C78;
+  --list-textcolor-active: white; 
+  --list-textcolor-inactive: #999090;
+
+  --radius: 5px;
+  --font: Space Grotesk;
 }
 
 html { 
-  background: url(https://media.wired.com/photos/5ac3c5aaecb0130b0e7261e6/master/w_1600%2Cc_limit/odysseystation.jpg) no-repeat center; 
+  /* background: url(https://media.wired.com/photos/5ac3c5aaecb0130b0e7261e6/master/w_1600%2Cc_limit/odysseystation.jpg) no-repeat center;  */
+  /* background: url(https://townsquare.media/site/838/files/2018/09/james-acaster.jpg) no-repeat center; */
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
   height: 100%;
-  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-  box-sizing: border-box;         /* Opera/IE 8+ */
 }
 
 body {
   margin: 0;
-  /* background-color: var(--background-all); */
+  background-color: var(--background-all);
   text-align: center;
-  font-family: 'Space Grotesk', 'Syne Mono', monospace , 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Barlow Condensed', 'Space Grotesk', 'Syne Mono', monospace , 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -54,12 +56,19 @@ code {
     monospace;
 }
 
+a {
+  color: black;
+  text-decoration: none; /* no underline */
+}
 
 /* BUTTONS */
 button {
-  color: var(--button-textcolor);
-  background-color: var(--button-background);
+  color: black;
+  background-color: white;
+  font-family: var(--font);
+  border-radius: var(--radius);
   /* margin: 4px 4px; =dashed border width */
+  border: none;
 }
 
 button.action {
@@ -70,7 +79,7 @@ button.action:hover {
 }
 
 button.files {
-  background-color: var(--button-files);
+  background-color: var(--primary-green);
 }
 button.files:hover {
   background-color: var(--button-files-hover);
@@ -88,12 +97,13 @@ button.nonaction {
 }
 
 button.handle {
-  background-color: Transparent;
-  background-repeat:no-repeat;
+  /* background-color: Transparent;
+  background-repeat: no-repeat;
   border: none;
   cursor:pointer;
   overflow: hidden;
-  outline:none;
+  outline:none; */
+  background-color: var(--button-nonaction);
 }
 /* BUTTONS */
 
@@ -128,7 +138,7 @@ div.dropzone-border {
   border: dashed red 4px;
   height: 100px;
   position: relative;
-  border-radius: 3px;
+  border-radius: var(--radius);
 }
 
 div.dropzone-shadow {
@@ -168,87 +178,100 @@ div.dropzone-shadow {
   z-index: -1;
 }
 #finite-list {
-  background: #e9c46a;
+  /* background: #e9c46a; */
   height: 200px; /* =50*4 or =100*2 */
   width: 480px; /* =(160:90)*3 */
   overflow-y: scroll;
   padding: 4px;
 }
+
 div.list-item {
   display: flex;
   flex-direction: row;
   width: 480px;  /* =inifite-list width*/
   flex-wrap: nowrap;
 }
+
 div.preview-cell {
   width: 100px;
   height: 50px;
   text-align: center;
   background-color: var(--list-background);
-  color: var(--list-foreground);  
-  font-family: Space Grotesk;
-  border: 1px outset white;
+  color: var(--list-textcolor-inactive);  
+  font-family: var(--font);
+  /* border: 1px outset white; */
   box-sizing: border-box;
   position: relative;
+  border-radius: var(--radius);
 }
 div.preview-cell:hover {
-  background-color: var(--primary-green);
+  /* background-color: var(--primary-green); */
+  background-color: var(--primary-yellow);
 }
 div.preview-cell.active {
   background-color: var(--list-foreground);
-  color: var(--list-background);   
-  border: 1px inset white;
+  color: var(--list-textcolor-active);   
+  /* border: 1px inset white; */
 }
 div.preview-cell.active:hover {
-  background-color: var(--primary-red);
+  /* background-color: var(--primary-red); */
+  background-color: var(--primary-yellow);
 }
+
 div.filename-cell {
   width: 360px;  /* =480-100-20*/
   height: 50px;
   text-align: center;
   background-color: var(--list-background);
-  color: var(--list-foreground);  
-  font-family: Space Grotesk;
+  color: var(--list-textcolor-inactive);  
+  font-family: var(--font);
   overflow-x: auto;
-  border: 1px outset white;
+  /* border: 1px outset white; */
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
+  border-radius: var(--radius);
 }
 div.filename-cell:hover {
-  background-color: var(--primary-green);
+  /* background-color: var(--primary-green); */
+  background-color: var(--primary-yellow);
 }
 div.filename-cell.active {
   background-color: var(--list-foreground);
-  color: var(--list-background);  
-  border: 1px inset white;
+  color: var(--list-textcolor-active);  
+  /* border: 1px inset white; */
 }
 div.filename-cell.active:hover {
-  background-color: var(--primary-red);
+  /* background-color: var(--primary-red); */
+  background-color: var(--primary-yellow);
 }
+
 div.delete-button {
   width: 20px;
   height: 50px;
   text-align: center;
   background-color: var(--list-background);
-  color: var(--list-foreground);  
-  font-family: Space Grotesk;
-  border: 1px outset white;
+  color: var(--list-textcolor-inactive);  
+  font-family: var(--font);
+  /* border: 1px outset white; */
   box-sizing: border-box;
+  border-radius: var(--radius);
 }
 div.delete-button:hover {
-  background-color: var(--primary-green);
+  /* background-color: var(--primary-green); */
+  background-color: var(--primary-yellow);
 }
 div.delete-button.active {
   background-color: var(--list-foreground);
-  color: var(--list-background);
-  border: 1px inset white;
+  color: var(--list-textcolor-active);
+  /* border: 1px inset white; */
 }
 div.delete-button.active:hover {
-  background-color: var(--primary-red);
+  /* background-color: var(--primary-red); */
+  background-color: var(--primary-yellow);
 }
 
 .preview-img-list {
@@ -261,6 +284,7 @@ div.delete-button.active:hover {
   left: 0;
   right: 0;
   margin: auto;
+  border-radius: var(--radius);
 }
 
 
@@ -280,14 +304,15 @@ div.overlay {
   height: 90px;
   width: 160px;
   text-align: center;
-  color: var(--list-foreground);  
-  font-family: Space Grotesk;
+  color: var(--list-textcolor-active);  
+  font-family: var(--font);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
+  border-radius: var(--radius);
 }
 
 div.overlay:hover {
@@ -299,49 +324,56 @@ div.preview-cell-grid {
   width: 160px;
   text-align: center;
   background-color: var(--list-background);
-  color: var(--list-foreground);  
-  font-family: Space Grotesk;
-  border: 1px outset white;
+  color: var(--list-textcolor-inactive);  
+  font-family: var(--font);
+  /* border: 1px outset white; */
   box-sizing: border-box;
   position: relative;
+  border-radius: var(--radius);
 }
 div.preview-cell-grid:hover {
-  background-color: var(--primary-green);
+  /* background-color: var(--primary-green); */
+  background-color: var(--primary-yellow);
 }
 div.preview-cell-grid.active {
   background-color: var(--list-foreground);
-  color: var(--list-background);  
-  border: 1px inset white;
+  color: var(--list-textcolor-active);  
+  /* border: 1px inset white; */
 }
 div.preview-cell-grid.active:hover {
-  background-color: var(--primary-red);
+  /* background-color: var(--primary-red); */
+  background-color: var(--primary-yellow);
 }
+
 div.filename-cell-grid {
   height: 90px;
   width: 160px;
   text-align: center;
   background-color: var(--list-background);
-  color: var(--list-foreground);  
-  font-family: Space Grotesk;
+  color: var(--list-textcolor-inactive);  
+  font-family: var(--font);
   overflow-x: auto;
-  border: 1px outset white;
+  /* border: 1px outset white; */
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
+  border-radius: var(--radius);
 }
 div.filename-cell-grid:hover {
-  background-color: var(--primary-green);
+  /* background-color: var(--primary-green); */
+  background-color: var(--primary-yellow);
 }
 div.filename-cell-grid.active {
   background-color: var(--list-foreground);
-  color: var(--list-background);  
-  border: 1px inset white;
+  color: var(--list-textcolor-active);  
+  /* border: 1px inset white; */
 }
 div.filename-cell-grid.active:hover {
-  background-color: var(--primary-red);
+  /* background-color: var(--primary-red); */
+  background-color: var(--primary-yellow);
 }
 
 .preview-img-grid {
@@ -354,15 +386,8 @@ div.filename-cell-grid.active:hover {
   left: 0;
   right: 0;
   margin: auto;
+  border-radius: var(--radius);
 }
-
-
-
-
-
-
-
-
 /* PLAYLIST*/
 
 
@@ -371,6 +396,7 @@ div.draw-area {
     background-color: rgb(0,0,0,0.5);
     z-index: 100;
     position: absolute;
+    border-radius: var(--radius);
 }
 /* DRAWAREA */
 
@@ -385,14 +411,15 @@ div.draw-area {
   margin: 10px;
   padding: 10px;
   float: left;
+  border-radius: var(--radius);
 }
 .no-cursor {
   cursor: auto;
 }
-.handle {
-  background: greenyellow;
+/* .handle {
+  background: var(--button-nonaction);
   text-align: center;
-}
+} */
 div.editor {
   width: 600px;
 }

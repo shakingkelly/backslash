@@ -41,6 +41,14 @@ class App extends Component {
 		// web 
 		const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
 		{ id: 20, name: 'vid', url: './asset/JavaScript.mp4', type: 'av', text: '' },
+		{ id: 100, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
+		{ id: 101, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
+		{ id: 102, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
+		{ id: 103, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
+		{ id: 104, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
+		{ id: 105, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
+		{ id: 106, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
+		{ id: 107, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
 		{ id: 30, name: 'hiya', url: './asset/hiya.md', type: 'md', text: 'hiya' }]
 
 		this.state = {
@@ -259,7 +267,7 @@ class App extends Component {
 					<div className='audio'>
 						<Draggable handle=".handle"><div>
 							{this.state.showAudio && <Audio />}
-							<button className="handle">🧲</button>
+							<button className="handle"><span role="img" aria-label="handle emoji">🧲</span></button>
 							<HotButton keyName="shift+a" buttonClass="action" actionFN={this.toggleAudio}>{this.state.showAudio ? 'HIDE' : 'RECORDER'}</HotButton>
 						</div></Draggable>
 					</div>
@@ -272,7 +280,7 @@ class App extends Component {
 									{/* <div style={{ position: 'absolute', top: 0, botton: 0, left: 0, right: 0, textAlign: 'center', color: 'salmon', fontSize: 24 }} >Drop Zone</div> */}
 								</DragAndDrop>
 							}
-							<button className="handle">🧲</button>
+							<button className="handle"><span role="img" aria-label="handle emoji">🧲</span></button>
 							<HotButton keyName="shift+z" buttonClass="action" actionFN={this.toggleZone}>{this.state.showZone ? 'HIDE' : 'DROPZONE'}</HotButton>
 						</div></Draggable>
 					</div>
@@ -283,10 +291,10 @@ class App extends Component {
 								this.state.showList &&
 								<Playlist data={this.state.data} selectedIndex={this.state.selectedIndex} updated={this.updateSortable} clicked={this.changeSelection} clickDeleted={this.deleteFromLS} view={this.state.listView} />
 							}
-							<button className="handle">🧲</button>
-							<button className="action" onClick={this.toggleListView}>{this.state.listView === 'list' ? 'GRID' : 'LIST'}</button>
+							<button className="handle"><span role="img" aria-label="handle emoji">🧲</span></button>
+							{this.state.showList && <button className="action" onClick={this.toggleListView}>{this.state.listView === 'list' ? 'GRID' : 'LIST'}</button>}
 							<HotButton keyName="shift+l" buttonClass="action" actionFN={this.toggleList}>{this.state.showList ? 'HIDE' : 'PLAYLIST'}</HotButton>
-							<HotButton keyName="ctrl+l" buttonClass="delete" actionFN={this.clearLS}>{this.state.showList && 'CLEAR'}</HotButton>
+							{this.state.showList && <HotButton keyName="ctrl+l" buttonClass="delete" actionFN={this.clearLS}>CLEAR</HotButton>}
 						</div></Draggable>
 					</div>
 				</div>

@@ -164,11 +164,11 @@ class DrawArea extends React.Component {
                 <button className="action" onClick={this.clearCanvas}>clear canvas</button>
                 <button className="action" onClick={this.toggleStroke}>{this.state.currStrokeWidth === 1 ? 'L' : 'S'}</button>
                 <button className="action" onClick={this.togglePicker}>{this.state.showColors ? 'hide colors' : 'show colors'}</button> */}
-                <HotButton className="action" actionFN={this.undo} keyName="ctrl+z">undo</HotButton>
-                <HotButton className="action" actionFN={this.redo} keyName="ctrl+shift+z">redo</HotButton>
-                <HotButton className="action" actionFN={this.clearCanvas} keyName="ctrl+c">clear</HotButton>
-                <HotButton className="action" actionFN={this.toggleStroke} keyName="shift+b">{this.state.currStrokeWidth === 1 ? 'L' : 'S'}</HotButton>
-                <HotButton className="action" actionFN={this.togglePicker} keyName="shift+h">{this.state.showColors ? 'hide colors' : 'show colors'}</HotButton>
+                <HotButton buttonClass="action" actionFN={this.undo} keyName="ctrl+z">undo</HotButton>
+                <HotButton buttonClass="action" actionFN={this.redo} keyName="ctrl+shift+z">redo</HotButton>
+                <HotButton buttonClass="action" actionFN={this.clearCanvas} keyName="ctrl+c">clear</HotButton>
+                <HotButton buttonClass="action" actionFN={this.toggleStroke} keyName="shift+b">{this.state.currStrokeWidth === 1 ? 'L' : 'S'}</HotButton>
+                <HotButton buttonClass="action" actionFN={this.togglePicker} keyName="shift+h">{this.state.showColors ? 'hide colors' : 'show colors'}</HotButton>
                 {this.state.showColors && <SketchPicker color={this.state.currStrokeColor} onChangeComplete={this.pickColor} />}
             </div>
         );

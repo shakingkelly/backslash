@@ -201,12 +201,12 @@ class Editor extends Component {
             <Draggable handle=".handle">
                 <div>  {/* className="box no-cursors" */}
                     <div className="list-item">
-                        <button className="handle">🧲</button>
+                        <button className="handle"><span role="img" aria-label="handle emoji">🧲</span></button>
                         <input className="editor-filename" type="text" placeholder="filename" value={this.state.inputValue} onChange={e => this.setState({ inputValue: e.target.value })} />
                         {/* <button className="action" onClick={this.save}>Save</button>
                         <button className="files" onClick={this.download}>Download</button> */}
-                        <HotButton className="action" actionFN={this.save} keyName="ctrl+s">Save</HotButton>
-                        <HotButton className="action" actionFN={this.download} keyName="ctrl+d">Download</HotButton>
+                        <HotButton buttonClass="action" actionFN={this.save} keyName="ctrl+s">Save</HotButton>
+                        <HotButton buttonClass="files" actionFN={this.download} keyName="ctrl+d">Download</HotButton>
                     </div>
                     <div className="editor">
                         <RichTextEditor
