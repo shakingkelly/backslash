@@ -421,10 +421,10 @@ div.draw-area {
   text-align: center;
 } */
 div.editor {
-  width: 600px;
+  width: 480px;
 }
 input.editor-filename {
-  width: 600px;
+  width: 480px;
 }
 /* EDITOR */
 

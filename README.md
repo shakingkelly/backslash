@@ -7,53 +7,118 @@ Go to [Slasher blog](https://www.slashers.blog) for more development details!
 
 - Check issues
 
-## Functions
+## Instruction Manual
+
+**Supported Files:**  
+Audio/Video: .mp3, .mp4  
+Image: .png, .jpg, .bmmp, .gif  
+Text: .txt, .md  
 
 **Installation:**  
 Install the `.dmg` file in `dist` folder.  
-Double click open `backslash.app`, there should be 3 preloaded files for testing purpose.  
-  
+Double click open `backslash.app`, there should be 3 preloaded files for testing purpose. 
+```diff
++ On first start, please grant the app's access to local file system.
+```
+
+![screenshot](screen.png)
+
 **Loading files:**  
-Drag and drop any file from the computer into the drag-drop zone would load that file.  
-Multiple files can be drag-drop-loaded in one operation.  
-Click "hide / show" to toggle the visibility of the dropzone.  
+- Drag and drop any file from the computer into the `dropzone` would load that file.  
+- Multiple files can be drag-drop-loaded in one operation.  
   
 **Playlist operations:**  
-Click on a black bar to show the image / audio video file.  
-Shift click multiple black bars together will show multiple files.  
-If there are multiple files selected and you want to deselect one of them, **shift click** that white bar (only click will clear the preview, aka. deselect all selected files).  
-When there's only one file selected, you could just click or shift click to deselect it.  
-Click the cross right to the file name to **delete** the file from playlist (it's not turn it unseen, it's removing it from the software).  
-Click "clear playlist" to delete all loaded files.  
-The app would "remember" what files are added. Feel free to quit, same status will be loaded upon re-opening the app.  
-Drag the black bars to reorder the files in the playlist as you wish.
-Click "hide / show" to toggle the visibility of the list.  
-  
+There are two views (list/grid) for `playlist`. Grid view is friendly to image/av heavy presentations, which shows previews of the files in a grid; list view is friendly to text heavy presentations, where each file's name is clearly shown.  
+
+- Click on a `cell` to show the file and click again to deselect. **Shift+click** multiple cells together will show multiple files.  
+- If there are multiple files selected and you want to deselect one of them, **shift click** that cell.***Only click and no shift will clear the `preview`, aka. deselect all selected files.***  
+- In list view, click the `X` to **delete** the file from `playlist` aka. removing it from the app's internal memo.  
+- Click `CLEAR` to ***remove all loaded files from internal memo***.  
+- The app would "remember" what files are added. Feel free to quit, same files will be loaded upon re-opening the app.  
+- Drag the `cells` to reorder the files in the `playlist` as you wish.
+- Toggle list/grid view via `LIST/GRID` button.  
+
 **Preview operations:**  
-The shown files could be dragged and placed anywhere within the window as you like.
-Click "prev / next" to show prev / next file. (Disabled when selecting multiple files.)  
-To deselect a file, just click on a different file.  
-Click "clear preview" to reset the file area.  
-The number on the top-left corner indicates the order of the layer (useful when there are multiple files shown; smaller number = near bottom). The color of the border is a visual aid for the same purpose (red = bottom, blue = top).  
-Click "+ / -" to resize the preview.
+- The shown files could be dragged with the handle🧲 and placed anywhere within the window as you like.
+- Click `PREV` or `NEXT` to show prev/next file in the list/grid. This is disabled when selecting multiple files.   
+- Click `CLEAR` to reset the `preview` area. This will not delete the file from the app's internal memo.  
+- The color of the border indicates the order of the layer (useful when there are multiple files shown; whiter = near bottom).
+- Click `+/-` to resize the previewed file, or click `FULLSCREEN`. Press `ESC` to exit fullscreen.  
   
 **Canvas operations:**  
-Click "show canvas" on the top-left corner of one previewed file to show its own local canvas.  
-Default pencil stroke is "S" (small), click "L" on the bottom of the canvas to change pencil stroke to large.  
-Click "show colors" to use the colorpicker.  
-Changes to the pencil will be applied on your next move.  
-Click "clear canvas" to remove all drawing history.  
-Clicking "hide canvas" will result in removing all drawing history local to the file.  
-When canvas is shown, dragging preview on the screen is disabled.  
-Click "global canvas" to show the top-most layer and draw the relationships between different shown files.  
+`Canvas` is an overlay to image files, which allows users to jot or doodle without permanently modify the undelying image during a live presentation.  
+- Click `SHOW CANVAS` on the top-left corner of one previewed image to show its own local canvas.  
+- Default pencil stroke is `S` (small), click `L` on the bottom of the canvas to change pencil stroke to large.  
+- Click `SHOW COLORS` to use the colorpicker.  
+- Click `CLEAR` to remove all drawing history.  
+- Clicking `HIDE CANVAS` will remove all drawing history local to the file. Toggling between fullscreen will do the same.  
+- Click `GLOBAL CANVAS` to show a global overlay layer for eg. drawing the relationships between different shown files.  
+
+**Editor operations:**  
+Users can edit/save/download the text files from a WYSIWYG editor. The files are downloaded into the same default location as your browser downloads. They are save in `.md` to keep the styles. 
+```diff 
++ Under development as of 2021/1/29. TODO: create new files within the app.  
+```
 
 **Recorder:**  
-Click play button to start recording.  
-Click stop button to stop recording.  
-Click download button to download the file (named 'Blah.webm').  
+Recorder is designed for bookkeeping and dissemination of the recorded presentation session. 
+```diff 
++ For MacOS, please grant the app's access to Microphone in System Preference.  
++ Under development as of 2021/1/29.
+```
 
-**Misc**:  
-To hide any of the functions that don't appear on starting the app, just click again on whatever button that made it appear.  
+**Misc:**  
+- Each component is draggable to anywhere in the window with the handle🧲.  
+- To hide any of the functions that don't appear on starting the app, just click again on whatever button that made it appear. 
+
+**Hotkeys:**  
+toggle, interaction: shift  
+clear: ctrl  
+global: alt  
+
+App.js:  
+toggleGlobalCanvas: shift+alt+c  
+toggleAudio: shift+a  
+toggleZone: shift+z  
+toggleList: shift+l  
+clearLS: ctrl+l  
+prev: left  
+next: right  
+clearPreview: ctrl+p  
+
+Audio.js:  
+start:  
+stop:  
+pause:  
+download:  
+
+Playlist.js:  
+selection/deselection: shift click  
+
+IAVMedia.js: (no button for fullscreen)  
+toggleCanvas: shift+c  
+enterFullscreen: shift+f  
+exitFullscreen: esc  
+larger: =  
+smaller: -  
+
+DrawArea.js:
+undo: ctrl+z  
+redo: ctrl+shift+z  
+clearCanvas: ctrl+c  
+toggleStroke: shift+b (bold)  
+togglePicker: shift+h (hue)  
+
+GlobalDrawArea.js:
+undo: alt+ctrl+z  
+redo: alt+ctrl+shift+z (lol)  
+clearCanvas: alt+ctrl+c  
+toggleStroke: alt+shift+b (bold)  
+togglePicker: alt+shift+h (hue)  
+
+Editor.js:  
+save: ctrl+s  
+download: ctrl+d  
 
 ## Folder Structure
 ```
@@ -80,10 +145,7 @@ To hide any of the functions that don't appear on starting the app, just click a
 │   ├── index.js                        Entry point for React app
 │   ├── ...
 │   └── components
-│       ├── DragAndDrop.js              Drag and drop area for "uploading" files from local machine
-│       ├── IAVMedia.js                 Holder component for an img / av media
-│       ├── Playlist.js                 Drag-sortable list to show "uploaded" files
-│       └── Preview.js                  Player area w/ ctrls
+│       └── ...                  
 ├── craco.config.js                     Enables Node.js file system on client side
 ├── electron-dev.js                     Entry point for electron app in dev mode
 ├── package.json

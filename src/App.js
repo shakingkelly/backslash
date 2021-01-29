@@ -32,24 +32,25 @@ class App extends Component {
 		// })
 
 		// desktop
-		// let data = JSON.parse(localStorage.getItem('files'))
-		// if (data.length === 0) {
-		// 	data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img' },
-		// 	{ id: 20, name: 'cant lose cant lose cant lose cant lose', url: './asset/break_it_to_me.png', type: 'img' }]
-		// }
+		let data = JSON.parse(localStorage.getItem('files'))
+		if (data.length === 0) {
+			data = [{ id: 10, name: 'img', url: './asset/cave.jpg', type: 'img', text: '' },
+			{ id: 20, name: 'av', url: './asset/JavaScript.mp4', type: 'av', text: '' },
+			{ id: 30, name: 'txt', url: './asset/hiya.md', type: 'md', text: 'hiya' }]
+		}
 
 		// web 
-		const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
-		{ id: 20, name: 'vid', url: './asset/JavaScript.mp4', type: 'av', text: '' },
-		{ id: 100, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
-		{ id: 101, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
-		{ id: 102, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
-		{ id: 103, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
-		{ id: 104, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
-		{ id: 105, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
-		{ id: 106, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
-		{ id: 107, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
-		{ id: 30, name: 'hiya', url: './asset/hiya.md', type: 'md', text: 'hiya' }]
+		// const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
+		// { id: 20, name: 'vid', url: './asset/JavaScript.mp4', type: 'av', text: '' },
+		// { id: 100, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
+		// { id: 101, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
+		// { id: 102, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
+		// { id: 103, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
+		// { id: 104, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
+		// { id: 105, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
+		// { id: 106, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
+		// { id: 107, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
+		// { id: 30, name: 'hiya', url: './asset/hiya.md', type: 'md', text: 'hiya' }]
 
 		this.state = {
 			data: data || [],
