@@ -32,8 +32,8 @@ class App extends Component {
 		// })
 
 		// desktop
-		let data = JSON.parse(localStorage.getItem('files'))
-		if (data.length === 0) {
+		let data = JSON.parse(localStorage.getItem('files'));
+		if (!data) {
 			data = [{ id: 10, name: 'img', url: './asset/cave.jpg', type: 'img', text: '' },
 			{ id: 20, name: 'av', url: './asset/JavaScript.mp4', type: 'av', text: '' },
 			{ id: 30, name: 'txt', url: './asset/hiya.md', type: 'md', text: 'hiya' }]
