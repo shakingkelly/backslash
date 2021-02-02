@@ -5,7 +5,7 @@ import Preview from './components/Preview';
 // import TestFs from './TestFs.ts';
 import DragAndDrop from './components/DragAndDrop';
 import GlobalDrawArea from './components/GlobalDrawArea';
-import Audio from './components/Audio';
+import Recorder from './components/Recorder';
 
 import Draggable from 'react-draggable';
 import Hotkeys from 'react-hot-keys';
@@ -267,9 +267,10 @@ class App extends Component {
 
 					<div className='audio'>
 						<Draggable handle=".handle"><div>
-							{this.state.showAudio && <Audio />}
+							{/* {this.state.showAudio && <Recorder />} */}
+							<Recorder/>
 							<button className="handle"><span role="img" aria-label="handle emoji">🧲</span></button>
-							<HotButton keyName="shift+a" buttonClass="action" actionFN={this.toggleAudio}>{this.state.showAudio ? 'HIDE' : 'RECORDER'}</HotButton>
+							{/* <HotButton keyName="shift+a" buttonClass="action" actionFN={this.toggleAudio}>{this.state.showAudio ? 'HIDE' : 'RECORDER'}</HotButton> */}
 						</div></Draggable>
 					</div>
 
