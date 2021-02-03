@@ -130,6 +130,11 @@ class IAVMedia extends Component {
         }
     }
 
+    triggerRedraw = () => {
+        this.refs.redraw.redrawLines();
+    }
+
+
     render() {
         console.log('[IAVMedia:render]', this.url); // worked after put in publics
         // const avWidth = this.state.imgWidth.toString() + 'px';
@@ -175,8 +180,11 @@ class IAVMedia extends Component {
                 <Rnd
                     size={{ width: this.state.imgWidth + 8, height: this.state.imgHeight + 8 }}
                     position={{ x: this.state.x, y: this.state.y }}
-                    onDragStop={(e, d) => { this.setState({ x: d.x, y: d.y }) }}
-                    onResize={(e, direction, ref, delta, position) => {
+                    onDragStop={(e, d) => { 
+                        console.log('[onDragStop]', d)
+                        this.setState({ x: d.x, y: d.y }) }}
+                    onResizeStop={(e, direction, ref, delta, position) => {
+                        console.log('[onResizeStop]', direction, ref, delta, position);
                         this.setState({
                             imgWidth: ref.offsetWidth,
                             imgHeight: ref.offsetHeight,
@@ -184,6 +192,7 @@ class IAVMedia extends Component {
                             canvasHeight: ref.offsetHeight + 8,
                             ...position,
                         });
+                        // this.triggerRedraw();
                     }}
                     dragHandleClassName="handle"
                 >
@@ -196,7 +205,7 @@ class IAVMedia extends Component {
                         }
                         {this.type === 'img' &&
                             // this.state.showCanvas && 
-                            <DrawArea className={this.state.showCanvas ? 'shown' : 'hidden'} canvasWidth={this.state.canvasWidth} canvasHeight={this.state.canvasHeight} />
+                            <DrawArea className={this.state.showCanvas ? 'shown' : 'hidden'} isVisible={this.state.showCanvas ? true : false} ref="redraw" canvasWidth={this.state.canvasWidth} canvasHeight={this.state.canvasHeight} />
                         }
                         {this.type === 'av' && <ReactPlayer url={this.url} controls={true} width={this.state.prevImgWidth > 0 ? this.state.prevImgWidth : this.state.imgWidth} height={this.state.prevImgHeight > 0 ? this.state.prevImgHeight : this.state.imgHeight} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' '), borderRadius: '25px' }} />}
                         <button className="handle" style={{ zIndex: 200, position: 'relative' }}><span role="img" aria-label="handle emoji">🧲</span></button>

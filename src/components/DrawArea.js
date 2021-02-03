@@ -36,7 +36,7 @@ class DrawArea extends React.Component {
     }
 
     handleMouseDown(mouseEvent) {
-        if (mouseEvent.button !== 0) {
+        if (mouseEvent.button !== 0 || !this.props.isVisible) {
             return;
         }
 
@@ -45,7 +45,7 @@ class DrawArea extends React.Component {
             return;
         }
         let newUndoLines = this.state.undolines;
-        let newLine = [[point], this.state.currStrokeWidth, this.state.currStrokeColor];
+        let newLine = [[this.relativePosToLengthPercent(point)], this.state.currStrokeWidth, this.state.currStrokeColor];
         newUndoLines.push(newLine);
 
         this.setState({
@@ -56,7 +56,7 @@ class DrawArea extends React.Component {
     }
 
     handleMouseMove(mouseEvent) {
-        if (!this.state.isDrawing) {
+        if (!this.state.isDrawing || !this.props.isVisible) {
             return;
         }
 
@@ -66,7 +66,7 @@ class DrawArea extends React.Component {
         }
         let newUndoLines = this.state.undolines;
         let lastLine = newUndoLines.pop();
-        lastLine[0].push(point);
+        lastLine[0].push(this.relativePosToLengthPercent(point));
         newUndoLines.push(lastLine);
 
         this.setState({ undolines: newUndoLines });
@@ -90,9 +90,15 @@ class DrawArea extends React.Component {
         }
 
         return {
-            x: relativeX,
-            y: relativeY,
+            rx: relativeX,
+            ry: relativeY,
         };
+    }
+    relativePosToLengthPercent = (point) => {
+        return {pw: point.rx / this.props.canvasWidth, ph: point.ry / this.props.canvasHeight};
+    }
+    lengthPercentToRelativePos = (percent) => {
+        return {rx: percent.pw * this.props.canvasWidth, ry: percent.ph * this.props.canvasHeight};
     }
 
     undo() {
@@ -158,7 +164,7 @@ class DrawArea extends React.Component {
                     // top: this.props.canvasTop
                 }}
             >
-                <Drawing lines={this.state.undolines} />
+                <Drawing lines={this.state.undolines} scaleFN={this.lengthPercentToRelativePos}/>
                 {/* <button className="action" onClick={this.undo}>undo</button>
                 <button className="action" onClick={this.redo}>redo</button>
                 <button className="action" onClick={this.clearCanvas}>clear canvas</button>
@@ -175,21 +181,23 @@ class DrawArea extends React.Component {
     }
 }
 
-function Drawing({ lines }) {
+function Drawing({ lines, scaleFN }) {
     return (
-        <svg className="drawing" style={{ width: '100%', height: '100%' }}>
+        <svg className="drawing" width='100%' height='100%'>
+            {/* viewBox="0 0 640 360" preserveAspectRatio="none" width={boxWidth} height={boxHeight} */}
             {lines.map((line, index) => (
-                <DrawingLine key={index} line={line[0]} strokeWidth={line[1]} strokeColor={line[2]}/>
+                <DrawingLine key={index} line={line[0]} strokeWidth={line[1]} strokeColor={line[2]} scaleFN={scaleFN}/>
             ))}
         </svg>
     );
 }
 
-function DrawingLine({ line, strokeWidth, strokeColor }) {
+function DrawingLine({ line, strokeWidth, strokeColor, scaleFN }) {
     const pathData = "M " +
         line
             .map(p => {
-                return `${p['x']} ${p['y']}`;
+                const scaledP = scaleFN(p);
+                return `${scaledP['rx']} ${scaledP['ry']}`;
             })
             .join(" L ");
 

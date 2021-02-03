@@ -11,8 +11,8 @@
   --frame-roundedness: 90px;
   --list-roundedness: 3px; */
 
-  --background-all: #140000;
-  /* --background-all: #CF9F9F; */
+  /* --background-all: #140000; */
+  --background-all: #CF9F9F;
   --primary-red: #D50100 ;     /* =button-delete #b90505*/ 
   --primary-yellow: #FFCF60;  /* =button-action #b86f03*/
   --primary-green: #309EC5;  /* =button-files #037445*/ 
@@ -442,4 +442,9 @@ input.editor-filename {
 }
 /* EDITOR */
 
+
+/* .drawing {
+  height: 100%;
+  width: 100%;
+} */
 
