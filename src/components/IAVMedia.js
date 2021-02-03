@@ -22,25 +22,29 @@ class IAVMedia extends Component {
 
     // 这个要点两次才能变??
     componentDidUpdate(prevProps, prevState) {
-        console.log('[componentDidUpdate]', prevProps.item.name, this.props.item.name)
+        // console.log('[componentDidUpdate]', prevProps.item.name, this.props.item.name)
         // only update if the data has changed
         // if (prevProps.item !== this.props.item) {
         //     this.name = this.props.item.name;
         //     this.url = this.props.item.url;
         //     this.type = this.props.item.type;
         // }
+        this.id = this.props.item.id;
         this.name = this.props.item.name;
         this.url = this.props.item.url;
         this.type = this.props.item.type;
         this.order = this.props.order;
     }
 
+    id = this.props.item.id;
     name = this.props.item.name;
     url = this.props.item.url;
     type = this.props.item.type;
     order = this.props.order;
+    saveCanvasFN = this.props.saveCanvasFN;
 
     state = {
+        orgScale: 0,
         imgWidth: 640,
         imgHeight: 360,
         showCanvas: false,
@@ -49,15 +53,19 @@ class IAVMedia extends Component {
         dragX: document.getElementById("preview-pos").getBoundingClientRect().left,
         dragY: document.getElementById("preview-pos").getBoundingClientRect().top,
         fullscreen: false,
-        // prevX: document.getElementById("preview-pos").getBoundingClientRect().left,
-        // prevY: document.getElementById("preview-pos").getBoundingClientRect().top,
         prevImgWidth: 0,
         prevImgHeight: 0,
         x: 0,
-        y: 0
+        y: 0,
+        undolines: this.props.item.undolines || [],
+        redoline: []
     }
 
-    mediaClickHandler = (event) => { console.log('[IAVMedia] playing') };
+    saveCanvas = () => {
+        this.saveCanvasFN(this.id, this.state.undolines);
+    }
+
+    mediaClickHandler = (event) => { console.log('[load undolines]', this.state.undolines) };
 
     // resizing: all use horizontal edge as anchor (considering use cases). 
     // AKA currently all heights are not necessary. 
@@ -94,7 +102,8 @@ class IAVMedia extends Component {
 
     enterFullscreen = (keyName, e, handle) => {
         if (e) { console.log('[enterFullscreen:Hotkeys]', keyName, e, handle); }
-        this.setState({ fullscreen: true });
+        console.log('[fullscreen ref]', this.refs.redraw);
+        this.setState({ fullscreen: true, undolines: this.refs.redraw.state.undolines, redolines: this.refs.redraw.state.redolines });
     }
     exitFullscreen = (keyName, e, handle) => {
         if (e) { console.log('[exitFullscreen:Hotkeys]', keyName, e, handle); }
@@ -116,75 +125,65 @@ class IAVMedia extends Component {
     }
 
     onImgLoad = ({ target: img }) => {
+        if (this.state.orgScale != 0) {
+            return;
+        }
+
         let scale = 1;
         if (img.width / img.height >= 1) {
-            // long img
             scale = 640 / img.width;
-            this.setState({ imgWidth: 640, imgHeight: scale * img.height });
-            console.log('[onImgLoad] long img');
+            this.setState({ orgScale: img.width / img.height, imgWidth: 640, imgHeight: scale * img.height });
+            console.log('[onImgLoad] long', img.width, img.height);
         } else {
-            // tall img
             scale = 360 / img.height;
-            this.setState({ imgWidth: scale * img.width, imgHeight: 360 });
-            console.log('[onImgLoad] tall img');
+            this.setState({ orgScale: img.width / img.height, imgWidth: scale * img.width, imgHeight: 360 });
+            console.log('[onImgLoad] tall', img.width, img.height);
         }
     }
-
-    triggerRedraw = () => {
-        this.refs.redraw.redrawLines();
-    }
-
 
     render() {
-        console.log('[IAVMedia:render]', this.url); // worked after put in publics
-        // const avWidth = this.state.imgWidth.toString() + 'px';
-        // const avHeight = (this.state.imgWidth * 9 / 16).toString() + 'px';
+        // console.log('[IAVMedia:render]', this.url); // worked after put in publics
 
-        // onLoad doesn't work on react-player, so these have no effect
-        // ratio is always 640/360 as is the default width/height in react-player
-        // anyways. could always use +/- button as work-around ¯\_(ツ)_/¯
-        let fullAVWidth = '';
-        let fullAVHeight = '';
-        const imgWidth = this.state.imgWidth;
-        const imgHeight = this.state.imgHeight;
-        const screenRatio = window.screen.width / window.screen.height;
-        const avRatio = imgWidth / imgHeight;
-        if (avRatio / screenRatio >= 1) {
-            // long av
-            console.log('[IAVMedia] long av');
-            fullAVWidth = window.screen.width.toString() + 'px';
-            fullAVHeight = (imgHeight / imgWidth * window.screen.width).toString() + 'px';
-        } else {
-            // tall av
-            console.log('[IAVMedia] tall av');
-            fullAVHeight = window.screen.height.toString() + 'px';
-            fullAVWidth = (imgWidth / imgHeight * window.screen.height).toString() + 'px';
-        }
+        // img 
+        const fullWidthLong = window.screen.width;
+        const fullWidthTall = this.state.orgScale * window.screen.height;
+        const fullHeightLong = 1 / this.state.orgScale * window.screen.width;
+        const fullHeightTall = window.screen.height;
+        const long = this.state.orgScale >= 1;
 
         return (
 
             this.state.fullscreen ?
                 <div style={{ position: 'absolute', left: 0, top: 0 }}>
-                    {this.type === 'img' && <img ref='coverImg' width={window.screen.width} height={this.state.imgHeight / this.state.imgWidth * window.screen.width} src={this.url} alt={this.url} style={{ zIndex: 0, position: 'absolute' }} />}
-                    {this.type === 'img' && this.state.showCanvas && <DrawArea canvasWidth={window.screen.width} canvasHeight={this.state.imgHeight / this.state.imgWidth * window.screen.width} />}
-                    {this.type === 'av' && <ReactPlayer url={this.url} controls={true} width={fullAVWidth} height={fullAVHeight} style={{ zIndex: 0, position: 'absolute', left: 0, top: 0 }} />}
                     {this.type === 'img' &&
-                        // <button className="action" onClick={this.toggleCanvas} style={{ zIndex: 200, position: 'relative' }}>{this.state.showCanvas ? 'HIDE CANVAS' : 'SHOW CANVAS'}</button>
-                        <Hotkeys onKeyDown={this.toggleCanvas} keyName="shift+c" />
+                        <img ref='coverImg'
+                            width={long ? fullWidthLong : fullWidthTall}
+                            height={long ? fullHeightLong : fullHeightTall}
+                            src={this.url} alt={this.url} style={{ zIndex: 0, position: 'absolute' }} />
                     }
-                    {/* <button className="action" style={{ zIndex: 200, position: 'relative' }} onClick={this.toggleFullscreen}>{this.state.fullscreen ? 'ESC' : 'FULLSCREEN'}</button> */}
+                    {this.type === 'img' &&
+                        <DrawArea className={this.state.showCanvas ? 'shown' : 'hidden'}
+                            isVisible={this.state.showCanvas ? true : false}
+                            ref="redraw"
+                            canvasWidth={long ? fullWidthLong : fullWidthTall}
+                            canvasHeight={long ? fullHeightLong : fullHeightTall}
+                            prevUndolines={this.state.undolines}
+                            prevRedolines={this.state.redolines} />
+                    }
+                    {this.type === 'av' && <ReactPlayer url={this.url} controls={true} width={fullWidthLong} height={fullHeightLong} style={{ zIndex: 0, position: 'absolute', left: 0, top: 0 }} />}
+                    {this.type === 'img' && <Hotkeys onKeyDown={this.toggleCanvas} keyName="shift+c" />}
                     <Hotkeys onKeyDown={this.exitFullscreen} keyName="esc"></Hotkeys>
                 </div>
                 :
-                // <Draggable handle='.handle'>
                 <Rnd
                     size={{ width: this.state.imgWidth + 8, height: this.state.imgHeight + 8 }}
                     position={{ x: this.state.x, y: this.state.y }}
-                    onDragStop={(e, d) => { 
-                        console.log('[onDragStop]', d)
-                        this.setState({ x: d.x, y: d.y }) }}
+                    onDragStop={(e, d) => {
+                        // console.log('[onDragStop]', d);
+                        this.setState({ x: d.x, y: d.y })
+                    }}
                     onResizeStop={(e, direction, ref, delta, position) => {
-                        console.log('[onResizeStop]', direction, ref, delta, position);
+                        // console.log('[onResizeStop]', direction, ref, delta, position);
                         this.setState({
                             imgWidth: ref.offsetWidth,
                             imgHeight: ref.offsetHeight,
@@ -192,7 +191,6 @@ class IAVMedia extends Component {
                             canvasHeight: ref.offsetHeight + 8,
                             ...position,
                         });
-                        // this.triggerRedraw();
                     }}
                     dragHandleClassName="handle"
                 >
@@ -204,11 +202,16 @@ class IAVMedia extends Component {
                             </div>
                         }
                         {this.type === 'img' &&
-                            // this.state.showCanvas && 
-                            <DrawArea className={this.state.showCanvas ? 'shown' : 'hidden'} isVisible={this.state.showCanvas ? true : false} ref="redraw" canvasWidth={this.state.canvasWidth} canvasHeight={this.state.canvasHeight} />
+                            <DrawArea className={this.state.showCanvas ? 'shown' : 'hidden'} 
+                            isVisible={this.state.showCanvas ? true : false} 
+                            ref="redraw" 
+                            canvasWidth={this.state.canvasWidth} 
+                            canvasHeight={this.state.canvasHeight}
+                            prevUndolines={this.state.undolines}
+                            prevRedolines={this.state.redolines} />
                         }
                         {this.type === 'av' && <ReactPlayer url={this.url} controls={true} width={this.state.prevImgWidth > 0 ? this.state.prevImgWidth : this.state.imgWidth} height={this.state.prevImgHeight > 0 ? this.state.prevImgHeight : this.state.imgHeight} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' '), borderRadius: '25px' }} />}
-                        <button className="handle" style={{ zIndex: 200, position: 'relative' }}><span role="img" aria-label="handle emoji">🧲</span></button>
+                        <button className="handle" style={{ zIndex: 200, position: 'relative' }} onClick={this.mediaClickHandler}><span role="img" aria-label="handle emoji">🧲</span></button>
                         {!this.state.showCanvas && !this.state.fullscreen &&
                             <HotButton buttonClass="action" style={this.zButtonStyle} actionFN={this.smaller.bind(this)} keyName="-">-</HotButton>
                         }
@@ -216,12 +219,14 @@ class IAVMedia extends Component {
                             <HotButton buttonClass="action" style={this.zButtonStyle} actionFN={this.larger.bind(this)} keyName="=">+</HotButton>
                         }
                         {this.type === 'img' &&
-                            <HotButton buttonClass="action" style={this.zButtonStyle} actionFN={this.toggleCanvas} keyName="shift+c">{this.state.showCanvas ? 'HIDE CANVAS' : 'SHOW CANVAS'}</HotButton>
+                            <div>
+                                <HotButton buttonClass="action" style={this.zButtonStyle} actionFN={this.toggleCanvas} keyName="shift+c">{this.state.showCanvas ? 'HIDE CANVAS' : 'SHOW CANVAS'}</HotButton>
+                                <button onClick={this.saveCanvas} style={this.zButtonStyle}>save canvas</button>
+                            </div>
                         }
                         <HotButton buttonClass="action" style={this.zButtonStyle} actionFN={this.enterFullscreen} keyName="f">FULLSCREEN</HotButton>
                     </div>
                 </Rnd>
-            // </Draggable>
 
 
         )

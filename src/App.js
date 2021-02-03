@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 import Playlist from './components/Playlist';
 import Preview from './components/Preview';
-// import TestFs from './TestFs.ts';
 import DragAndDrop from './components/DragAndDrop';
 import GlobalDrawArea from './components/GlobalDrawArea';
 import Recorder from './components/Recorder';
@@ -16,33 +15,18 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 
-		// deprecated: fetch data from json file 
-		// let data = [{ id: 10, name: 'outside file', url: '/Users/sjx/Pictures/2001_A_Space_Odyssey_1.jpg', type: 'img' }]
-		// const files_json = TestFs.getDirectoryListing()
-		// console.log('[files_json]', files_json)
-		// const files_name = files_json.slice(4, -2).split(',\n  ')
-
-		// files_name.forEach((file, index) => {
-		// 	file = file.slice(1, -1)
-		// 	if (file.endsWith('.png')) {
-		// 		data.push({ id: index, name: file, url: './asset/' + file, type: 'img' })
-		// 	} else if (file.endsWith('.mp4') || file.endsWith('.mp3')) {
-		// 		data.push({ id: index, name: file, url: './asset/' + file, type: 'av' })
-		// 	}
-		// })
-
 		// desktop
-		let data = JSON.parse(localStorage.getItem('files'));
-		if (!data) {
-			data = [{ id: 10, name: 'img', url: './asset/cave.jpg', type: 'img', text: '' },
-			{ id: 20, name: 'av', url: './asset/JavaScript.mp4', type: 'av', text: '' },
-			{ id: 30, name: 'txt', url: './asset/hiya.md', type: 'md', text: 'hiya' }]
-		}
+		// let data = JSON.parse(localStorage.getItem('files'));
+		// if (!data) {
+		// 	data = [{ id: 10, name: 'img', url: './asset/cave.jpg', type: 'img', text: '' },
+		// 	{ id: 20, name: 'av', url: './asset/JavaScript.mp4', type: 'av', text: '' },
+		// 	{ id: 30, name: 'txt', url: './asset/hiya.md', type: 'md', text: 'hiya' }]
+		// }
 
 		// web 
-		// const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
-		// { id: 20, name: 'vid', url: './asset/JavaScript.mp4', type: 'av', text: '' },
-		// { id: 100, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
+		const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
+		{ id: 20, name: 'vid', url: './asset/JavaScript.mp4', type: 'av', text: '' },
+		{ id: 100, name: 'tall', url: './asset/tall.png', type: 'img', text: '' },
 		// { id: 101, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
 		// { id: 102, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
 		// { id: 103, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
@@ -50,20 +34,20 @@ class App extends Component {
 		// { id: 105, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
 		// { id: 106, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
 		// { id: 107, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
-		// { id: 30, name: 'hiya', url: './asset/hiya.md', type: 'md', text: 'hiya' }]
+		{ id: 30, name: 'hiya', url: './asset/hiya.md', type: 'md', text: 'hiya' }]
 
 		this.state = {
 			data: data || [],
 			selectedIndex: [],
-			id2index: { 10: 0, 20: 1, 30: 2 },
-			index2id: { 0: 10, 1: 20, 2: 30 },
+			id2index: { 10: 0, 20: 1, 100: 2, 30: 3 },
+			index2id: { 0: 10, 1: 20, 2: 100, 3: 30 },
 			showList: true,
 			listView: 'list',
 			showZone: true,
 			showGlobalCanvas: false,
 			showAudio: true
 		}
-		console.log('[START]', this.state)
+		// console.log('[START]', this.state)
 	}
 
 
@@ -74,7 +58,7 @@ class App extends Component {
 
 		for (var i = 0; i < files.length; i++) {
 			let type = '';
-			let newData = { id: len, name: files[i].name, url: files[i].path, type: type, text: '', height: 0, width: 0 };
+			let newData = { id: len, name: files[i].name, url: files[i].path, type: type, text: '' };
 			if (files[i].name.endsWith(".jpg") || files[i].name.endsWith(".png") || files[i].name.endsWith(".gif") || files[i].name.endsWith(".bmp")) {
 				newData.type = 'img';
 			} else if (files[i].name.endsWith(".md") || files[i].name.endsWith(".txt")) {
@@ -88,7 +72,7 @@ class App extends Component {
 
 			data.push(newData);
 			len += 1
-			console.log('[addFiles]', newData.url, newData.text);
+			// console.log('[addFiles]', newData.url, newData.text);
 		}
 
 		localStorage.setItem('files', JSON.stringify(data));
@@ -254,8 +238,17 @@ class App extends Component {
 		this.setState({ showAudio: !this.state.showAudio });
 	}
 
+	// should be included in changeSelection if img 
+	// also prev next 
+	saveCanvas = (id, undolines) => {
+		let data = this.state.data;
+		data[this.state.id2index[id]].undolines = undolines;
+		this.setState({ data: data });
+		console.log('[saveCanvas]', this.state.data[this.state.id2index[id]].undolines);
+	}
+
 	render() {
-		console.log('[render]', this.state.data.length)
+		// console.log('[render]', this.state.data.length)
 		return (
 			/* CONTAINER */
 			<div>
@@ -268,7 +261,7 @@ class App extends Component {
 					<div className='audio'>
 						<Draggable handle=".handle"><div>
 							{/* {this.state.showAudio && <Recorder />} */}
-							<Recorder/>
+							<Recorder />
 							<button className="handle"><span role="img" aria-label="handle emoji">🧲</span></button>
 							{/* <HotButton keyName="shift+a" buttonClass="action" actionFN={this.toggleAudio}>{this.state.showAudio ? 'HIDE' : 'RECORDER'}</HotButton> */}
 						</div></Draggable>
@@ -306,7 +299,7 @@ class App extends Component {
 							<HotButton keyName="ctrl+p" buttonClass="delete" actionFN={this.clearPreview}>CLEAR</HotButton>
 						</div>
 					}
-					<Preview data={this.state.data} selectedIndex={this.state.selectedIndex} changeEditorFilenameFn={this.changeEditorFilename} />
+					<Preview data={this.state.data} selectedIndex={this.state.selectedIndex} changeEditorFilenameFn={this.changeEditorFilename} saveCanvasFN={this.saveCanvas} />
 				</div>
 			</div>
 		)

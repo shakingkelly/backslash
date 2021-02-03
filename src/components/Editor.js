@@ -145,22 +145,22 @@ class Editor extends Component {
         }
     };
 
-    downloadTxtFile = () => {
-        const element = document.createElement("a");
-        const file = new Blob([this.state.value.toString('markdown', { blockStyleFn: this.getTextAlignStyles })], { type: 'text/plain' });
-        element.href = URL.createObjectURL(file);
-        const filename = document.getElementById("filename").value;
-        element.download = filename + ".md";
-        document.body.appendChild(element); // Required for this to work in FireFox
-        element.click();
-        return filename;
-    }
-    saveMarkdown = () => {
-        this._logState();
-        const newFilename = this.downloadTxtFile();
-        this.setState({ filename: newFilename });
-        this.changeEditorFilename(this.id, newFilename);
-    }
+    // downloadTxtFile = () => {
+    //     const element = document.createElement("a");
+    //     const file = new Blob([this.state.value.toString('markdown', { blockStyleFn: this.getTextAlignStyles })], { type: 'text/plain' });
+    //     element.href = URL.createObjectURL(file);
+    //     const filename = document.getElementById("filename").value;
+    //     element.download = filename + ".md";
+    //     document.body.appendChild(element); // Required for this to work in FireFox
+    //     element.click();
+    //     return filename;
+    // }
+    // saveMarkdown = () => {
+    //     this._logState();
+    //     const newFilename = this.downloadTxtFile();
+    //     this.setState({ filename: newFilename });
+    //     this.changeEditorFilename(this.id, newFilename);
+    // }
 
     save = () => {
         this._logState();

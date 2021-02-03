@@ -3,12 +3,12 @@ import { SketchPicker } from 'react-color';
 import HotButton from './HotButton';
 
 class DrawArea extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
-            undolines: [],
-            redolines: [],
+            undolines: props.prevUndolines || [],
+            redolines: props.prevRedolines || [],
             isDrawing: false,
             currStrokeWidth: 1,
             currStrokeColor: '#fff',

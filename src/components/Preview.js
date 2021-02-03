@@ -13,7 +13,7 @@ const Preview = (props) => {
                         props.data[selected].type === 'md' ?
                             <Editor key={selected} item={props.data[selected]} order={index} changeEditorFilenameFn={props.changeEditorFilenameFn} />
                             :
-                            <IAVMedia key={selected} item={props.data[selected]} order={index} />
+                            <IAVMedia key={selected} item={props.data[selected]} order={index} saveCanvasFN={props.saveCanvasFN} />
                     )
                 })
             }
