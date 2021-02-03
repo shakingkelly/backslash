@@ -276,12 +276,7 @@ class App extends Component {
 
 					<div className='dropzone'>
 						<Draggable handle=".handle"><div>
-							{
-								this.state.showZone &&
-								<DragAndDrop handleDrop={this.addFiles}>
-									{/* <div style={{ position: 'absolute', top: 0, botton: 0, left: 0, right: 0, textAlign: 'center', color: 'salmon', fontSize: 24 }} >Drop Zone</div> */}
-								</DragAndDrop>
-							}
+							{this.state.showZone && <DragAndDrop handleDrop={this.addFiles} />}
 							<button className="handle"><span role="img" aria-label="handle emoji">🧲</span></button>
 							<HotButton keyName="shift+z" buttonClass="action" actionFN={this.toggleZone}>{this.state.showZone ? 'HIDE' : 'DROPZONE'}</HotButton>
 						</div></Draggable>

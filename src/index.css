@@ -395,11 +395,18 @@ div.filename-cell-grid.active:hover {
 
 
 /* DRAWAREA */
-div.draw-area {
+div.draw-area-shown {
     background-color: rgb(0,0,0,0.5);
     z-index: 100;
     position: absolute;
     border-radius: var(--radius);
+}
+div.draw-area-hidden {
+  background-color: rgb(0,0,0,0.5);
+  z-index: 100;
+  position: absolute;
+  border-radius: var(--radius);
+  opacity: 0;
 }
 /* DRAWAREA */
 
@@ -419,116 +426,20 @@ div.draw-area {
 .no-cursor {
   cursor: auto;
 }
-/* .handle {
-  background: var(--button-nonaction);
-  text-align: center;
-} */
-div.editor {
-  width: 480px;
+.handle {
+  background-color: Transparent;
+  background-repeat: no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
 }
+/* div.editor {
+  width: 480px;
+} */
 input.editor-filename {
   width: 480px;
 }
 /* EDITOR */
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*** deprecated button system ***/
-/* button {
-  color: rgb(109, 101, 28); 
-  border-radius: 4px;
-  text-shadow: 0 0px 0px rgba(0, 0, 0, 0.2);
-} */
-/* PRIMARY DEFAULT BUTTON */
-button.pure-button {
-  font-size: 100%;
-  background: var(--default-button);
-  padding: 10px 32px;
-  border-radius: var(--button-roundedness);
-  text-align: center;
-} 
-/* PRIMARY DEFAULT BUTTON */
-button.button-prev {
-  background: var(--primary-yellow);
-}
-button.button-next {
-  background: var(--primary-green);
-}
-button.button-clear {
-  background: var(--primary-red);   
-}
-button.button-hide {
-  font-size: 100%;
-  margin-top:10px;
-  padding: 8px 32px;
-}
-button.button-order-num {
-  padding: 3px 8px;
-  margin-top: var(--canvas-top-margin);
-}
-button.button-sizer {
-  background: #7584ad;
-  padding: 0px 20px;
-  font-size: 130%;
-  margin-top: var(--canvas-top-margin);
-  margin-right: 3px;
-}
-button.button-canvas {
-  color: rgb(109, 101, 28);
-  background: #e9c46a;
-  padding: 3px 20px;
-  margin-top: var(--canvas-top-margin); 
-}
-/* AUDIO BUTTON DEFN */
-button.button-record {
-  color: rgb(255, 255, 255);
-  background: var(--primary-red);
-  padding: 3px 10px;
-  margin-top: var(--canvas-top-margin);
-}
-button.button-stop {
-  color: rgb(255, 255, 255);
-  background: var(--primary-red);
-  padding: 3px 10px;
-  margin-top: var(--canvas-top-margin);
-}
-button.button-download {
-  color: rgb(255, 255, 255);
-  background: var(--secondary-button);
-  padding: 3px 10px;
-  margin-top: var(--canvas-top-margin);
-} 
-
-/* SketchPicker.color-picker {
-  background: cadetblue;
-} */
-
-/* .divider{
-  width:10px;
-  height:auto;
-  display:inline-block;
-} */

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import RichTextEditor from 'react-rte';
 import Draggable from 'react-draggable';
 import HotButton from './HotButton';
+import { Rnd } from 'react-rnd';
 
 class Editor extends Component {
 
@@ -21,10 +22,14 @@ class Editor extends Component {
     order = this.props.order;
 
     state = {
-        // value: RichTextEditor.createEmptyValue()
+        // value: RichTextEditor.createEmptyValue(),
         value: RichTextEditor.createValueFromString(this.text, "markdown"),
         filename: this.name,
-        inputValue: this.name
+        inputValue: this.name,
+        x: 30,
+        y: 30,
+        h: 0,
+        w: 0
     }
 
     _logState() {
@@ -178,27 +183,24 @@ class Editor extends Component {
     }
 
     render() {
-        const toolbarConfig = {
-            // Optionally specify the groups to display (displayed in the order listed).
-            display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'BLOCK_TYPE_DROPDOWN', 'HISTORY_BUTTONS'],
-            INLINE_STYLE_BUTTONS: [
-                { label: 'Bold', style: 'BOLD', className: 'custom-css-class' },
-                { label: 'Italic', style: 'ITALIC' },
-                { label: 'Underline', style: 'UNDERLINE' }
-            ],
-            BLOCK_TYPE_DROPDOWN: [
-                { label: 'Normal', style: 'unstyled' },
-                { label: 'Heading Large', style: 'header-one' },
-                { label: 'Heading Medium', style: 'header-two' },
-                { label: 'Heading Small', style: 'header-three' }
-            ],
-            BLOCK_TYPE_BUTTONS: [
-                { label: 'UL', style: 'unordered-list-item' },
-                { label: 'OL', style: 'ordered-list-item' }
-            ]
-        };
+
         return (
-            <Draggable handle=".handle">
+            // <Draggable handle=".handle">
+            <Rnd
+                size={{ width: this.state.w, height: this.state.h }}
+                position={{ x: this.state.x, y: this.state.y }}
+                onDragStop={(e, d) => { this.setState({ x: d.x, y: d.y }) }}
+                onResize={(e, direction, ref, delta, position) => {
+                    this.setState({
+                        w: ref.offsetWidth,
+                        h: ref.offsetHeight,
+                        ...position,
+                    });
+                }}
+                dragHandleClassName="handle"
+                minWidth='480px'
+                minHeight='200px'
+            >
                 <div>  {/* className="box no-cursors" */}
                     <div className="list-item">
                         <button className="handle"><span role="img" aria-label="handle emoji">🧲</span></button>
@@ -227,7 +229,8 @@ class Editor extends Component {
                         </div> */}
                     </div>
                 </div>
-            </Draggable>
+            </Rnd>
+            // </Draggable>
 
         );
     }

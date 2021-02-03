@@ -4,11 +4,12 @@ import DrawArea from './DrawArea';
 import Draggable from 'react-draggable';
 import HotButton from './HotButton';
 import Hotkeys from 'react-hot-keys';
+import { Rnd } from 'react-rnd';
 
 class IAVMedia extends Component {
 
     // colors = { 0: 'red', 1: 'orange', 2: 'Yellow', 3: 'lime', 4: 'green', 5: 'blue', 6: 'navy', 7: 'purple', 8: 'indigo', 9: 'dimgray' };
-    colors = {0:'#9E9FCF', 1:'#8889cf', 2:'#7677cf', 3:'#6466d1', 4:'#5456d1', 5:'#4547d1', 6:'#3437d1', 7:'#2125d1', 8:'#1317d1', 9:'#0408d1'}
+    colors = { 0: '#9E9FCF', 1: '#8889cf', 2: '#7677cf', 3: '#6466d1', 4: '#5456d1', 5: '#4547d1', 6: '#3437d1', 7: '#2125d1', 8: '#1317d1', 9: '#0408d1' }
     zButtonStyle = { zIndex: 200, position: 'relative' };
 
     // 这个是移动之后selected index不变（所以media自动变了）
@@ -51,7 +52,9 @@ class IAVMedia extends Component {
         // prevX: document.getElementById("preview-pos").getBoundingClientRect().left,
         // prevY: document.getElementById("preview-pos").getBoundingClientRect().top,
         prevImgWidth: 0,
-        prevImgHeight: 0
+        prevImgHeight: 0,
+        x: 0,
+        y: 0
     }
 
     mediaClickHandler = (event) => { console.log('[IAVMedia] playing') };
@@ -90,16 +93,16 @@ class IAVMedia extends Component {
     }
 
     enterFullscreen = (keyName, e, handle) => {
-        if (e) {console.log('[enterFullscreen:Hotkeys]', keyName, e, handle);}
-        this.setState( {fullscreen: true});
+        if (e) { console.log('[enterFullscreen:Hotkeys]', keyName, e, handle); }
+        this.setState({ fullscreen: true });
     }
     exitFullscreen = (keyName, e, handle) => {
-        if (e) {console.log('[exitFullscreen:Hotkeys]', keyName, e, handle);}
-        this.setState( {fullscreen: false});
+        if (e) { console.log('[exitFullscreen:Hotkeys]', keyName, e, handle); }
+        this.setState({ fullscreen: false });
     }
 
     toggleCanvas = (keyName, e, handle) => {
-        if (e) {console.log('[toggleCanvas:Hotkeys]', keyName, e, handle);}
+        if (e) { console.log('[toggleCanvas:Hotkeys]', keyName, e, handle); }
         // const boundingRect = this.refs.coverImg.getBoundingClientRect();
         this.setState({
             showCanvas: !this.state.showCanvas,
@@ -138,7 +141,7 @@ class IAVMedia extends Component {
         let fullAVWidth = '';
         let fullAVHeight = '';
         const imgWidth = this.state.imgWidth;
-        const imgHeight = this.state.imgHeight;        
+        const imgHeight = this.state.imgHeight;
         const screenRatio = window.screen.width / window.screen.height;
         const avRatio = imgWidth / imgHeight;
         if (avRatio / screenRatio >= 1) {
@@ -160,7 +163,7 @@ class IAVMedia extends Component {
                     {this.type === 'img' && <img ref='coverImg' width={window.screen.width} height={this.state.imgHeight / this.state.imgWidth * window.screen.width} src={this.url} alt={this.url} style={{ zIndex: 0, position: 'absolute' }} />}
                     {this.type === 'img' && this.state.showCanvas && <DrawArea canvasWidth={window.screen.width} canvasHeight={this.state.imgHeight / this.state.imgWidth * window.screen.width} />}
                     {this.type === 'av' && <ReactPlayer url={this.url} controls={true} width={fullAVWidth} height={fullAVHeight} style={{ zIndex: 0, position: 'absolute', left: 0, top: 0 }} />}
-                    {this.type === 'img' && 
+                    {this.type === 'img' &&
                         // <button className="action" onClick={this.toggleCanvas} style={{ zIndex: 200, position: 'relative' }}>{this.state.showCanvas ? 'HIDE CANVAS' : 'SHOW CANVAS'}</button>
                         <Hotkeys onKeyDown={this.toggleCanvas} keyName="shift+c" />
                     }
@@ -168,24 +171,48 @@ class IAVMedia extends Component {
                     <Hotkeys onKeyDown={this.exitFullscreen} keyName="esc"></Hotkeys>
                 </div>
                 :
-                <Draggable handle='.handle'>
-                    <div style={{ position: 'absolute', left: this.state.dragX, top: this.state.dragY }}>
-                        {this.type === 'img' && <img onLoad={this.onImgLoad} ref='coverImg' width={this.state.prevImgWidth > 0 ? this.state.prevImgWidth : this.state.imgWidth} src={this.url} alt={this.url} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' '), borderRadius: '25px' }} />}
-                        {this.type === 'img' && this.state.showCanvas && <DrawArea canvasWidth={this.state.canvasWidth} canvasHeight={this.state.canvasHeight} />}
+                // <Draggable handle='.handle'>
+                <Rnd
+                    size={{ width: this.state.imgWidth + 8, height: this.state.imgHeight + 8 }}
+                    position={{ x: this.state.x, y: this.state.y }}
+                    onDragStop={(e, d) => { this.setState({ x: d.x, y: d.y }) }}
+                    onResize={(e, direction, ref, delta, position) => {
+                        this.setState({
+                            imgWidth: ref.offsetWidth,
+                            imgHeight: ref.offsetHeight,
+                            canvasWidth: ref.offsetWidth + 8,
+                            canvasHeight: ref.offsetHeight + 8,
+                            ...position,
+                        });
+                    }}
+                    dragHandleClassName="handle"
+                >
+
+                    <div>
+                        {this.type === 'img' &&
+                            <div style={{ width: this.state.prevImgWidth > 0 ? this.state.prevImgWidth : this.state.imgWidth, height: this.state.prevImgHeight > 0 ? this.state.prevImgHeight : this.state.imgHeight, zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' '), borderRadius: '25px' }} >
+                                <img onLoad={this.onImgLoad} ref='coverImg' src={this.url} alt={this.url} style={{ width: '100%', height: '100%' }} />
+                            </div>
+                        }
+                        {this.type === 'img' &&
+                            // this.state.showCanvas && 
+                            <DrawArea className={this.state.showCanvas ? 'shown' : 'hidden'} canvasWidth={this.state.canvasWidth} canvasHeight={this.state.canvasHeight} />
+                        }
                         {this.type === 'av' && <ReactPlayer url={this.url} controls={true} width={this.state.prevImgWidth > 0 ? this.state.prevImgWidth : this.state.imgWidth} height={this.state.prevImgHeight > 0 ? this.state.prevImgHeight : this.state.imgHeight} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' '), borderRadius: '25px' }} />}
                         <button className="handle" style={{ zIndex: 200, position: 'relative' }}><span role="img" aria-label="handle emoji">🧲</span></button>
-                        {!this.state.showCanvas && !this.state.fullscreen && 
+                        {!this.state.showCanvas && !this.state.fullscreen &&
                             <HotButton buttonClass="action" style={this.zButtonStyle} actionFN={this.smaller.bind(this)} keyName="-">-</HotButton>
                         }
-                        {!this.state.showCanvas && !this.state.fullscreen && 
+                        {!this.state.showCanvas && !this.state.fullscreen &&
                             <HotButton buttonClass="action" style={this.zButtonStyle} actionFN={this.larger.bind(this)} keyName="=">+</HotButton>
                         }
-                        {this.type === 'img' && 
+                        {this.type === 'img' &&
                             <HotButton buttonClass="action" style={this.zButtonStyle} actionFN={this.toggleCanvas} keyName="shift+c">{this.state.showCanvas ? 'HIDE CANVAS' : 'SHOW CANVAS'}</HotButton>
                         }
                         <HotButton buttonClass="action" style={this.zButtonStyle} actionFN={this.enterFullscreen} keyName="f">FULLSCREEN</HotButton>
                     </div>
-                </Draggable>
+                </Rnd>
+            // </Draggable>
 
 
         )
