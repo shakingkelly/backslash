@@ -36,13 +36,25 @@ export default class VideoThumbnail extends React.Component {
             snapshotAtTime: props.snapshotAtTime,       // number
             thumbnailHandler: props.thumbnailHandler,   // callback function
             videoUrl: props.videoUrl,                   // string
-            view: props.view
+            view: props.view,
+            isYoutube: props.videoUrl.includes('youtube')
         }
     }
 
     render() {
-        const { renderThumbnail, snapshot, videoUrl, view } = this.state;
-        if (!snapshot) {
+        const { renderThumbnail, snapshot, videoUrl, view, isYoutube } = this.state;
+        if (isYoutube) {
+            const viewClass = view === 'list' ? 'preview-img-list' : 'preview-img-grid';
+            const youtubeID = videoUrl.split('=')[1];
+            return (
+                <div className="react-thumbnail-generator" >
+                    <img className={viewClass} src={`http://img.youtube.com/vi/${youtubeID}/2.jpg`} alt="youtube thumbnail" />
+                </div>
+            );
+
+        }
+
+        else if (!snapshot) {
             return (
                 <div className="react-thumbnail-generator" ref="container">
                     <canvas className="snapshot-generator" ref="canvas" ></canvas>
@@ -87,6 +99,7 @@ export default class VideoThumbnail extends React.Component {
     }
 
     componentDidMount() {
+        if (this.state.isYoutube) { return; }
         if (!this.state.cors) this.refs.videoEl.setAttribute('crossOrigin', 'Anonymous');
         // console.log('mount state: ', this.state)
     }
@@ -95,6 +108,7 @@ export default class VideoThumbnail extends React.Component {
      * (fires every time setState() gets called)
      */
     componentDidUpdate(prevProps, prevState) {
+        if (this.state.isYoutube) { return; }
         if (!this.state.snapshot) {
             const { metadataLoaded, dataLoaded, suspended, seeked, snapshot, snapshotAtTime } = this.state;
 
@@ -117,7 +131,7 @@ export default class VideoThumbnail extends React.Component {
      * image, then convert it to a data url
      */
     getSnapShot = () => {
-        
+
         try {
             const { width, height } = this.props;
             const video = this.refs.videoEl;

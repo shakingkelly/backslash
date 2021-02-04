@@ -147,7 +147,7 @@ class DrawArea extends React.Component {
     render() {
         return (
             <div
-                className="draw-area"
+                className="draw-area-shown"
                 ref="drawArea"
                 onMouseDown={this.handleMouseDown}
                 onMouseMove={this.handleMouseMove}

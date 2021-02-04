@@ -10,6 +10,9 @@ import Draggable from 'react-draggable';
 import Hotkeys from 'react-hot-keys';
 import HotButton from './components/HotButton';
 
+import axios from 'axios';
+const API_KEY = 'AIzaSyCou-4kz6C3Cu9HJytXcYR9Ax3r3JHA1GI';
+
 class App extends Component {
 
 	constructor(props) {
@@ -25,7 +28,7 @@ class App extends Component {
 
 		// web 
 		const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
-		{ id: 20, name: 'vid', url: './asset/JavaScript.mp4', type: 'av', text: '' },
+		{ id: 20, name: 'vid', url: 'https://www.youtube.com/watch?v=nbUqsZlDErg', type: 'av', text: '' },
 		{ id: 100, name: 'tall', url: './asset/tall.png', type: 'img', text: '' },
 		// { id: 101, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
 		// { id: 102, name: 'cave', url: './asset/cave.jpg', type: 'img', text: '' },
@@ -76,7 +79,21 @@ class App extends Component {
 		}
 
 		localStorage.setItem('files', JSON.stringify(data));
-		this.setState({ data: data })
+		this.setState({ data: data });
+	}
+	addURL = (url) => {
+		const youtubeID = url.split('=')[1];
+		axios.get(`https://www.googleapis.com/youtube/v3/videos?id=${youtubeID}&key=${API_KEY}&part=snippet`)
+			.then((response) => {
+				const youtubeTitle = response.data.items[0].snippet.localized.title;
+				console.log('youtubeTitle:', youtubeTitle);
+
+				let data = this.state.data;
+				data.push({ id: data.length, name: youtubeTitle, url: url, type: 'av', text: '' });
+				localStorage.setItem('files', JSON.stringify(data));
+				this.setState({ data: data });
+			})
+
 	}
 
 	clearLS = (keyName, e, handle) => {
@@ -269,7 +286,7 @@ class App extends Component {
 
 					<div className='dropzone'>
 						<Draggable handle=".handle"><div>
-							{this.state.showZone && <DragAndDrop handleDrop={this.addFiles} />}
+							{this.state.showZone && <DragAndDrop handleFileDrop={this.addFiles} handleURLDrop={this.addURL} />}
 							<button className="handle"><span role="img" aria-label="handle emoji">🧲</span></button>
 							<HotButton keyName="shift+z" buttonClass="action" actionFN={this.toggleZone}>{this.state.showZone ? 'HIDE' : 'DROPZONE'}</HotButton>
 						</div></Draggable>

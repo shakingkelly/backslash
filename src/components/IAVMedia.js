@@ -102,8 +102,13 @@ class IAVMedia extends Component {
 
     enterFullscreen = (keyName, e, handle) => {
         if (e) { console.log('[enterFullscreen:Hotkeys]', keyName, e, handle); }
-        console.log('[fullscreen ref]', this.refs.redraw);
-        this.setState({ fullscreen: true, undolines: this.refs.redraw.state.undolines, redolines: this.refs.redraw.state.redolines });
+        if (this.refs.redraw) {
+            console.log('[fullscreen ref]', this.refs.redraw);
+            this.setState({ fullscreen: true, undolines: this.refs.redraw.state.undolines, redolines: this.refs.redraw.state.redolines });
+        } else {
+            this.setState({ fullscreen: true });
+        }
+
     }
     exitFullscreen = (keyName, e, handle) => {
         if (e) { console.log('[exitFullscreen:Hotkeys]', keyName, e, handle); }
@@ -170,7 +175,7 @@ class IAVMedia extends Component {
                             prevUndolines={this.state.undolines}
                             prevRedolines={this.state.redolines} />
                     }
-                    {this.type === 'av' && <ReactPlayer url={this.url} controls={true} width={fullWidthLong} height={fullHeightLong} style={{ zIndex: 0, position: 'absolute', left: 0, top: 0 }} />}
+                    {this.type === 'av' && <ReactPlayer url={this.url} controls={true} width={window.screen.width} height={window.screen.height} style={{ zIndex: 0, position: 'absolute', left: 0, top: 0 }} />}
                     {this.type === 'img' && <Hotkeys onKeyDown={this.toggleCanvas} keyName="shift+c" />}
                     <Hotkeys onKeyDown={this.exitFullscreen} keyName="esc"></Hotkeys>
                 </div>
@@ -202,13 +207,13 @@ class IAVMedia extends Component {
                             </div>
                         }
                         {this.type === 'img' &&
-                            <DrawArea className={this.state.showCanvas ? 'shown' : 'hidden'} 
-                            isVisible={this.state.showCanvas ? true : false} 
-                            ref="redraw" 
-                            canvasWidth={this.state.canvasWidth} 
-                            canvasHeight={this.state.canvasHeight}
-                            prevUndolines={this.state.undolines}
-                            prevRedolines={this.state.redolines} />
+                            <DrawArea className={this.state.showCanvas ? 'shown' : 'hidden'}
+                                isVisible={this.state.showCanvas ? true : false}
+                                ref="redraw"
+                                canvasWidth={this.state.canvasWidth}
+                                canvasHeight={this.state.canvasHeight}
+                                prevUndolines={this.state.undolines}
+                                prevRedolines={this.state.redolines} />
                         }
                         {this.type === 'av' && <ReactPlayer url={this.url} controls={true} width={this.state.prevImgWidth > 0 ? this.state.prevImgWidth : this.state.imgWidth} height={this.state.prevImgHeight > 0 ? this.state.prevImgHeight : this.state.imgHeight} style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' '), borderRadius: '25px' }} />}
                         <button className="handle" style={{ zIndex: 200, position: 'relative' }} onClick={this.mediaClickHandler}><span role="img" aria-label="handle emoji">🧲</span></button>
@@ -221,10 +226,10 @@ class IAVMedia extends Component {
                         {this.type === 'img' &&
                             <div>
                                 <HotButton buttonClass="action" style={this.zButtonStyle} actionFN={this.toggleCanvas} keyName="shift+c">{this.state.showCanvas ? 'HIDE CANVAS' : 'SHOW CANVAS'}</HotButton>
-                                <button onClick={this.saveCanvas} style={this.zButtonStyle}>save canvas</button>
+                                {this.state.showCanvas && <button onClick={this.saveCanvas} style={this.zButtonStyle}>save canvas</button>}                        
+                                <HotButton buttonClass="action" style={this.zButtonStyle} actionFN={this.enterFullscreen} keyName="f">FULLSCREEN</HotButton>
                             </div>
                         }
-                        <HotButton buttonClass="action" style={this.zButtonStyle} actionFN={this.enterFullscreen} keyName="f">FULLSCREEN</HotButton>
                     </div>
                 </Rnd>
 

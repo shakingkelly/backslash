@@ -30,9 +30,12 @@ class DragAndDrop extends Component {
         this.setState({ drag: false })
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
             // console.log('[e.dataTransfer.files]', e.dataTransfer.files.length)
-            this.props.handleDrop(e.dataTransfer.files)
+            this.props.handleFileDrop(e.dataTransfer.files)
             e.dataTransfer.clearData()
             this.dragCounter = 0
+        } else {
+            console.log(e.dataTransfer.getData('text/plain'));
+            this.props.handleURLDrop(e.dataTransfer.getData('text/plain'));
         }
     }
     componentDidMount() {
