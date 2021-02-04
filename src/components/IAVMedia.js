@@ -33,6 +33,7 @@ class IAVMedia extends Component {
         this.name = this.props.item.name;
         this.url = this.props.item.url;
         this.type = this.props.item.type;
+        this.position = this.props.item.position;
         this.order = this.props.order;
     }
 
@@ -40,6 +41,7 @@ class IAVMedia extends Component {
     name = this.props.item.name;
     url = this.props.item.url;
     type = this.props.item.type;
+    position = this.props.item.position;
     order = this.props.order;
     saveCanvasFN = this.props.saveCanvasFN;
 
@@ -55,8 +57,8 @@ class IAVMedia extends Component {
         fullscreen: false,
         prevImgWidth: 0,
         prevImgHeight: 0,
-        x: 0,
-        y: 0,
+        x: this.position ? this.position.x : 0,
+        y: this.position ? this.position.y : 0,
         undolines: this.props.item.undolines || [],
         redoline: []
     }
@@ -185,7 +187,8 @@ class IAVMedia extends Component {
                     position={{ x: this.state.x, y: this.state.y }}
                     onDragStop={(e, d) => {
                         // console.log('[onDragStop]', d);
-                        this.setState({ x: d.x, y: d.y })
+                        this.setState({ x: d.x, y: d.y });
+                        this.props.savePositionFN(this.id, d.x, d.y);
                     }}
                     onResizeStop={(e, direction, ref, delta, position) => {
                         // console.log('[onResizeStop]', direction, ref, delta, position);

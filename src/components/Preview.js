@@ -11,9 +11,9 @@ const Preview = (props) => {
                 props.selectedIndex.map((selected, index) => {
                     return (
                         props.data[selected].type === 'md' ?
-                            <Editor key={selected} item={props.data[selected]} order={index} changeEditorFilenameFn={props.changeEditorFilenameFn} />
+                            <Editor key={selected} item={props.data[selected]} order={index} changeEditorFilenameFn={props.changeEditorFilenameFn} savePositionFN={props.savePositionFN} />
                             :
-                            <IAVMedia key={selected} item={props.data[selected]} order={index} saveCanvasFN={props.saveCanvasFN} />
+                            <IAVMedia key={selected} item={props.data[selected]} order={index} saveCanvasFN={props.saveCanvasFN} savePositionFN={props.savePositionFN} />
                     )
                 })
             }

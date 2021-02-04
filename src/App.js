@@ -264,6 +264,13 @@ class App extends Component {
 		console.log('[saveCanvas]', this.state.data[this.state.id2index[id]].undolines);
 	}
 
+	savePosition = (id, x, y) => {
+		let data = this.state.data;
+		data[this.state.id2index[id]].position = {x, y};
+		this.setState({ data: data });
+		console.log('[savePosition]', this.state.data[this.state.id2index[id]].position);
+	}
+
 	render() {
 		// console.log('[render]', this.state.data.length)
 		return (
@@ -316,7 +323,7 @@ class App extends Component {
 							<HotButton keyName="ctrl+p" buttonClass="delete" actionFN={this.clearPreview}>CLEAR</HotButton>
 						</div>
 					}
-					<Preview data={this.state.data} selectedIndex={this.state.selectedIndex} changeEditorFilenameFn={this.changeEditorFilename} saveCanvasFN={this.saveCanvas} />
+					<Preview data={this.state.data} selectedIndex={this.state.selectedIndex} changeEditorFilenameFn={this.changeEditorFilename} saveCanvasFN={this.saveCanvas} savePositionFN={this.savePosition} />
 				</div>
 			</div>
 		)
