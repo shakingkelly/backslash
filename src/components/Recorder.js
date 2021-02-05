@@ -1,5 +1,11 @@
 import React, { Component } from "react";
 
+/* STYLE
+   audio: width 250 px
+   duration: color fontsize
+   change to hotbuttons
+*/
+
 const audioType = "audio/*";
 
 class Recorder extends Component {
@@ -116,45 +122,41 @@ class Recorder extends Component {
             };
         } else {
             this.setState({ mediaNotFound: true });
-            console.log("Media Decives will work only with SSL.....");
+            console.log("[Recorder] Media Decives will work only with SSL.....");
         }
     }
 
     render() {
         const { recording, audioURL, time, mediaNotFound, paused } = this.state;
+        if (mediaNotFound) {
+            return null;
+        }
+
         return (
-            <div className='recorder_library_box'>
-                {!mediaNotFound ? (
-                    <div className='record_section'>
-                        <div className='audio_section'>
-                            {audioURL !== null ? (
-                                <div>
-                                    <audio controls style={{width: '250px'}}>
-                                        <source src={audioURL} type="audio/ogg" />
-                                        <source src={audioURL} type="audio/mpeg" />
-                                    </audio>
-                                    <button className='handle' onClick={(e) => this.reset(e)}>🔄</button>
-                                    <button className='handle'><a href={this.state.audioURL} download="Blah.webm">⬇️</a></button>
-                                </div>
-                            ) : null}
-                        </div>
-                        {!recording ? (
-                            !audioURL && <button className='handle' onClick={e => this.startRecording(e)}>⏺️</button>
-                        ) : (
-                                <div className='record_controller'>
-                                    <div className='duration' style={{ color: '#fff', fontSize: '25px' }}>
-                                        {time.m !== undefined ? `${time.m <= 9 ? "0" + time.m : time.m}` : "00"}:{time.s !== undefined ? `${time.s <= 9 ? "0" + time.s : time.s}` : "00"}
-                                    </div>
-                                    <button className='handle' onClick={e => this.stopRecording(e)}>⏹️</button>
-                                    <button className='handle' onClick={!paused ? e => this.handleAudioPause(e) : e => this.handleAudioStart(e)}>{paused ? '▶️' : '⏸️'}</button>
-                                </div>
-                            )}
+            <div className='record_section'>
+                {
+                    audioURL &&
+                    <div className="audio">
+                        <audio controls style={{ width: '250px' }}>
+                            <source src={audioURL} type="audio/ogg" />
+                            <source src={audioURL} type="audio/mpeg" />
+                        </audio>
+                        <button className='handle' onClick={(e) => this.reset(e)}>🔄</button>
+                        <button className='handle'><a href={this.state.audioURL} download="Blah.webm">⬇️</a></button>
                     </div>
-                ) : (
-                        <p style={{ color: "#fff", marginTop: 30, fontSize: 25 }}>
-                            Seems the site is Non-SSL
-                        </p>
-                    )}
+                }
+                {
+                    !recording ?
+                        !audioURL && <button className='handle' onClick={e => this.startRecording(e)}>⏺️</button>
+                        :
+                        <div className='record_controller'>
+                            <div className='duration' style={{ color: '#fff', fontSize: '25px' }}>
+                                {time.m !== undefined ? `${time.m <= 9 ? "0" + time.m : time.m}` : "00"}:{time.s !== undefined ? `${time.s <= 9 ? "0" + time.s : time.s}` : "00"}
+                            </div>
+                            <button className='handle' onClick={e => this.stopRecording(e)}>⏹️</button>
+                            <button className='handle' onClick={!paused ? e => this.handleAudioPause(e) : e => this.handleAudioStart(e)}>{paused ? '▶️' : '⏸️'}</button>
+                        </div>
+                }
             </div>
         );
     }

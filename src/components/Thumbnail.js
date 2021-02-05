@@ -44,14 +44,8 @@ export default class VideoThumbnail extends React.Component {
     render() {
         const { renderThumbnail, snapshot, videoUrl, view, isYoutube } = this.state;
         if (isYoutube) {
-            const viewClass = view === 'list' ? 'preview-img-list' : 'preview-img-grid';
             const youtubeID = videoUrl.split('=')[1];
-            return (
-                <div className="react-thumbnail-generator" >
-                    <img className={viewClass} src={`http://img.youtube.com/vi/${youtubeID}/2.jpg`} alt="youtube thumbnail" />
-                </div>
-            );
-
+            return <ThumbnailImage snapshot={`http://img.youtube.com/vi/${youtubeID}/2.jpg`} view={view}/>;
         }
 
         else if (!snapshot) {

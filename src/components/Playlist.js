@@ -2,16 +2,17 @@ import React from 'react';
 import { ReactSortable } from "react-sortablejs";
 import VideoThumbnail from './Thumbnail';
 
+/* STYLE 
+   VideoThumbnail: width/height, list/grid view
+*/
 
 const Playlist = (props) => {
 
-    const viewClass = props.view === 'list' ? 'list' : 'grid';
-
     return (
         <div id="finite-list">
-            <ReactSortable
-                className={viewClass}
-                list={props.data}
+            <ReactSortable 
+                className={props.view === 'list' ? 'list' : 'grid'} 
+                list={props.data} 
                 setList={props.updated}
             >
                 {props.data.map((item, index) => {
@@ -22,7 +23,7 @@ const Playlist = (props) => {
                         props.view === 'list' ?
 
                         // LIST VIEW: 
-                        <div className="list-item" key={item.id} >
+                        <div className="list-item" key={item.id}>
                             {isActive ?
                                 <div className="preview-cell active" onClick={props.clicked(item.id)}>
                                     {item.type === 'img' && <img className="preview-img-list" src={item.url} alt={item.url} />}
@@ -46,7 +47,7 @@ const Playlist = (props) => {
                         :
 
                         // GRID VIEW: only when inactive have the overlay
-                        <div className="1">
+                        <div className="grid-item">  
                             {isActive ?
                                 <div className="grid-view-active">
                                     {
@@ -89,7 +90,6 @@ const Playlist = (props) => {
                                 </div>
                             }
                         </div>
-
                     )
                 })}
             </ReactSortable>

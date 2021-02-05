@@ -1,35 +1,38 @@
 import React, { Component } from 'react';
 import RichTextEditor from 'react-rte';
-import Draggable from 'react-draggable';
 import HotButton from './HotButton';
 import { Rnd } from 'react-rnd';
 
 class Editor extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.id = props.item.id;
+        this.name = props.item.name;
+        this.text = props.item.text;
+        this.order = props.order;
+        this.position = props.item.position;
+
+        this.state = {
+            // value: RichTextEditor.createEmptyValue(),
+            value: RichTextEditor.createValueFromString(this.text, "markdown"),
+            filename: this.name,
+            inputValue: this.name,
+            x: this.position ? this.position.x : 30,
+            y: this.position ? this.position.y : 30,
+            h: 0,
+            w: 0
+        }
+    }
+
+
     // copied from IAVMedia 
     componentDidUpdate(prevProps, prevState) {
-        console.log('[componentDidUpdate]', prevProps.item.name, this.props.item.name);
         this.id = this.props.item.id;
         this.name = this.props.item.name;
         this.text = this.props.item.text;
         this.order = this.props.order;
-    }
-
-    id = this.props.item.id;
-    name = this.props.item.name;
-    text = this.props.item.text;
-    changeEditorFilename = this.props.changeEditorFilenameFn;
-    order = this.props.order;
-
-    state = {
-        // value: RichTextEditor.createEmptyValue(),
-        value: RichTextEditor.createValueFromString(this.text, "markdown"),
-        filename: this.name,
-        inputValue: this.name,
-        x: 30,
-        y: 30,
-        h: 0,
-        w: 0
     }
 
     _logState() {
@@ -44,34 +47,26 @@ class Editor extends Component {
             // Send the changes up to the parent component as an HTML string.
             // This is here to demonstrate using `.toString()` but in a real app it
             // would be better to avoid generating a string on each change.
-            this.props.onChange(
-                value.toString('html')
-            );
+            this.props.onChange(value.toString('html'));
         }
     };
 
     _onChangeSource(event) {
         let source = event.target.value;
         let oldValue = this.state.value;
-        this.setState({
-            value: oldValue.setContentFromString(source, this.state.format, { customBlockFn: this.getTextAlignBlockMetadata }),
-        });
+        this.setState({ value: oldValue.setContentFromString(source, this.state.format, { customBlockFn: this.getTextAlignBlockMetadata }) });
     }
 
     getTextAlignClassName = (contentBlock) => {
         switch (contentBlock.getData().get('textAlign')) {
             case 'ALIGN_LEFT':
                 return 'text-align--left';
-
             case 'ALIGN_CENTER':
                 return 'text-align--center';
-
             case 'ALIGN_RIGHT':
                 return 'text-align--right';
-
             case 'ALIGN_JUSTIFY':
                 return 'text-align--justify';
-
             default:
                 return '';
         }
@@ -79,33 +74,13 @@ class Editor extends Component {
     getTextAlignStyles = (contentBlock) => {
         switch (contentBlock.getData().get('textAlign')) {
             case 'ALIGN_LEFT':
-                return {
-                    style: {
-                        textAlign: 'left',
-                    },
-                };
-
+                return { style: { textAlign: 'left' } };
             case 'ALIGN_CENTER':
-                return {
-                    style: {
-                        textAlign: 'center',
-                    },
-                };
-
+                return { style: { textAlign: 'center' } };
             case 'ALIGN_RIGHT':
-                return {
-                    style: {
-                        textAlign: 'right',
-                    },
-                };
-
+                return { style: { textAlign: 'right' } };
             case 'ALIGN_JUSTIFY':
-                return {
-                    style: {
-                        textAlign: 'justify',
-                    },
-                };
-
+                return { style: { textAlign: 'justify' } };
             default:
                 return {};
         }
@@ -113,63 +88,27 @@ class Editor extends Component {
     getTextAlignBlockMetadata = (element) => {
         switch (element.style.textAlign) {
             case 'right':
-                return {
-                    data: {
-                        textAlign: 'ALIGN_RIGHT',
-                    },
-                };
-
+                return { data: { textAlign: 'ALIGN_RIGHT' } };
             case 'center':
-                return {
-                    data: {
-                        textAlign: 'ALIGN_CENTER',
-                    },
-                };
-
+                return { data: { textAlign: 'ALIGN_CENTER' } };
             case 'justify':
-                return {
-                    data: {
-                        textAlign: 'ALIGN_JUSTIFY',
-                    },
-                };
-
+                return { data: { textAlign: 'ALIGN_JUSTIFY' } };
             case 'left':
-                return {
-                    data: {
-                        textAlign: 'ALIGN_LEFT',
-                    },
-                };
-
+                return { data: { textAlign: 'ALIGN_LEFT' } };
             default:
                 return {};
         }
     };
 
-    // downloadTxtFile = () => {
-    //     const element = document.createElement("a");
-    //     const file = new Blob([this.state.value.toString('markdown', { blockStyleFn: this.getTextAlignStyles })], { type: 'text/plain' });
-    //     element.href = URL.createObjectURL(file);
-    //     const filename = document.getElementById("filename").value;
-    //     element.download = filename + ".md";
-    //     document.body.appendChild(element); // Required for this to work in FireFox
-    //     element.click();
-    //     return filename;
-    // }
-    // saveMarkdown = () => {
-    //     this._logState();
-    //     const newFilename = this.downloadTxtFile();
-    //     this.setState({ filename: newFilename });
-    //     this.changeEditorFilename(this.id, newFilename);
-    // }
+
 
     save = () => {
         this._logState();
         // const newFilename = document.getElementById("filename").value;
         const newFilename = this.state.inputValue;
         const newText = this.state.value.toString('markdown', { blockStyleFn: this.getTextAlignStyles });
-        console.log('[Editor.js save]', newText);
         this.setState({ filename: newFilename });
-        this.changeEditorFilename(this.id, newFilename, newText);
+        this.props.changeEditorFilenameFN(this.id, newFilename, newText);
         return newFilename;
     }
     download = () => {
@@ -185,11 +124,13 @@ class Editor extends Component {
     render() {
 
         return (
-            // <Draggable handle=".handle">
             <Rnd
                 size={{ width: this.state.w, height: this.state.h }}
                 position={{ x: this.state.x, y: this.state.y }}
-                onDragStop={(e, d) => { this.setState({ x: d.x, y: d.y }) }}
+                onDragStop={(e, d) => { 
+                    this.setState({ x: d.x, y: d.y });
+                    this.props.savePositionFN(this.id, d.x, d.y);
+                }}
                 onResize={(e, direction, ref, delta, position) => {
                     this.setState({
                         w: ref.offsetWidth,
@@ -201,12 +142,10 @@ class Editor extends Component {
                 minWidth='480px'
                 minHeight='200px'
             >
-                <div>  {/* className="box no-cursors" */}
+                <div className="editor-container"> 
                     <div className="list-item">
-                        <button className="handle"><span role="img" aria-label="handle emoji">🧲</span></button>
+                        <HandleButton />
                         <input className="editor-filename" type="text" placeholder="filename" value={this.state.inputValue} onChange={e => this.setState({ inputValue: e.target.value })} />
-                        {/* <button className="action" onClick={this.save}>Save</button>
-                        <button className="files" onClick={this.download}>Download</button> */}
                         <HotButton buttonClass="action" actionFN={this.save} keyName="ctrl+s">Save</HotButton>
                         <HotButton buttonClass="files" actionFN={this.download} keyName="ctrl+d">Download</HotButton>
                     </div>
@@ -230,11 +169,33 @@ class Editor extends Component {
                     </div>
                 </div>
             </Rnd>
-            // </Draggable>
-
         );
     }
 }
 
 export default Editor;
 
+const HandleButton = () => {
+    return (
+        <button className="handle" style={{ zIndex: 200, position: 'relative' }}>
+            <span role="img" aria-label="handle emoji">🧲</span>
+        </button>
+    )
+}
+
+    // downloadTxtFile = () => {
+    //     const element = document.createElement("a");
+    //     const file = new Blob([this.state.value.toString('markdown', { blockStyleFn: this.getTextAlignStyles })], { type: 'text/plain' });
+    //     element.href = URL.createObjectURL(file);
+    //     const filename = document.getElementById("filename").value;
+    //     element.download = filename + ".md";
+    //     document.body.appendChild(element); // Required for this to work in FireFox
+    //     element.click();
+    //     return filename;
+    // }
+    // saveMarkdown = () => {
+    //     this._logState();
+    //     const newFilename = this.downloadTxtFile();
+    //     this.setState({ filename: newFilename });
+    //     this.changeEditorFilename(this.id, newFilename);
+    // }

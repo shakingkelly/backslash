@@ -1,16 +1,4 @@
 :root {
-  /* --canvas-top-margin: 0px;
-  --background-all: #978897;
-  --default-button: #f0f6f6;
-  --secondary-button: #887ac7;
-  --primary-red: #721121;
-  --primary-yellow: #ffa630;
-  --primary-green: #519e8a;
-  --secondary-accent: #519e8a;
-  --button-roundedness: 3px;
-  --frame-roundedness: 90px;
-  --list-roundedness: 3px; */
-
   /* --background-all: #140000; */
   --background-all: #CF9F9F;
   --primary-red: #D50100 ;     /* =button-delete #b90505*/ 
@@ -32,7 +20,6 @@
 
 html { 
   /* background: url(https://media.wired.com/photos/5ac3c5aaecb0130b0e7261e6/master/w_1600%2Cc_limit/odysseystation.jpg) no-repeat center;  */
-  /* background: url(https://townsquare.media/site/838/files/2018/09/james-acaster.jpg) no-repeat center; */
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -145,16 +132,6 @@ div.dropzone-border {
 }
 
 div.dropzone-shadow {
-  /* style={{
-    // border: 'dashed white 4px',
-    backgroundColor: 'rgba(255,255,255,.8)',
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    zIndex: 9999
-}} */
   background-color: rgba(255,255,255,.8);
   position: absolute;
   top: 0;
