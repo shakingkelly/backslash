@@ -215,7 +215,7 @@ class App extends Component {
 		this.setState({ showGlobalCanvas: !this.state.showGlobalCanvas });
 	}
 
-	/** @callback [passed to preview] */ 
+	/** @callback [passed to preview] */
 	changeEditorFilename = (id, newFilename, newText) => {
 		let data = this.state.data;
 		data[this.state.id2index[id]].name = newFilename;
@@ -223,20 +223,35 @@ class App extends Component {
 		this.setState({ data: data });
 	}
 
-	/** @todo [should be included in changeSelection, prev, next if img] */ 
-	/** @callback [passed to preview] */ 
+	/** @todo [should be included in changeSelection, prev, next if img] */
+	/** @callback [passed to preview] */
 	saveCanvas = (id, undolines) => {
 		let data = this.state.data;
 		data[this.state.id2index[id]].undolines = undolines;
 		this.setState({ data: data });
 	}
 
-	/** @callback [passed to preview] */ 
+	/** @callback [passed to preview] */
 	savePosition = (id, x, y) => {
 		// called in Rnd onDragStop callback
 		let data = this.state.data;
 		data[this.state.id2index[id]].position = { x, y };
 		this.setState({ data: data });
+	}
+
+	changeOrder = clickedID => event => {
+		// id, index doesn't change, dicts no change, only order changes, so could use index as id or vice versa
+		// but order is not actually used in IAVMedia
+		// so equivalent to deselect all then select them back in new order
+		const clickedIndex = this.state.id2index[clickedID];
+		let selectedIndex = [...this.state.selectedIndex];
+
+		this.clearPreview();
+		const indexOfClickedIndex = selectedIndex.indexOf(clickedIndex);
+		selectedIndex.splice(indexOfClickedIndex, 1);
+		selectedIndex.push(clickedIndex);
+		this.setState({ selectedIndex: selectedIndex });
+		console.log('[changeOrder]', selectedIndex);
 	}
 	/* END PREVIEW */
 
@@ -277,13 +292,13 @@ class App extends Component {
 						<Drag>
 							{
 								this.state.showList &&
-								<Playlist 
-									data={this.state.data} 
-									selectedIndex={this.state.selectedIndex} 
-									updated={this.updateSortable} 
-									clicked={this.changeSelection} 
-									clickDeleted={this.deleteFromLS} 
-									view={this.state.listView} 
+								<Playlist
+									data={this.state.data}
+									selectedIndex={this.state.selectedIndex}
+									updated={this.updateSortable}
+									clicked={this.changeSelection}
+									clickDeleted={this.deleteFromLS}
+									view={this.state.listView}
 								/>
 							}
 							<HandleButton />
@@ -304,12 +319,13 @@ class App extends Component {
 							<HotButton keyName="ctrl+p" buttonClass="delete" actionFN={this.clearPreview}>CLEAR</HotButton>
 						</div>
 					}
-					<Preview 
-						data={this.state.data} 
-						selectedIndex={this.state.selectedIndex} 
-						changeEditorFilenameFN={this.changeEditorFilename} 
-						saveCanvasFN={this.saveCanvas} 
-						savePositionFN={this.savePosition} 
+					<Preview
+						data={this.state.data}
+						selectedIndex={this.state.selectedIndex}
+						changeEditorFilenameFN={this.changeEditorFilename}
+						saveCanvasFN={this.saveCanvas}
+						savePositionFN={this.savePosition}
+						changeOrderFN={this.changeOrder}
 					/>
 				</div>
 			</div>

@@ -16,6 +16,7 @@ const Preview = (props) => {
                                 order={index} 
                                 changeEditorFilenameFN={props.changeEditorFilenameFN} 
                                 savePositionFN={props.savePositionFN} 
+                                changeOrderFN={props.changeOrderFN}
                             />
                             :
                             <IAVMedia 
@@ -24,6 +25,7 @@ const Preview = (props) => {
                                 order={index} 
                                 saveCanvasFN={props.saveCanvasFN} 
                                 savePositionFN={props.savePositionFN} 
+                                changeOrderFN={props.changeOrderFN}
                             />
                     )
                 })

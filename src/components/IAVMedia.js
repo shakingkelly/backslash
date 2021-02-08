@@ -198,13 +198,17 @@ class IAVMedia extends Component {
                         {this.type === 'img' &&
                             <div>
                                 <HandleButton />
+                                <button onClick={this.props.changeOrderFN(this.id)} style={this.zButtonStyle}>bring to front</button>
                                 <HotButton buttonClass="action" style={this.zButtonStyle} actionFN={this.toggleCanvas} keyName="shift+c">{showCanvas ? 'HIDE CANVAS' : 'SHOW CANVAS'}</HotButton>
                                 {showCanvas && <button className="action" onClick={() => this.props.saveCanvasFN(this.id, undolines)} style={this.zButtonStyle}>save canvas</button>}
                                 <HotButton buttonClass="action" style={this.zButtonStyle} actionFN={this.enterFullscreen} keyName="f">FULLSCREEN</HotButton>
                             </div>
                         }
                         {this.type === 'av' && 
+                        <div>
                             <HandleButton />
+                            <button onClick={this.props.changeOrderFN(this.id)} style={this.zButtonStyle}>bring to front</button>
+                        </div>
                         }
                     </div>
                 </Rnd>
