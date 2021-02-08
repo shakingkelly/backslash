@@ -19,7 +19,7 @@ class IAVMedia extends Component {
         this.order = props.order;
 
         this.state = {
-            orgRatio: 0,        // get in onImgLoad; only for img (should be orgRatio)
+            orgRatio: 0,        // get in onImgLoad; only for img 
             w: 640,      // default w/h for img&av; img keeps org ratio; cannot get av w/h on load so set default to long 
             h: 360,
             showCanvas: false,
@@ -98,18 +98,23 @@ class IAVMedia extends Component {
     }
 
     onImgLoad = ({ target: img }) => {
+        const divide = this.divide;
         if (this.state.orgRatio != 0) {
             // only need to get ratio once on the first load 
+            console.log('not again');
             return;
         }
-        let scale = 1;
-        if (img.width / img.height >= 1) {
-            scale = 640 / img.width;
-            this.setState({ orgRatio: img.width / img.height, w: 640, h: scale * img.height });
+        const orgRatio = divide(img.width, img.height);
+        if (orgRatio >= 1) {
+            this.setState({ orgRatio: orgRatio, w: 640, h: img.height }, () => { console.log('long', img.width, img.height, this.state.orgRatio) });
         } else {
-            scale = 360 / img.height;
-            this.setState({ orgRatio: img.width / img.height, w: scale * img.width, h: 360 });
+            this.setState({ orgRatio: orgRatio, w: img.width, h: 360 }, () => { console.log('tall', img.width, img.height, this.state.orgRatio) });
         }
+    }
+    divide = (a, b) => {
+        return (
+            parseFloat((a / b).toFixed(2))
+        ) 
     }
 
 
@@ -123,6 +128,7 @@ class IAVMedia extends Component {
         const fullHeightLong = 1 / orgRatio * window.screen.width;
         const fullHeightTall = window.screen.height;
         const long = orgRatio >= 1;
+        // console.log('long?tall', long);
 
         return (
 
@@ -167,14 +173,15 @@ class IAVMedia extends Component {
                         });
                     }}
                 >
-                    <HandleButton/>
                     <div>
                         {this.type === 'img' &&
                             <div style={{
-                                width: w, height: h, zIndex: 0, position: 'absolute',
-                                border: ['dashed', this.colors[this.order], '4px'].join(' '), borderRadius: '25px'
+                                zIndex: 0, position: 'absolute',
+                                border: ['dashed', this.colors[this.order], '4px'].join(' ')
                             }} >
-                                <img onLoad={this.onImgLoad} ref='coverImg' src={this.url} alt={this.url} style={{ width: '100%', height: '100%' }} />
+                                {long ? <img onLoad={this.onImgLoad} ref='coverImg' src={this.url} alt={this.url} width={w} />
+                                : <img onLoad={this.onImgLoad} ref='coverImg' src={this.url} alt={this.url} height={h} />}
+                                
                             </div>
                         }
                         {this.type === 'img' &&
@@ -185,16 +192,19 @@ class IAVMedia extends Component {
                         }
                         {this.type === 'av' &&
                             <ReactPlayer url={this.url} controls={true} width={w} height={h}
-                                style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' '), borderRadius: '25px' }} />
+                                style={{ zIndex: 0, position: 'absolute', border: ['dashed', this.colors[this.order], '4px'].join(' ') }} />
                         }
-                        {/* <HandleButton /> */}
                         {/* org +/- buttons  */}
                         {this.type === 'img' &&
                             <div>
+                                <HandleButton />
                                 <HotButton buttonClass="action" style={this.zButtonStyle} actionFN={this.toggleCanvas} keyName="shift+c">{showCanvas ? 'HIDE CANVAS' : 'SHOW CANVAS'}</HotButton>
                                 {showCanvas && <button className="action" onClick={() => this.props.saveCanvasFN(this.id, undolines)} style={this.zButtonStyle}>save canvas</button>}
                                 <HotButton buttonClass="action" style={this.zButtonStyle} actionFN={this.enterFullscreen} keyName="f">FULLSCREEN</HotButton>
                             </div>
+                        }
+                        {this.type === 'av' && 
+                            <HandleButton />
                         }
                     </div>
                 </Rnd>
