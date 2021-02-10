@@ -43,7 +43,7 @@ There are two views (list/grid) for `playlist`. Grid view is friendly to image/a
 - Click `PREV` or `NEXT` to show prev/next file in the list/grid. This is disabled when selecting multiple files.   
 - Click `CLEAR` to reset the `preview` area. This will not delete the file from the app's internal memo.  
 - The color of the border indicates the order of the layer (useful when there are multiple files shown; whiter = near bottom).
-- Click `+/-` to resize the previewed file, or click `FULLSCREEN`. Press `ESC` to exit fullscreen.  
+- Click `FULLSCREEN` to enter fullscreen. Press `ESC` to exit fullscreen.  
   
 **Canvas operations:**  
 `Canvas` is an overlay to image files, which allows users to jot or doodle without permanently modify the undelying image during a live presentation.  
@@ -51,24 +51,21 @@ There are two views (list/grid) for `playlist`. Grid view is friendly to image/a
 - Default pencil stroke is `S` (small), click `L` on the bottom of the canvas to change pencil stroke to large.  
 - Click `SHOW COLORS` to use the colorpicker.  
 - Click `CLEAR` to remove all drawing history.  
-- Clicking `HIDE CANVAS` will remove all drawing history local to the file. Toggling between fullscreen will do the same.  
-- Click `GLOBAL CANVAS` to show a global overlay layer for eg. drawing the relationships between different shown files.  
+- Clicking `HIDE CANVAS` or toggle fullscreen will not remove all drawing history local to the file. However, the drawings will be removed when selecting a different file from the playlist. To save the canvas, click `SAVE CANVAS`.  
+- Click `GLOBAL CANVAS` to show a global overlay layer for eg. drawing the relationships between different shown files. There is no explicit saving functions for drawings on global canvas at the moment considering its use cases.  
 
 **Editor operations:**  
 Users can edit/save/download the text files from a WYSIWYG editor. The files are downloaded into the same default location as your browser downloads. They are save in `.md` to keep the styles. 
-```diff 
-+ Under development as of 2021/1/29. TODO: create new files within the app.  
-```
 
 **Recorder:**  
-Recorder is designed for bookkeeping and dissemination of the recorded presentation session. 
+Recorder is designed for bookkeeping and dissemination of the recorded presentation session.  
 ```diff 
 + For MacOS, please grant the app's access to Microphone in System Preference.  
-+ Under development as of 2021/1/29.
 ```
 
 **Misc:**  
 - Each component is draggable to anywhere in the window with the handle🧲.  
+- Preview components are resizable by dragging the sides or the corners of the displayed area. Aspect ratios are not locked. 
 - To hide any of the functions that don't appear on starting the app, just click again on whatever button that made it appear. 
 
 **Hotkeys:**  
