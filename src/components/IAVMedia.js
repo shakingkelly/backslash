@@ -99,7 +99,7 @@ class IAVMedia extends Component {
 
     onImgLoad = ({ target: img }) => {
         const divide = this.divide;
-        if (this.state.orgRatio != 0) {
+        if (this.state.orgRatio !== 0) {
             // only need to get ratio once on the first load 
             console.log('not again');
             return;
@@ -159,6 +159,7 @@ class IAVMedia extends Component {
                 :
                 <Rnd
                     dragHandleClassName="handle" size={{ width: w + 8, height: h + 8 }} position={{ x: x, y: y }}
+                    lockAspectRatio={true}
                     onDragStop={(e, d) => {
                         this.setState({ x: d.x, y: d.y });
                         this.props.savePositionFN(this.id, d.x, d.y);

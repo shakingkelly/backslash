@@ -84,13 +84,13 @@ button.nonaction {
 }
 
 button.handle {
-  background-color: Transparent;
-  background-repeat: no-repeat;
+  /* background-color: Transparent; */
+  /* background-repeat: no-repeat; */
   border: none;
   cursor:pointer;
   overflow: hidden;
   outline:none;
-  /* background-color: var(--button-nonaction); */
+  background-color: var(--button-nonaction); 
 }
 /* BUTTONS */
 

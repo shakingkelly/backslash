@@ -141,20 +141,20 @@ class Recorder extends Component {
                             <source src={audioURL} type="audio/ogg" />
                             <source src={audioURL} type="audio/mpeg" />
                         </audio>
-                        <button className='handle' onClick={(e) => this.reset(e)}>🔄</button>
-                        <button className='handle'><a href={this.state.audioURL} download="Blah.webm">⬇️</a></button>
+                        <button className='handle' onClick={(e) => this.reset(e)}><span role="img" aria-label="reset emoji">🔄</span></button>
+                        <button className='handle'><a href={this.state.audioURL} download="Blah.webm"><span role="img" aria-label="download emoji">⬇️</span></a></button>
                     </div>
                 }
                 {
                     !recording ?
-                        !audioURL && <button className='handle' onClick={e => this.startRecording(e)}>⏺️</button>
+                        !audioURL && <button className='handle' onClick={e => this.startRecording(e)}><span role="img" aria-label="record emoji">⏺️</span></button>
                         :
                         <div className='record_controller'>
                             <div className='duration' style={{ color: '#fff', fontSize: '25px' }}>
                                 {time.m !== undefined ? `${time.m <= 9 ? "0" + time.m : time.m}` : "00"}:{time.s !== undefined ? `${time.s <= 9 ? "0" + time.s : time.s}` : "00"}
                             </div>
-                            <button className='handle' onClick={e => this.stopRecording(e)}>⏹️</button>
-                            <button className='handle' onClick={!paused ? e => this.handleAudioPause(e) : e => this.handleAudioStart(e)}>{paused ? '▶️' : '⏸️'}</button>
+                            <button className='handle' onClick={e => this.stopRecording(e)}><span role="img" aria-label="stop emoji">⏹️</span></button>
+                            <button className='handle' onClick={!paused ? e => this.handleAudioPause(e) : e => this.handleAudioStart(e)}><span role="img" aria-label="play-pause emoji">{paused ? '▶️' : '⏸️'}</span></button>
                         </div>
                 }
             </div>

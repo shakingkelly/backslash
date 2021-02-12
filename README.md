@@ -44,6 +44,7 @@ There are two views (list/grid) for `playlist`. Grid view is friendly to image/a
 - Click `CLEAR` to reset the `preview` area. This will not delete the file from the app's internal memo.  
 - The color of the border indicates the order of the layer (useful when there are multiple files shown; whiter = near bottom).
 - Click `FULLSCREEN` to enter fullscreen. Press `ESC` to exit fullscreen.  
+- Click `BRING TO FRONT` to bring certain file to the top layer when multiple files are shown.
   
 **Canvas operations:**  
 `Canvas` is an overlay to image files, which allows users to jot or doodle without permanently modify the undelying image during a live presentation.  

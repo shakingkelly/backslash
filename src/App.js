@@ -6,6 +6,7 @@ import DragAndDrop from './components/DragAndDrop';
 import GlobalDrawArea from './components/GlobalDrawArea';
 import Recorder from './components/Recorder';
 import HotButton from './components/HotButton';
+import Hotkeys from 'react-hot-keys';
 import axios from 'axios';
 const API_KEY = 'AIzaSyCou-4kz6C3Cu9HJytXcYR9Ax3r3JHA1GI';
 
@@ -34,6 +35,8 @@ class App extends Component {
 		// { id: 106, name: 'cave', url: './asset/cave.jpg', type: 'img' },
 		// { id: 107, name: 'cave', url: './asset/cave.jpg', type: 'img' },
 		{ id: 30, name: 'hiya', url: './asset/hiya.md', type: 'md', text: 'hiya' }]
+		
+		this.spareKeys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\'];  // key assignment follows sort result; 23
 
 		this.state = {
 			data: data || [],
@@ -44,8 +47,10 @@ class App extends Component {
 			listView: 'list',
 			showZone: true,
 			showGlobalCanvas: false,
-			showAudio: true
+			showAudio: true,
+			nextSpare: data.length
 		}
+
 		console.log('===== START =====', this.state);
 	}
 
@@ -63,7 +68,7 @@ class App extends Component {
 			} else if (files[i].name.endsWith(".md") || files[i].name.endsWith(".txt")) {
 				newData.type = 'md';
 				files[i].text().then(result => newData.text = result);
-			} else if (files[i].name.endsWith(".mp3") || files[i].name.endsWith(".mp4") || files[i].name.endsWith(".webm")) {
+			} else if (files[i].name.endsWith(".mp3") || files[i].name.endsWith(".mp4") || files[i].name.endsWith(".webm") || files[i].name.endsWith(".wav") || files[i].name.endsWith(".mov") || files[i].name.endsWith(".m4v")) {
 				newData.type = 'av';
 			} else {
 				console.log('[addFiles] file type not supported!');
@@ -147,7 +152,35 @@ class App extends Component {
 				selectedIndex = [];
 			}
 		}
-		this.setState({ selectedIndex: [...selectedIndex] }, () => { console.log('[changeSelection:callback]', this.state.selectedIndex) }); // so only after render, it reset the states
+		this.setState({ selectedIndex: [...selectedIndex] }, () => { /*console.log('[changeSelection:callback]', this.state.selectedIndex)*/ }); // so only after render, it reset the states
+	}
+
+	changeSelection2 = (keyName, e, handle) => {
+		// is the combination of "select" & "bring to front" thru hotkeys
+		const clickedIndex = this.spareKeys.indexOf(keyName);
+		const clickedID = this.state.index2id[clickedIndex];
+		// simulate clicking twice
+		// first remove from preview, then displaying again
+		const loops = this.state.selectedIndex.includes(clickedIndex) ? 2 : 1;
+		let oldSelectedIndex = [...this.state.selectedIndex];
+		let selectedID;
+		let selectedIndex;
+		for (var loop = 0; loop < loops; loop++) {
+			selectedIndex = [...oldSelectedIndex];
+			selectedID = [];
+			selectedIndex.forEach((index, i) => {
+				selectedID.push(this.state.index2id[index]);
+			})
+			// only keeps the "with shift key" scenario
+			if (!selectedID.includes(clickedID)) {
+					selectedIndex.push(clickedIndex);
+			} else {
+					selectedIndex.splice(selectedIndex.indexOf(clickedIndex), 1);
+			}
+			oldSelectedIndex = [...selectedIndex];
+		}
+		this.setState({ selectedIndex: [...selectedIndex] });
+
 	}
 
 	updateSortable = (newState) => {
@@ -267,6 +300,12 @@ class App extends Component {
 		return (
 			/* CONTAINER */
 			<div>
+				{this.state.data.map((item, i) => {
+					return (
+						<Hotkeys onKeyDown={this.changeSelection2} keyName={this.spareKeys[i]}/>
+					)
+				})}
+
 				<HotButton keyName="shift+alt+c" buttonClass="action" actionFN={this.toggleGlobalCanvas}>GLOBAL CANVAS</HotButton>
 				{this.state.showGlobalCanvas && <GlobalDrawArea canvasWidth={window.innerWidth} canvasHeight={window.innerHeight} />}
 
