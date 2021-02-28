@@ -22,7 +22,7 @@ class App extends Component {
             64, 65, 66, 67, 68, 69, 70, 71,
             80, 81, 82, 83, 84, 85, 86, 87,
             6, 97, 98, 99, 100, 101, 102, 103,
-            112, 113, 114, 115, 116, 117, 118, 119]; // 没用
+            112, 113, 114, 115, 116, 117, 118, 119]; // 没用, 用available ids
 
         // desktop
         // let data = JSON.parse(localStorage.getItem('files'));
@@ -47,18 +47,14 @@ class App extends Component {
         data[2] = { id: 2, name: 'tall', url: './asset/tall.png', type: 'img' };
         data[3] = { id: 3, name: 'hiya', url: './asset/hiya.md', type: 'md', text: 'hiya' };
 
-        this.availableIDs = [...this.midiButtons];
-        this.availableIDs.shift();
-        this.availableIDs.shift();
-        this.availableIDs.shift();
-        this.availableIDs.shift();
-
+        // there's only one type of ID which is midi button id
+        // two types of index: 1. order in playlist, 2. fixed order in button list
         this.state = {
             // data: data || [],
             data: data || new Array(64),
-            selectedIndex: [],
-            // id2index: { 0: 0, 1: 1, 2: 2, 3: 3 },
-            // index2id: { 0: 0, 1: 1, 2: 2, 3: 3 }, // seems redundant now
+            selectedIndex: [],  // index/order in playlist
+            id2index: { 0: 0, 1: 1, 2: 2, 3: 3 },
+            index2id: { 0: 0, 1: 1, 2: 2, 3: 3 }, // midiID & playlist index
             showList: true,
             listView: 'list',
             showZone: true,
@@ -70,8 +66,9 @@ class App extends Component {
             midiMode: false
         }
 
-        this.id2index = id => { return Math.floor(id / 16) * 8 + id % 16; }
-        this.index2id = index => { return Math.floor(index / 8) * 16 + index % 8; }
+        this.availableIDs = [...this.midiButtons];
+        this.id2indexMIDI = id => { return Math.floor(id / 16) * 8 + id % 16; }
+        this.index2idMIDI = index => { return Math.floor(index / 8) * 16 + index % 8; }
         console.log('===== START =====', this.state);
     }
 
@@ -102,6 +99,10 @@ class App extends Component {
                     output.send([144, 1, 17]);
                     output.send([144, 2, 17]);
                     output.send([144, 3, 17]);
+                    this.availableIDs.shift();
+                    this.availableIDs.shift();
+                    this.availableIDs.shift();
+                    this.availableIDs.shift();
                 });
         }
     }
@@ -119,6 +120,8 @@ class App extends Component {
 
 
     /* DROPZONE */
+
+    // add files doesn't bind file to playlist ordering yet
     /** @callback [called in dropzone handleDrop] */
     addFiles = (files) => {
         let data = this.state.data;
@@ -164,24 +167,54 @@ class App extends Component {
         } else {
             console.log('[addFileMIDI] file type not supported!');
         }
-        // turn on LED of the cells associated with the sample files
+        // turn on LED of the cells associated with the added file
         this.state.outputs[0].send([128, midiID, 17]);
         this.state.outputs[0].send([144, midiID, 17]);
+        // if cell is previously empty, remove id from available list
+        const pos = this.availableIDs.indexOf(midiID);
+        if (pos !== -1) {
+            this.availableIDs.slice(pos, 1);
+        }
+        // if cell if previously occupied, overwrite with new file
         data[this.id2index(midiID)] = newData;
-        console.log('[addFileMIDI]', midiID, data[this.midiButtons.indexOf(midiID)]);
+        console.log('[addFileMIDI]', midiID, data[this.id2index(midiID)]);
         localStorage.setItem('files', JSON.stringify(data));
         this.setState({ data: data });
     }
 
     /** @callback [called in dropzone handleDrop] */
     addURL = (url) => {
+        const nextAvailableID = this.availableIDs.shift();
+        if (!nextAvailableID) {
+            console.log('no vacancy!');
+        } else {
+            const youtubeID = url.split('=')[1];
+            axios.get(`https://www.googleapis.com/youtube/v3/videos?id=${youtubeID}&key=${API_KEY}&part=snippet`)
+                .then((response) => {
+                    const youtubeTitle = response.data.items[0].snippet.localized.title;
+                    console.log('[addURL] YouTube Title:', youtubeTitle);
+                    let data = this.state.data;
+                    data[this.id2index(nextAvailableID)] = { id: data.length, name: youtubeTitle, url: url, type: 'av' };
+                    localStorage.setItem('files', JSON.stringify(data));
+                    this.setState({ data: data });
+                })
+        }
+    }
+
+    addURLMIDI = (midiID, url) => {
+        this.state.outputs[0].send([128, midiID, 17]);
+        this.state.outputs[0].send([144, midiID, 17]);
+        const pos = this.availableIDs.indexOf(midiID);
+        if (pos !== -1) {
+            this.availableIDs.slice(pos, 1);
+        }
         const youtubeID = url.split('=')[1];
         axios.get(`https://www.googleapis.com/youtube/v3/videos?id=${youtubeID}&key=${API_KEY}&part=snippet`)
             .then((response) => {
                 const youtubeTitle = response.data.items[0].snippet.localized.title;
                 console.log('[addURL] YouTube Title:', youtubeTitle);
                 let data = this.state.data;
-                data.push({ id: data.length, name: youtubeTitle, url: url, type: 'av' });
+                data[this.id2index(nextAvailableID)] = { id: data.length, name: youtubeTitle, url: url, type: 'av' };
                 localStorage.setItem('files', JSON.stringify(data));
                 this.setState({ data: data });
             })
@@ -190,13 +223,14 @@ class App extends Component {
     clearLS = (keyName, e, handle) => {
         if (e) { console.log('[clearLS:Hotkeys]', keyName, e, handle); }
         localStorage.clear();
-        this.setState({ data: [], selectedIndex: [] })
+        this.setState({ data: new Array(64), selectedIndex: [] })
     }
 
     deleteFromLS = id => event => {
         if (this.state.selectedIndex.length > 0) {
             console.log('[deleteFromLS] disabled when showing preview!')
         } else {
+            // here all is playlist index 
             let data = this.state.data;
             let id2index = this.state.id2index;
             let index2id = {};
@@ -210,7 +244,8 @@ class App extends Component {
             for (var key in id2index) {
                 index2id[id2index[key]] = key;
             }
-            data.splice(index, 1);
+            // here is fixed button idex
+            data[this.id2indexMIDI(id)] = null;
             this.setState({ data: data, id2index: id2index, index2id: index2id });
             localStorage.setItem('files', JSON.stringify(data));
         }
