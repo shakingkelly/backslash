@@ -5,6 +5,7 @@ class DragAndDrop extends Component {
         drag: false
     }
     dropRef = React.createRef();
+    dragCounter = 0;
 
     handleDrag = (e) => {
         e.preventDefault();

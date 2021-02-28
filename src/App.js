@@ -16,8 +16,8 @@ class App extends Component {
 
 	constructor(props) {
 		super(props);
-		// should also have 64 sparekeys
-		this.spareKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\'];  // key assignment follows sort result; 23
+		// should also have 64 sparekeys @deprecated
+		// this.spareKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\'];  // key assignment follows sort result; 23
 		this.midiButtons = [0, 1, 2, 3, 4, 5, 6, 7,
 			16, 17, 18, 19, 20, 21, 22, 23,
 			32, 33, 34, 35, 36, 37, 38, 39,
@@ -262,8 +262,8 @@ class App extends Component {
 	}
 
 	// logic bug: this one can never remove some file from preview
-	// hotkeys not working (2/21)
-	// deprecate?
+	// 而且没啥用
+	// @deprecated
 	changeSelection2 = (keyName, e, handle) => {
 		console.log('[changeSelection2]', keyName);
 		// is the combination of "select" & "bring to front" thru hotkeys
@@ -410,11 +410,11 @@ class App extends Component {
 		return (
 			/* CONTAINER */
 			<div>
-				{this.state.data.map((item, i) => {
+				{/* {this.state.data.slice(0, 8).map((item, i) => {
 					return (
 						<Hotkeys onKeyDown={this.changeSelection2} keyName={this.spareKeys[i]} />
 					)
-				})}
+				})} */}
 
 				<HotButton keyName="shift+alt+c" buttonClass="action" actionFN={this.toggleGlobalCanvas}>GLOBAL CANVAS</HotButton>
 				{this.state.showGlobalCanvas && <GlobalDrawArea canvasWidth={window.innerWidth} canvasHeight={window.innerHeight} />}
