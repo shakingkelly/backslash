@@ -1,14 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-import AppMIDI from './AppMIDI';
+import AppAll from './AppAll';
 
 ReactDOM.render(
   <React.StrictMode>
-    <AppMIDI />
+    <AppAll />
   </React.StrictMode>,
   document.getElementById('root')
 );

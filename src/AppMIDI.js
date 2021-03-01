@@ -52,7 +52,7 @@ class AppMIDI extends Component {
         // 1. order in playlist: almost all func logic 
         // 2. fixed order in button list: only when need data/LED change
         this.state = {
-            data: data || emptyData,  
+            data: data || emptyData,
             selectedIndex: [],  // playlist index/order
             id2index: { 0: 0, 1: 1, 2: 2, 3: 3 },
             index2id: { 0: 0, 1: 1, 2: 2, 3: 3 }, // midiID <=> playlist index
@@ -67,13 +67,13 @@ class AppMIDI extends Component {
         }
 
         this.availableIDs = [0, 1, 2, 3, 4, 5, 6, 7,
-                            16, 17, 18, 19, 20, 21, 22, 23,
-                            32, 33, 34, 35, 36, 37, 38, 39,
-                            48, 49, 50, 51, 52, 53, 54, 55,
-                            64, 65, 66, 67, 68, 69, 70, 71,
-                            80, 81, 82, 83, 84, 85, 86, 87,
-                            6, 97, 98, 99, 100, 101, 102, 103,
-                            112, 113, 114, 115, 116, 117, 118, 119];
+            16, 17, 18, 19, 20, 21, 22, 23,
+            32, 33, 34, 35, 36, 37, 38, 39,
+            48, 49, 50, 51, 52, 53, 54, 55,
+            64, 65, 66, 67, 68, 69, 70, 71,
+            80, 81, 82, 83, 84, 85, 86, 87,
+            6, 97, 98, 99, 100, 101, 102, 103,
+            112, 113, 114, 115, 116, 117, 118, 119];
         this.id2indexMIDI = id => { return Math.floor(id / 16) * 8 + id % 16; }
         this.index2idMIDI = index => { return Math.floor(index / 8) * 16 + index % 8; } // midiID <=> button index/pos
         console.log('===== START =====', this.state);
@@ -214,6 +214,7 @@ class AppMIDI extends Component {
         for (let i = 0; i < 8; i++) {
             for (let j = i * 16; j < i * 16 + 8; j++) {
                 emptyData.push({ id: j });
+                this.state.outputs[0].send([128, j, 1]);
             }
         }
         localStorage.clear();
@@ -257,7 +258,7 @@ class AppMIDI extends Component {
     /* PLAYLIST */
     // deprecate shift key
     // click once, add to preview; click again, remove from preview 
-    changeSelection = clickedDataID => event => { 
+    changeSelection = clickedDataID => event => {
         const clickedIndex = this.state.id2index[clickedDataID];  // data index = playlist index
         const buttonID = this.index2idMIDI(clickedIndex);
 
@@ -336,13 +337,13 @@ class AppMIDI extends Component {
         // turn off all lights
         const output = this.state.outputs[0];
         for (let i = 0; i < 8; i++) {
-            for (let j = i * 16; j < i * 16 + 8; j++) { 
+            for (let j = i * 16; j < i * 16 + 8; j++) {
                 const dataID = j;
                 const dataIndex = this.state.id2index[dataID];
                 const playlistIndex = this.state.id2index[dataID];
                 const buttonID = this.index2idMIDI(playlistIndex);
-                output.send([128, buttonID, 1]); 
-                if (this.state.data[dataIndex].name) { 
+                output.send([128, buttonID, 1]);
+                if (this.state.data[dataIndex].name) {
                     if (this.state.selectedIndex.indexOf(playlistIndex) !== -1) {
                         // cell has file and selected
                         output.send([144, buttonID, 1]);
@@ -367,6 +368,18 @@ class AppMIDI extends Component {
     /* PREVIEW */
     clearPreview = (keyName, e, handle) => {
         if (e) { console.log('[clearPreview:Hotkeys]', keyName, e, handle); }
+        for (let i = 0; i < 8; i++) {
+            for (let j = i * 16; j < i * 16 + 8; j++) { 
+                const dataID = j;
+                const dataIndex = this.state.id2index[dataID];
+                const playlistIndex = this.state.id2index[dataID];
+                const buttonID = this.index2idMIDI(playlistIndex);
+                this.state.outputs[0].send([128, j, 1]);
+                if (this.state.data[dataIndex].name) {
+                    this.state.outputs[0].send([144, buttonID, 17]);
+                }
+            }
+        }
         this.setState({ selectedIndex: [] });
     }
 
@@ -467,7 +480,7 @@ class AppMIDI extends Component {
                         changeEditorFilenameFN={this.changeEditorFilename}
                         saveCanvasFN={this.saveCanvas}
                         savePositionFN={this.savePosition}
-                        // changeOrderFN={this.changeOrder}
+                    // changeOrderFN={this.changeOrder}
                     />
                 </div>
             </div>

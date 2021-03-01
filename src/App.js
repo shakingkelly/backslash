@@ -1,3 +1,5 @@
+// ❗️❗️❗️LAST WORKING MIDI TEST VER: CHECK COMMIT b952d1b0ca❗️❗️❗️
+
 
 /** WHEN TO USE APP
  * must not connect with midi controller
@@ -14,7 +16,6 @@ import Recorder from './components/Recorder';
 import HotButton from './components/HotButton';
 import Hotkeys from 'react-hot-keys';
 import axios from 'axios';
-import MIDIDropZone from './components/MIDIDropZone';
 
 const API_KEY = 'AIzaSyCou-4kz6C3Cu9HJytXcYR9Ax3r3JHA1GI';
 
@@ -24,14 +25,6 @@ class App extends Component {
 		super(props);
 		// should also have 64 sparekeys @deprecated
 		// this.spareKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\'];  // key assignment follows sort result; 23
-		this.midiButtons = [0, 1, 2, 3, 4, 5, 6, 7,
-			16, 17, 18, 19, 20, 21, 22, 23,
-			32, 33, 34, 35, 36, 37, 38, 39,
-			48, 49, 50, 51, 52, 53, 54, 55,
-			64, 65, 66, 67, 68, 69, 70, 71,
-			80, 81, 82, 83, 84, 85, 86, 87,
-			6, 97, 98, 99, 100, 101, 102, 103,
-			112, 113, 114, 115, 116, 117, 118, 119];
 
 		// desktop
 		// let data = JSON.parse(localStorage.getItem('files'));
@@ -42,81 +35,34 @@ class App extends Component {
 		// }
 
 		// web 
-		const data = [];
-		// by introducing MIDI, fix data size at max 64
-		for (let i = 0; i < 8; i++) {
-			for (let j = i * 16; j < i * 16 + 8; j++) {
-				// test
-				data.push({ id: j });
-				// data.push(null);
-			}
-		}
-		data[0] = { id: 0, name: 'cave', url: './asset/cave.jpg', type: 'img' };
-		data[1] = { id: 1, name: 'vid', url: './asset/JavaScript.mp4', type: 'av' };
-		data[2] = { id: 2, name: 'tall', url: './asset/tall.png', type: 'img' };
-		data[3] = { id: 3, name: 'hiya', url: './asset/hiya.md', type: 'md', text: 'hiya' };
+		const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img' },
+		{ id: 20, name: 'vid', url: './asset/JavaScript.mp4', type: 'av' },
+		{ id: 100, name: 'tall', url: './asset/tall.png', type: 'img' },
+		// { id: 101, name: 'cave', url: './asset/cave.jpg', type: 'img' },
+		// { id: 102, name: 'cave', url: './asset/cave.jpg', type: 'img' },
+		// { id: 103, name: 'cave', url: './asset/cave.jpg', type: 'img' },
+		// { id: 104, name: 'cave', url: './asset/cave.jpg', type: 'img' },
+		// { id: 105, name: 'cave', url: './asset/cave.jpg', type: 'img' },
+		// { id: 106, name: 'cave', url: './asset/cave.jpg', type: 'img' },
+		// { id: 107, name: 'cave', url: './asset/cave.jpg', type: 'img' },
+		{ id: 30, name: 'hiya', url: './asset/hiya.md', type: 'md', text: 'hiya' }]
 
 		this.state = {
-			// data: data || [],
-			data: data || new Array(64),
+			data: data || [],
 			selectedIndex: [],
-			id2index: { 0: 0, 1: 1, 2: 2, 3: 3 },
-			index2id: { 0: 0, 1: 1, 2: 2, 3: 3 }, // seems redundant now
+			id2index: { 10: 0, 20: 1, 100: 2, 30: 3 },
+			index2id: { 0: 10, 1: 20, 2: 100, 3: 30 },
 			showList: true,
 			listView: 'list',
 			showZone: true,
 			showGlobalCanvas: false,
 			showAudio: true,
 			nextSpare: data.length,
-			inputs: [],
-			outputs: [],
-			midiMode: false
 		}
 
 		console.log('===== START =====', this.state);
 	}
 
-
-	componentDidMount() {
-		if (!("requestMIDIAccess" in navigator)) {
-			console.log('Browser does not support WebMIDI');
-		} else {
-			this.setState({ midiMode: true });
-			navigator.requestMIDIAccess()
-				.then((access) => {
-					// Get lists of available MIDI controllers
-					const inputs = access.inputs;
-					const outputs = access.outputs;
-					inputs.forEach((midiInput) => {
-						midiInput.onmidimessage = this.onMIDIMessage;
-						this.setState({ inputs: this.state.inputs.concat(midiInput) });
-					})
-					outputs.forEach((midiOutput) => {
-						this.setState({ outputs: this.state.outputs.concat(midiOutput) });
-					})
-					console.log('MIDI inputs:', this.state.inputs);
-					console.log('MIDI outputs:', this.state.outputs);
-
-					// test: turn on LED of the cells associated with the sample files
-					const output = this.state.outputs[0];
-					output.send([144, 0, 17]);
-					output.send([144, 1, 17]);
-					output.send([144, 2, 17]);
-					output.send([144, 3, 17]);
-				});
-		}
-	}
-
-	onMIDIMessage = (message) => {
-		const type = message.data[0];
-		const midiButton = message.data[1];
-		if (type === 144) {
-			// ignore 128
-			const clickedIndex = this.midiButtons.indexOf(midiButton);
-			const clickedID = this.state.index2id[clickedIndex];
-			this.changeSelectionMIDI(clickedID);
-		}
-	}
 
 
 	/* DROPZONE */
@@ -141,32 +87,6 @@ class App extends Component {
 			data.push(newData);
 			len += 1
 		}
-		localStorage.setItem('files', JSON.stringify(data));
-		this.setState({ data: data });
-	}
-
-	/** @callback [called in dropzone handleDropFN] */
-	// MIDI, only add single file in one drag
-	addFileMIDI = (midiID, files) => {
-		const file = files[0];
-		let data = this.state.data;
-		let type = '';
-		let newData = { id: midiID, name: file.name, url: file.path, type: type };
-		if (file.name.endsWith(".jpg") || file.name.endsWith(".png") || file.name.endsWith(".gif") || file.name.endsWith(".bmp")) {
-			newData.type = 'img';
-		} else if (file.name.endsWith(".md") || file.name.endsWith(".txt")) {
-			newData.type = 'md';
-			file.text().then(result => newData.text = result);
-		} else if (file.name.endsWith(".mp3") || file.name.endsWith(".mp4") || file.name.endsWith(".webm") || file.name.endsWith(".wav") || file.name.endsWith(".mov") || file.name.endsWith(".m4v")) {
-			newData.type = 'av';
-		} else {
-			console.log('[addFileMIDI] file type not supported!');
-		}
-		// turn on LED of the cells associated with the sample files
-		this.state.outputs[0].send([128, midiID, 17]);
-		this.state.outputs[0].send([144, midiID, 17]);
-		data[this.midiButtons.indexOf(midiID)] = newData;
-		console.log('[addFileMIDI]', midiID, data[this.midiButtons.indexOf(midiID)]);
 		localStorage.setItem('files', JSON.stringify(data));
 		this.setState({ data: data });
 	}
@@ -245,28 +165,6 @@ class App extends Component {
 		this.setState({ selectedIndex: [...selectedIndex] }, () => { /*console.log('[changeSelection:callback]', this.state.selectedIndex)*/ }); // so only after render, it reset the states
 	}
 
-	changeSelectionMIDI = clickedID => {
-		const clickedIndex = this.state.id2index[clickedID];
-		let selectedIndex = [...this.state.selectedIndex];
-		let selectedID = [];
-		selectedIndex.forEach((index, i) => {
-			selectedID.push(this.state.index2id[index]);
-		})
-		if (!selectedID.includes(clickedID)) {
-			selectedIndex.push(clickedIndex);
-			this.state.outputs[0].send([128, this.midiButtons[clickedIndex], 1]);
-			this.state.outputs[0].send([144, this.midiButtons[clickedIndex], 1]);
-		} else {
-			selectedIndex.splice(selectedIndex.indexOf(clickedIndex), 1);
-			this.state.outputs[0].send([128, this.midiButtons[clickedIndex], 1]); 
-			// if the cell is associated with a file
-			if (this.state.data[clickedIndex].name) {
-				this.state.outputs[0].send([144, this.midiButtons[clickedIndex], 17]);
-			}
-		}
-		this.setState({ selectedIndex: [...selectedIndex] });
-	}
-
 	// logic bug: this one can never remove some file from preview
 	// 而且没啥用
 	// @deprecated
@@ -300,7 +198,6 @@ class App extends Component {
 	}
 
 	updateSortable = (newState) => {
-		console.log('look here');
 		let newId2index = {};
 		let newIndex2id = {};
 		let newSelectedIndex = [];
@@ -414,7 +311,6 @@ class App extends Component {
 
 
 	render() {
-		console.log('what whaaat', this.state.index2id);
 		return (
 			/* CONTAINER */
 			<div>
@@ -437,19 +333,13 @@ class App extends Component {
 						</Drag>
 					</div>
 
-					{this.state.midiMode
-						?
-						<MIDIDropZone handleFileDropFN={this.addFileMIDI} />
-						:
-						<div className='dropzone'>
-							<Drag>
-								{this.state.showZone && <DragAndDrop handleFileDrop={this.addFiles} handleURLDrop={this.addURL} />}
-								<HandleButton />
-								<HotButton keyName="shift+z" buttonClass="action" actionFN={this.toggleZonge}>{this.state.showZone ? 'HIDE' : 'DROPZONE'}</HotButton>
-							</Drag>
-						</div>
-					}
-
+					<div className='dropzone'>
+						<Drag>
+							{this.state.showZone && <DragAndDrop handleFileDrop={this.addFiles} handleURLDrop={this.addURL} />}
+							<HandleButton />
+							<HotButton keyName="shift+z" buttonClass="action" actionFN={this.toggleZonge}>{this.state.showZone ? 'HIDE' : 'DROPZONE'}</HotButton>
+						</Drag>
+					</div>
 
 					<div className='playlist'>
 						<Drag>
