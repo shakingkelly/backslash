@@ -9,7 +9,7 @@ import VideoThumbnail from './Thumbnail';
 const Playlist = (props) => {
 
     return (
-        <div id="finite-list">
+        <div id="finite-list" style={{background: 'white'}}>
             <ReactSortable 
                 className={props.view === 'list' ? 'list' : 'grid'} 
                 list={props.data} 
@@ -66,6 +66,10 @@ const Playlist = (props) => {
                                         item.type === 'md' &&
                                         <div className="filename-cell-grid active" onClick={props.clicked(item.id)}>{item.name}</div>
                                     }
+                                    {
+                                        !item.type &&
+                                        <div className="filename-cell-grid active">??</div>
+                                    }
                                 </div>
                                 :
                                 <div className="grid-view-inactive">
@@ -86,6 +90,10 @@ const Playlist = (props) => {
                                     {
                                         item.type === 'md' &&
                                         <div className="filename-cell-grid" onClick={props.clicked(item.id)}>{item.name}</div>
+                                    }
+                                    {
+                                        !item.type &&
+                                        <div className="filename-cell-grid">??</div>
                                     }
                                 </div>
                             }

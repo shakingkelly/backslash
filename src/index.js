@@ -4,11 +4,11 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-import MIDIDropZone from './components/MIDIDropZone';
+import AppMIDI from './AppMIDI';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AppMIDI />
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -40,7 +40,11 @@ class DragAndDrop extends Component {
             e.dataTransfer.clearData();
             this.dragCounter = 0;
         } else {
-            this.props.handleURLDrop(e.dataTransfer.getData('text/plain'));
+            if (this.props.midiID) {
+                this.props.handleURLDropFN(this.props.midiID, e.dataTransfer.getData('text/plain'));
+            } else {
+                this.props.handleURLDrop(e.dataTransfer.getData('text/plain'));
+            }
         }
     }
     componentDidMount() {

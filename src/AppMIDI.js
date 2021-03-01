@@ -1,3 +1,11 @@
+
+/** WHEN TO USE APP_MIDI
+ * must connect with midi controller
+ * user can use both mouse and midi 
+ * playlist is grid view only, shows fixed 64 entries
+ */
+
+
 import React, { Component } from 'react';
 import Draggable from 'react-draggable';
 import Playlist from './components/Playlist';
@@ -11,18 +19,10 @@ import MIDIDropZone from './components/MIDIDropZone';
 
 const API_KEY = 'AIzaSyCou-4kz6C3Cu9HJytXcYR9Ax3r3JHA1GI';
 
-class App extends Component {
+class AppMIDI extends Component {
 
     constructor(props) {
         super(props);
-        this.midiButtons = [0, 1, 2, 3, 4, 5, 6, 7,
-            16, 17, 18, 19, 20, 21, 22, 23,
-            32, 33, 34, 35, 36, 37, 38, 39,
-            48, 49, 50, 51, 52, 53, 54, 55,
-            64, 65, 66, 67, 68, 69, 70, 71,
-            80, 81, 82, 83, 84, 85, 86, 87,
-            6, 97, 98, 99, 100, 101, 102, 103,
-            112, 113, 114, 115, 116, 117, 118, 119]; // 没用, 用available ids
 
         // desktop
         // let data = JSON.parse(localStorage.getItem('files'));
@@ -33,42 +33,49 @@ class App extends Component {
         // }
 
         // web 
-        const data = [];
+        const emptyData = [];
         // by introducing MIDI, fix data size at max 64
         for (let i = 0; i < 8; i++) {
             for (let j = i * 16; j < i * 16 + 8; j++) {
-                // test
-                // data.push({ id: j });
-                data.push(null);
+                emptyData.push({ id: j });
             }
         }
+
+        const data = [...emptyData];
         data[0] = { id: 0, name: 'cave', url: './asset/cave.jpg', type: 'img' };
         data[1] = { id: 1, name: 'vid', url: './asset/JavaScript.mp4', type: 'av' };
         data[2] = { id: 2, name: 'tall', url: './asset/tall.png', type: 'img' };
         data[3] = { id: 3, name: 'hiya', url: './asset/hiya.md', type: 'md', text: 'hiya' };
 
         // there's only one type of ID which is midi button id
-        // two types of index: 1. order in playlist, 2. fixed order in button list
+        // two types of index: 
+        // 1. order in playlist: almost all func logic 
+        // 2. fixed order in button list: only when need data/LED change
         this.state = {
-            // data: data || [],
-            data: data || new Array(64),
-            selectedIndex: [],  // index/order in playlist
+            data: data || emptyData,  
+            selectedIndex: [],  // playlist index/order
             id2index: { 0: 0, 1: 1, 2: 2, 3: 3 },
-            index2id: { 0: 0, 1: 1, 2: 2, 3: 3 }, // midiID & playlist index
+            index2id: { 0: 0, 1: 1, 2: 2, 3: 3 }, // midiID <=> playlist index
             showList: true,
-            listView: 'list',
+            listView: 'grid',  // grid only 
             showZone: true,
             showGlobalCanvas: false,
             showAudio: true,
-            nextSpare: data.length,
             inputs: [],
             outputs: [],
             midiMode: false
         }
 
-        this.availableIDs = [...this.midiButtons];
+        this.availableIDs = [0, 1, 2, 3, 4, 5, 6, 7,
+                            16, 17, 18, 19, 20, 21, 22, 23,
+                            32, 33, 34, 35, 36, 37, 38, 39,
+                            48, 49, 50, 51, 52, 53, 54, 55,
+                            64, 65, 66, 67, 68, 69, 70, 71,
+                            80, 81, 82, 83, 84, 85, 86, 87,
+                            6, 97, 98, 99, 100, 101, 102, 103,
+                            112, 113, 114, 115, 116, 117, 118, 119];
         this.id2indexMIDI = id => { return Math.floor(id / 16) * 8 + id % 16; }
-        this.index2idMIDI = index => { return Math.floor(index / 8) * 16 + index % 8; }
+        this.index2idMIDI = index => { return Math.floor(index / 8) * 16 + index % 8; } // midiID <=> button index/pos
         console.log('===== START =====', this.state);
     }
 
@@ -109,46 +116,45 @@ class App extends Component {
 
     onMIDIMessage = (message) => {
         const type = message.data[0];
-        const midiButton = message.data[1];
-        if (type === 144) {
-            // ignore 128
-            const clickedIndex = this.midiButtons.indexOf(midiButton);
-            const clickedID = this.state.index2id[clickedIndex];
-            this.changeSelectionMIDI(clickedID);
+        const buttonID = message.data[1];
+        const dataIndex = this.id2indexMIDI(buttonID);
+        if (this.state.data[dataIndex].name && type === 144) {
+            // disable empty cell && ignore 128
+            this.changeSelectionMIDI(buttonID);
         }
     }
 
 
     /* DROPZONE */
-
-    // add files doesn't bind file to playlist ordering yet
     /** @callback [called in dropzone handleDrop] */
-    addFiles = (files) => {
-        let data = this.state.data;
-        for (var i = 0; i < files.length; i++) {
-            const nextAvailableID = this.availableIDs.shift();
-            if (!nextAvailableID) {
-                console.log('no vacancy!');
-                break;
-            }
-            let type = '';
-            let newData = { id: len, name: files[i].name, url: files[i].path, type: type };
-            if (files[i].name.endsWith(".jpg") || files[i].name.endsWith(".png") || files[i].name.endsWith(".gif") || files[i].name.endsWith(".bmp")) {
-                newData.type = 'img';
-            } else if (files[i].name.endsWith(".md") || files[i].name.endsWith(".txt")) {
-                newData.type = 'md';
-                files[i].text().then(result => newData.text = result);
-            } else if (files[i].name.endsWith(".mp3") || files[i].name.endsWith(".mp4") || files[i].name.endsWith(".webm") || files[i].name.endsWith(".wav") || files[i].name.endsWith(".mov") || files[i].name.endsWith(".m4v")) {
-                newData.type = 'av';
-            } else {
-                console.log('[addFiles] file type not supported!');
-                continue;
-            }
-            data[this.id2index(nextAvailableID)] = newData;
-        }
-        localStorage.setItem('files', JSON.stringify(data));
-        this.setState({ data: data });
-    }
+    // addFiles = (files) => {
+    //     let data = this.state.data;
+    //     for (var i = 0; i < files.length; i++) {
+    //         const nextAvailableID = this.availableIDs.shift();
+    //         if (!nextAvailableID) {
+    //             console.log('no vacancy!');
+    //             break;
+    //         }
+    //         let type = '';
+    //         let newData = { id: nextAvailableID, name: files[i].name, url: files[i].path, type: type };
+    //         if (files[i].name.endsWith(".jpg") || files[i].name.endsWith(".png") || files[i].name.endsWith(".gif") || files[i].name.endsWith(".bmp")) {
+    //             newData.type = 'img';
+    //         } else if (files[i].name.endsWith(".md") || files[i].name.endsWith(".txt")) {
+    //             newData.type = 'md';
+    //             files[i].text().then(result => newData.text = result);
+    //         } else if (files[i].name.endsWith(".mp3") || files[i].name.endsWith(".mp4") || files[i].name.endsWith(".webm") || files[i].name.endsWith(".wav") || files[i].name.endsWith(".mov") || files[i].name.endsWith(".m4v")) {
+    //             newData.type = 'av';
+    //         } else {
+    //             console.log('[addFiles] file type not supported!');
+    //             continue;
+    //         }
+    //         this.state.outputs[0].send([128, nextAvailableID, 17]);
+    //         this.state.outputs[0].send([144, nextAvailableID, 17]);
+    //         data[this.id2indexMIDI(nextAvailableID)] = newData;
+    //     }
+    //     localStorage.setItem('files', JSON.stringify(data));
+    //     this.setState({ data: data });
+    // }
 
     /** @callback [called in dropzone handleDropFN] */
     // MIDI, only add single file in one drag
@@ -176,45 +182,27 @@ class App extends Component {
             this.availableIDs.slice(pos, 1);
         }
         // if cell if previously occupied, overwrite with new file
-        data[this.id2index(midiID)] = newData;
-        console.log('[addFileMIDI]', midiID, data[this.id2index(midiID)]);
+        data[this.id2indexMIDI(midiID)] = newData;
+        console.log('[addFileMIDI]', midiID, data[this.id2indexMIDI(midiID)]);
         localStorage.setItem('files', JSON.stringify(data));
         this.setState({ data: data });
     }
 
     /** @callback [called in dropzone handleDrop] */
-    addURL = (url) => {
-        const nextAvailableID = this.availableIDs.shift();
-        if (!nextAvailableID) {
-            console.log('no vacancy!');
-        } else {
-            const youtubeID = url.split('=')[1];
-            axios.get(`https://www.googleapis.com/youtube/v3/videos?id=${youtubeID}&key=${API_KEY}&part=snippet`)
-                .then((response) => {
-                    const youtubeTitle = response.data.items[0].snippet.localized.title;
-                    console.log('[addURL] YouTube Title:', youtubeTitle);
-                    let data = this.state.data;
-                    data[this.id2index(nextAvailableID)] = { id: data.length, name: youtubeTitle, url: url, type: 'av' };
-                    localStorage.setItem('files', JSON.stringify(data));
-                    this.setState({ data: data });
-                })
-        }
-    }
-
     addURLMIDI = (midiID, url) => {
-        this.state.outputs[0].send([128, midiID, 17]);
-        this.state.outputs[0].send([144, midiID, 17]);
-        const pos = this.availableIDs.indexOf(midiID);
-        if (pos !== -1) {
-            this.availableIDs.slice(pos, 1);
-        }
         const youtubeID = url.split('=')[1];
         axios.get(`https://www.googleapis.com/youtube/v3/videos?id=${youtubeID}&key=${API_KEY}&part=snippet`)
             .then((response) => {
                 const youtubeTitle = response.data.items[0].snippet.localized.title;
                 console.log('[addURL] YouTube Title:', youtubeTitle);
+                this.state.outputs[0].send([128, midiID, 17]);
+                this.state.outputs[0].send([144, midiID, 17]);
+                const pos = this.availableIDs.indexOf(midiID);
+                if (pos !== -1) {
+                    this.availableIDs.slice(pos, 1);
+                }
                 let data = this.state.data;
-                data[this.id2index(nextAvailableID)] = { id: data.length, name: youtubeTitle, url: url, type: 'av' };
+                data[this.id2indexMIDI(midiID)] = { id: data.length, name: youtubeTitle, url: url, type: 'av' };
                 localStorage.setItem('files', JSON.stringify(data));
                 this.setState({ data: data });
             })
@@ -222,34 +210,42 @@ class App extends Component {
 
     clearLS = (keyName, e, handle) => {
         if (e) { console.log('[clearLS:Hotkeys]', keyName, e, handle); }
+        const emptyData = [];
+        for (let i = 0; i < 8; i++) {
+            for (let j = i * 16; j < i * 16 + 8; j++) {
+                emptyData.push({ id: j });
+            }
+        }
         localStorage.clear();
-        this.setState({ data: new Array(64), selectedIndex: [] })
+        this.setState({ data: emptyData, selectedIndex: [] })
     }
 
-    deleteFromLS = id => event => {
-        if (this.state.selectedIndex.length > 0) {
-            console.log('[deleteFromLS] disabled when showing preview!')
-        } else {
-            // here all is playlist index 
-            let data = this.state.data;
-            let id2index = this.state.id2index;
-            let index2id = {};
-            const index = id2index[id];
-            delete id2index[id];
-            for (var key in id2index) {
-                if (id2index[key] > index) {
-                    id2index[key]--;
-                }
-            }
-            for (var key in id2index) {
-                index2id[id2index[key]] = key;
-            }
-            // here is fixed button idex
-            data[this.id2indexMIDI(id)] = null;
-            this.setState({ data: data, id2index: id2index, index2id: index2id });
-            localStorage.setItem('files', JSON.stringify(data));
-        }
-    }
+    // no need to delete, just overwrite
+    // also no delete button (doge)
+    // deleteFromLS = id => event => {
+    //     if (this.state.selectedIndex.length > 0) {
+    //         console.log('[deleteFromLS] disabled when showing preview!')
+    //     } else {
+    //         // here all is playlist index 
+    //         let data = this.state.data;
+    //         let id2index = this.state.id2index;
+    //         let index2id = {};
+    //         const index = id2index[id];
+    //         delete id2index[id];
+    //         for (var key in id2index) {
+    //             if (id2index[key] > index) {
+    //                 id2index[key]--;
+    //             }
+    //         }
+    //         for (var key in id2index) {
+    //             index2id[id2index[key]] = key;
+    //         }
+    //         // here is fixed button idex
+    //         data[this.id2indexMIDI(id)] = {id: id};
+    //         this.setState({ data: data, id2index: id2index, index2id: index2id });
+    //         localStorage.setItem('files', JSON.stringify(data));
+    //     }
+    // }
 
     toggleZone = (keyName, e, handle) => {
         if (e) { console.log('[toggleZone:Hotkeys]', keyName, e, handle); }
@@ -259,46 +255,52 @@ class App extends Component {
 
 
     /* PLAYLIST */
-    changeSelection = clickedID => event => {
-        const clickedIndex = this.state.id2index[clickedID];
+    // deprecate shift key
+    // click once, add to preview; click again, remove from preview 
+    changeSelection = clickedDataID => event => { 
+        const clickedIndex = this.state.id2index[clickedDataID];  // data index = playlist index
+        const buttonID = this.index2idMIDI(clickedIndex);
+
         let selectedIndex = [...this.state.selectedIndex];
         let selectedID = [];
+
+        console.log(`[changeSelection] selected index: ${selectedIndex}`);
+        console.log(`clicked: ${this.state.data[clickedIndex].name} \ndataID: ${clickedDataID} \ndata index = playlist index: ${clickedIndex} \nbutton id: ${buttonID}`);
+
         selectedIndex.forEach((index, i) => {
             selectedID.push(this.state.index2id[index]);
         })
-        if (!selectedID.includes(clickedID)) {
-            // if (event.shiftKey) {
+        if (!selectedID.includes(clickedDataID)) {
             selectedIndex.push(clickedIndex);
-            // } else {
-            // 	selectedIndex = [clickedIndex];
-            // }
+            this.state.outputs[0].send([128, buttonID, 1]);
+            this.state.outputs[0].send([144, buttonID, 1]);
         } else {
-            // if (event.shiftKey) {
             selectedIndex.splice(selectedIndex.indexOf(clickedIndex), 1);
-            // } else {
-            // 	selectedIndex = [];
-            // }
+            this.state.outputs[0].send([128, buttonID, 1]);
+            // if the cell is associated with a file
+            // update: it has to. empty cell doesn't have onclick (in playlist), so won't trigger this function
+            this.state.outputs[0].send([144, buttonID, 17]);
         }
         this.setState({ selectedIndex: [...selectedIndex] }, () => { /*console.log('[changeSelection:callback]', this.state.selectedIndex)*/ }); // so only after render, it reset the states
     }
 
-    changeSelectionMIDI = clickedID => {
-        const clickedIndex = this.state.id2index[clickedID];
+    changeSelectionMIDI = midiID => {
+        const clickedIndex = this.state.id2index[midiID];
         let selectedIndex = [...this.state.selectedIndex];
         let selectedID = [];
         selectedIndex.forEach((index, i) => {
             selectedID.push(this.state.index2id[index]);
         })
-        if (!selectedID.includes(clickedID)) {
+        if (!selectedID.includes(midiID)) {
             selectedIndex.push(clickedIndex);
-            this.state.outputs[0].send([128, this.midiButtons[clickedIndex], 1]);
-            this.state.outputs[0].send([144, this.midiButtons[clickedIndex], 1]);
+            this.state.outputs[0].send([128, midiID, 1]);
+            this.state.outputs[0].send([144, midiID, 1]);
         } else {
             selectedIndex.splice(selectedIndex.indexOf(clickedIndex), 1);
-            this.state.outputs[0].send([128, this.midiButtons[clickedIndex], 1]);
+            this.state.outputs[0].send([128, midiID, 1]);
             // if the cell is associated with a file
             if (this.state.data[clickedIndex].name) {
-                this.state.outputs[0].send([144, this.midiButtons[clickedIndex], 17]);
+                this.state.outputs[0].send([144, midiID, 17]);
             }
         }
         this.setState({ selectedIndex: [...selectedIndex] });
@@ -322,43 +324,47 @@ class App extends Component {
         selectedId.forEach((selected, i) => {
             newSelectedIndex.push(newId2index[selected]);
         })
+        // resetLED, but need to wait midi device to load
         this.setState({ data: newState, id2index: newId2index, index2id: newIndex2id, selectedIndex: newSelectedIndex });
+    }
+
+    resetLED = () => {
+        console.log('selectedIndex', this.state.selectedIndex);
+        // console.log(this.state.data);  // data dict order changed (should be in update sortable), data index = playlist index
+        // console.log(this.state.index2id);
+        // console.log(this.state.id2index);
+        // turn off all lights
+        const output = this.state.outputs[0];
+        for (let i = 0; i < 8; i++) {
+            for (let j = i * 16; j < i * 16 + 8; j++) { 
+                const dataID = j;
+                const dataIndex = this.state.id2index[dataID];
+                const playlistIndex = this.state.id2index[dataID];
+                const buttonID = this.index2idMIDI(playlistIndex);
+                output.send([128, buttonID, 1]); 
+                if (this.state.data[dataIndex].name) { 
+                    if (this.state.selectedIndex.indexOf(playlistIndex) !== -1) {
+                        // cell has file and selected
+                        output.send([144, buttonID, 1]);
+                        console.log(`turn on: ${this.state.data[dataIndex].name} \ndata id: ${j} \ndata index: ${dataIndex} \nplaylist index: ${playlistIndex} \nbutton id: ${buttonID}`);
+                    } else {
+                        // cell has file but not selected
+                        output.send([144, buttonID, 17]);
+                        console.log(`turn off: ${this.state.data[dataIndex].name} \ndata id: ${j} \ndata index: ${dataIndex} \nplaylist index: ${playlistIndex} \nbutton id: ${buttonID}`);
+                    }
+                }
+            }
+        }
     }
 
     toggleList = (keyName, e, handle) => {
         if (e) { console.log('[toggleList:Hotkeys]', keyName, e, handle); }
         this.setState({ showList: !this.state.showList });
     }
-
-    toggleListView = () => {
-        const view = this.state.listView;
-        if (view === 'list') {
-            this.setState({ listView: 'grid' });
-        } else {
-            this.setState({ listView: 'list' });
-        }
-    }
     /* END PLAYLIST */
 
 
     /* PREVIEW */
-    prev = (keyName, e, handle) => {
-        if (e) { console.log('[prev:Hotkeys]', keyName, e, handle); }
-        if (this.state.selectedIndex.length === 1) {
-            this.setState({ selectedIndex: this.state.selectedIndex[0] === 0 ? [this.state.data.length - 1] : [this.state.selectedIndex[0] - 1] });
-        } else {
-            console.log('[prev] disabled in multiselection!')
-        }
-    }
-    next = (keyName, e, handle) => {
-        if (e) { console.log('[next:Hotkeys]', keyName, e, handle); }
-        if (this.state.selectedIndex.length === 1) {
-            this.setState({ selectedIndex: this.state.selectedIndex[0] === this.state.data.length - 1 ? [0] : [this.state.selectedIndex[0] + 1] });
-        } else {
-            console.log('[next] disabled in multiselection!')
-        }
-    }
-
     clearPreview = (keyName, e, handle) => {
         if (e) { console.log('[clearPreview:Hotkeys]', keyName, e, handle); }
         this.setState({ selectedIndex: [] });
@@ -392,36 +398,14 @@ class App extends Component {
         data[this.state.id2index[id]].position = { x, y };
         this.setState({ data: data });
     }
-
-    changeOrder = clickedID => event => {
-        // id, index doesn't change, dicts no change, only order changes, so could use index as id or vice versa
-        // but order is not actually used in IAVMedia
-        // so equivalent to deselect all then select them back in new order
-        const clickedIndex = this.state.id2index[clickedID];
-        let selectedIndex = [...this.state.selectedIndex];
-
-        this.clearPreview();
-        const indexOfClickedIndex = selectedIndex.indexOf(clickedIndex);
-        selectedIndex.splice(indexOfClickedIndex, 1);
-        selectedIndex.push(clickedIndex);
-        this.setState({ selectedIndex: selectedIndex });
-        console.log('[changeOrder]', selectedIndex);
-    }
     /* END PREVIEW */
-
-    /** @deprecated [audio component is not hide-able] */
-    toggleAudio = (keyName, e, handle) => {
-        if (e) { console.log('[toggleAudio]', keyName, e, handle); }
-        this.setState({ showAudio: !this.state.showAudio });
-    }
-
 
 
     render() {
         return (
             /* CONTAINER */
             <div>
-
+                <button onClick={this.resetLED}>resetLED</button>
                 <HotButton keyName="shift+alt+c" buttonClass="action" actionFN={this.toggleGlobalCanvas}>GLOBAL CANVAS</HotButton>
                 {this.state.showGlobalCanvas && <GlobalDrawArea canvasWidth={window.innerWidth} canvasHeight={window.innerHeight} />}
 
@@ -435,9 +419,9 @@ class App extends Component {
                         </Drag>
                     </div>
 
-                    {this.state.midiMode
+                    {this.state.midiMode  // change to useMIDI? need both 64-square and 1-square
                         ?
-                        <MIDIDropZone handleFileDropFN={this.addFileMIDI} />
+                        <MIDIDropZone handleFileDropFN={this.addFileMIDI} handleURLDropFN={this.addURLMIDI} />
                         :
                         <div className='dropzone'>
                             <Drag>
@@ -463,7 +447,6 @@ class App extends Component {
                                 />
                             }
                             <HandleButton />
-                            {this.state.showList && <button className="action" onClick={this.toggleListView}>{this.state.listView === 'list' ? 'GRID' : 'LIST'}</button>}
                             <HotButton keyName="shift+l" buttonClass="action" actionFN={this.toggleList}>{this.state.showList ? 'HIDE' : 'PLAYLIST'}</HotButton>
                             {this.state.showList && <HotButton keyName="ctrl+l" buttonClass="delete" actionFN={this.clearLS}>CLEAR</HotButton>}
                         </Drag>
@@ -475,8 +458,6 @@ class App extends Component {
                     {
                         this.state.selectedIndex.length > 0 &&
                         <div>
-                            <HotButton keyName="left" buttonClass="action" actionFN={this.prev}>PREV</HotButton>
-                            <HotButton keyName="right" buttonClass="action" actionFN={this.next}>NEXT</HotButton>
                             <HotButton keyName="ctrl+p" buttonClass="delete" actionFN={this.clearPreview}>CLEAR</HotButton>
                         </div>
                     }
@@ -486,7 +467,7 @@ class App extends Component {
                         changeEditorFilenameFN={this.changeEditorFilename}
                         saveCanvasFN={this.saveCanvas}
                         savePositionFN={this.savePosition}
-                        changeOrderFN={this.changeOrder}
+                        // changeOrderFN={this.changeOrder}
                     />
                 </div>
             </div>
@@ -494,7 +475,7 @@ class App extends Component {
     }
 }
 
-export default App;
+export default AppMIDI;
 
 const HandleButton = () => {
     return (

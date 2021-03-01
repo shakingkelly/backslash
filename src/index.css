@@ -159,8 +159,8 @@ div.dropzone-shadow {
 }
 #finite-list {
   /* background: #e9c46a; */
-  height: 200px; /* =50*4 or =100*2 */
-  width: 480px; /* =(160:90)*3 */
+  height: 800px; /* =50*4 or =100*2 */
+  width: 1280px; /* =(160:90)*3 */
   overflow-y: scroll;
   padding: 4px;
 }
@@ -271,7 +271,7 @@ div.delete-button.active:hover {
 /* PLAYLIST GRID VIEW*/
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(8, 1fr);
   grid-auto-rows: 100px;
   /* gap: 0.5rem; */
 }

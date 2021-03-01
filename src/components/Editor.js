@@ -145,7 +145,8 @@ class Editor extends Component {
                 <div className="editor-container"> 
                     <div className="list-item">
                         <HandleButton />
-                        <button onClick={this.props.changeOrderFN(this.id)} style={this.zButtonStyle}>bring to front</button>
+                        {/* onClick={this.props.changeOrderFN(this.id)} */}
+                        <button style={this.zButtonStyle}>bring to front</button>
                         <input className="editor-filename" type="text" placeholder="filename" value={this.state.inputValue} onChange={e => this.setState({ inputValue: e.target.value })} />
                         <HotButton buttonClass="action" actionFN={this.save} keyName="ctrl+s">Save</HotButton>
                         <HotButton buttonClass="files" actionFN={this.download} keyName="ctrl+d">Download</HotButton>

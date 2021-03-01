@@ -1,3 +1,9 @@
+
+/** WHEN TO USE APP
+ * must not connect with midi controller
+ * playlist is appendable
+ */
+
 import React, { Component } from 'react';
 import Draggable from 'react-draggable';
 import Playlist from './components/Playlist';
@@ -294,6 +300,7 @@ class App extends Component {
 	}
 
 	updateSortable = (newState) => {
+		console.log('look here');
 		let newId2index = {};
 		let newIndex2id = {};
 		let newSelectedIndex = [];
@@ -407,6 +414,7 @@ class App extends Component {
 
 
 	render() {
+		console.log('what whaaat', this.state.index2id);
 		return (
 			/* CONTAINER */
 			<div>
@@ -480,7 +488,7 @@ class App extends Component {
 						changeEditorFilenameFN={this.changeEditorFilename}
 						saveCanvasFN={this.saveCanvas}
 						savePositionFN={this.savePosition}
-						changeOrderFN={this.changeOrder}
+						// changeOrderFN={this.changeOrder}
 					/>
 				</div>
 			</div>
