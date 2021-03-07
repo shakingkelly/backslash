@@ -10,6 +10,7 @@ class AppAll extends Component {
     }
 
     componentDidMount() {
+        const self = this;
         if (!("requestMIDIAccess" in navigator)) {
             console.log('Browser does not support WebMIDI');
         } else {
@@ -18,8 +19,14 @@ class AppAll extends Component {
                     const inputs = access.inputs;
                     const outputs = access.outputs;
                     if (inputs.length > 0 && outputs.length > 0) {
-                        this.setState({ midi: true });
+                        self.setState({ midi: true });
                     }
+                    inputs.forEach((midiInput) => {
+                        console.log(`inputs: ${midiInput.name}`);
+                    })
+                    outputs.forEach((midiOutput) => {
+                        console.log(`outputs: ${midiOutput.name}`);
+                    })
                 });
         }
     }
@@ -29,6 +36,7 @@ class AppAll extends Component {
         return (
             this.state.midi ? <AppMIDI /> : <App />
         );
+
     }
 }
 

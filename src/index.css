@@ -1,6 +1,6 @@
 :root {
-  --background-all: #140000;
-  /* --background-all: #CF9F9F; */
+  --background-dark: #140000;
+  --background-light: #CF9F9F;
   --primary-red: #D50100 ;     /* =button-delete #b90505*/ 
   --primary-yellow: #FFCF60;  /* =button-action #b86f03*/
   --primary-green: #309EC5;  /* =button-files #037445*/ 
@@ -29,7 +29,7 @@ html {
 
 body {
   margin: 0;
-  background-color: var(--background-all);
+  background-color: #ffffff;
   text-align: center;
   font-family: 'Barlow Condensed', 'Space Grotesk', 'Syne Mono', monospace , 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -37,6 +37,39 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+body.dark {
+  background-color: var(--background-dark);
+}
+body.light {
+  background-color: var(--background-light);
+}
+.side-bar {
+  /* height: 100% !important; */
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid;
+  border-radius: 0;
+  border-color: rgba(64, 194, 133, 0.693);
+  background-color: rgba(64, 194, 133, 0.693);
+  transition: 0.8s ease;
+}
+.toggle-menu {
+  height: 50px;
+  border-top-right-radius: 10rem;
+  border-bottom-right-radius: 9rem;
+  width: 10px;
+  position: absolute;
+  outline: none;
+  z-index: 1;
+  background-color: rgba(64, 194, 133, 0.693);
+  border-color: rgba(64, 194, 133, 0.693);
+  border-left: 0;
+}
+
+
+
+
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',

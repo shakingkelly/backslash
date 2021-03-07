@@ -16,6 +16,7 @@ import Recorder from './components/Recorder';
 import HotButton from './components/HotButton';
 import axios from 'axios';
 import MIDIDropZone from './components/MIDIDropZone';
+import SideNav from './components/SideNav';
 
 const API_KEY = 'AIzaSyCou-4kz6C3Cu9HJytXcYR9Ax3r3JHA1GI';
 
@@ -418,6 +419,7 @@ class AppMIDI extends Component {
         return (
             /* CONTAINER */
             <div>
+                <SideNav /> 
                 <button onClick={this.resetLED}>resetLED</button>
                 <HotButton keyName="shift+alt+c" buttonClass="action" actionFN={this.toggleGlobalCanvas}>GLOBAL CANVAS</HotButton>
                 {this.state.showGlobalCanvas && <GlobalDrawArea canvasWidth={window.innerWidth} canvasHeight={window.innerHeight} />}
