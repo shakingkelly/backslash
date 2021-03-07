@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import App from './App';
 import AppMIDI from './AppMIDI';
+import SideNav from './components/SideNav';
 
 class AppAll extends Component {
 
     constructor() {
         super();
-        this.state = { midi: false };
+        this.state = { hasMIDI: undefined, useMIDI: false, render: false };
     }
 
     componentDidMount() {
-        const self = this;
         if (!("requestMIDIAccess" in navigator)) {
             console.log('Browser does not support WebMIDI');
         } else {
@@ -18,9 +18,15 @@ class AppAll extends Component {
                 .then((access) => {
                     const inputs = access.inputs;
                     const outputs = access.outputs;
-                    if (inputs.length > 0 && outputs.length > 0) {
-                        self.setState({ midi: true });
+                    // console.log(`inputs: ${inputs}; outputs: ${outputs}`);
+                    if (inputs.size > 0 && outputs.size > 0) {
+                        console.log('set midi true');
+                        this.setState({ hasMIDI: true });
+                    } else {
+                        console.log('set midi false');
+                        this.setState({ hasMIDI: false });
                     }
+                    console.log('mount:', this.state);
                     inputs.forEach((midiInput) => {
                         console.log(`inputs: ${midiInput.name}`);
                     })
@@ -31,11 +37,25 @@ class AppAll extends Component {
         }
     }
 
+    toggleMIDI = () => {
+        if (!this.state.loading && this.state.hasMIDI == true) {
+            this.setState({ useMIDI: !this.state.useMIDI }, () => { console.log('toggleMIDI:', this.state) });
+            console.log('toggleMIDI:', this.state);
+        }
+    }
+
     render() {
-        console.log(this.state.midi ? '***** USING APPMIDI *****' : '***** USING APP *****');
+
+        console.log('render app:', this.state);
+        console.log((this.state.hasMIDI && this.state.useMIDI) ? '***** USING APPMIDI *****' : '***** USING APP *****');
         return (
-            this.state.midi ? <AppMIDI /> : <App />
+            <div>
+                <SideNav toggleMIDIFN={this.toggleMIDI} useMIDI={this.state.useMIDI}/>
+                {(this.state.hasMIDI && this.state.useMIDI) ? <AppMIDI /> : <App />}
+            </div>
         );
+        
+
 
     }
 }

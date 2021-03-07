@@ -419,7 +419,7 @@ class AppMIDI extends Component {
         return (
             /* CONTAINER */
             <div>
-                <SideNav /> 
+                {/* <SideNav />  */}
                 <button onClick={this.resetLED}>resetLED</button>
                 <HotButton keyName="shift+alt+c" buttonClass="action" actionFN={this.toggleGlobalCanvas}>GLOBAL CANVAS</HotButton>
                 {this.state.showGlobalCanvas && <GlobalDrawArea canvasWidth={window.innerWidth} canvasHeight={window.innerHeight} />}
