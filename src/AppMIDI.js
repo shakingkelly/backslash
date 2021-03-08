@@ -436,7 +436,7 @@ class AppMIDI extends Component {
 
                     {this.state.midiMode  // change to useMIDI? need both 64-square and 1-square
                         ?
-                        <MIDIDropZone handleFileDropFN={this.addFileMIDI} handleURLDropFN={this.addURLMIDI} />
+                        <MIDIDropZone handleFileDropFN={this.addFileMIDI} handleURLDropFN={this.addURLMIDI} data={this.state.data} selectedIndex={this.state.selectedIndex}/>
                         :
                         <div className='dropzone'>
                             <Drag>

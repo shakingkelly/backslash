@@ -63,8 +63,9 @@ class DragAndDrop extends Component {
     }
 
     render() {
+        const newClassName = "dropzone-border " + this.props.className;
         return (
-            <div className="dropzone-border" ref={this.dropRef}>
+            <div className={newClassName} ref={this.dropRef}>
                 {this.state.drag && <div className="dropzone-shadow" />}
                 {/* {this.props.children} */}
             </div>
