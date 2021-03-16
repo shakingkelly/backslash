@@ -9,7 +9,8 @@ import VideoThumbnail from './Thumbnail';
 const Playlist = (props) => {
 
     return (
-        <div id="finite-list" style={{background: 'white'}}>
+        <div id={props.view === 'list' ? "finite-list-list" : "finite-list-grid"}>
+        {/* <div id="finite-list" style={{background: 'rgb(255, 255, 255, 0.25)'}}> */}
             <ReactSortable 
                 className={props.view === 'list' ? 'list' : 'grid'} 
                 list={props.data} 

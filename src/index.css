@@ -45,6 +45,7 @@ body.light {
 }
 .side-bar {
   /* height: 100% !important; */
+  margin-bottom: -20px;
   height: 50px;
   display: flex;
   flex-direction: column;
@@ -67,7 +68,15 @@ body.light {
   border-left: 0;
 }
 
-
+button.action.menu {
+  margin-top: 15px;
+}
+/* button.action {
+  background: var(--primary-yellow);
+}
+button.action:hover {
+  background: var(--button-action-hover);
+} */
 
 
 
@@ -190,7 +199,14 @@ div.dropzone-shadow {
   width: 1px;
   z-index: -1;
 }
-#finite-list {
+#finite-list-list {
+  /* background: #e9c46a; */
+  height: 200px; /* =50*4 or =100*2 */
+  width: 480px; /* =(160:90)*3 */
+  overflow-y: scroll;
+  padding: 4px;
+}
+#finite-list-grid {
   /* background: #e9c46a; */
   height: 800px; /* =50*4 or =100*2 */
   width: 1280px; /* =(160:90)*3 */
@@ -452,7 +468,11 @@ input.editor-filename {
 }
 /* EDITOR */
 
-
+.midi-controller {
+  margin: 30px 0 0 30px;
+  height: 600px;
+  background-color:var(--background-dark);
+}
 
 .midi-matrix .dropzone-border {
   margin: 6px;

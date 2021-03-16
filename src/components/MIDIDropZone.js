@@ -19,7 +19,7 @@ class MIDIDropZone extends Component {
                 this.bgColor[this.id2indexMIDI(item.id)] = 'yellow';
             }
         });
-        console.log(this.bgColor);
+        // console.log(this.bgColor);
 
         // this.bgColor[this.id2indexMIDI(0)]
 

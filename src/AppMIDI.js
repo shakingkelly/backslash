@@ -64,7 +64,8 @@ class AppMIDI extends Component {
             showAudio: true,
             inputs: [],
             outputs: [],
-            midiMode: false
+            midiMode: false,
+            showMIDI: true
         }
 
         this.availableIDs = [0, 1, 2, 3, 4, 5, 6, 7,
@@ -363,6 +364,10 @@ class AppMIDI extends Component {
         if (e) { console.log('[toggleList:Hotkeys]', keyName, e, handle); }
         this.setState({ showList: !this.state.showList });
     }
+
+    toggleMIDIArea = () => {
+        this.setState({ showMIDI: !this.state.showMIDI });
+    }
     /* END PLAYLIST */
 
 
@@ -434,9 +439,15 @@ class AppMIDI extends Component {
                         </Drag>
                     </div>
 
-                    {this.state.midiMode  // change to useMIDI? need both 64-square and 1-square
+                    {this.state.midiMode  
                         ?
-                        <MIDIDropZone handleFileDropFN={this.addFileMIDI} handleURLDropFN={this.addURLMIDI} data={this.state.data} selectedIndex={this.state.selectedIndex}/>
+                        <div>
+                            <Drag>
+                                {this.state.showMIDI && <MIDIDropZone handleFileDropFN={this.addFileMIDI} handleURLDropFN={this.addURLMIDI} data={this.state.data} selectedIndex={this.state.selectedIndex}/>}
+                                <HandleButton />
+                                <button className="action" onClick={this.toggleMIDIArea}>{this.state.showMIDI ? 'HIDE' : 'MIDI Ctrl'}</button>
+                            </Drag>
+                        </div>
                         :
                         <div className='dropzone'>
                             <Drag>

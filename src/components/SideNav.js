@@ -44,8 +44,8 @@ const SideNav = (props) => {
 				}}
 			></button>
 			<div className="content">
-				<button className="action" onClick={toggleBackground}>{document.querySelector("body").classList.contains('light') ? 'Dark' : 'Light'}</button>
-				<button className="action" onClick={props.toggleMIDIFN}>{props.useMIDI ? 'Disable MIDI' : 'Enable MIDI'}</button>
+				<button className="action menu" onClick={toggleBackground}>{document.querySelector("body").classList.contains('light') ? 'Dark' : 'Light'}</button>
+				<button className="action menu" onClick={props.toggleMIDIFN}>{props.useMIDI ? 'Disable MIDI' : 'Enable MIDI'}</button>
 			</div>
 		</div>
 		// </React.Fragment>

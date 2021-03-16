@@ -50,7 +50,7 @@ class AppAll extends Component {
         console.log((this.state.hasMIDI && this.state.useMIDI) ? '***** USING APPMIDI *****' : '***** USING APP *****');
         return (
             <div>
-                <SideNav toggleMIDIFN={this.toggleMIDI} useMIDI={this.state.useMIDI}/>
+                {this.state.hasMIDI && <SideNav toggleMIDIFN={this.toggleMIDI} useMIDI={this.state.useMIDI}/>}
                 {(this.state.hasMIDI && this.state.useMIDI) ? <AppMIDI /> : <App />}
             </div>
         );

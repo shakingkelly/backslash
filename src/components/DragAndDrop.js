@@ -32,7 +32,7 @@ class DragAndDrop extends Component {
         e.stopPropagation();
         this.setState({ drag: false });
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-            if (this.props.midiID) {
+            if (this.props.midiID !== null) {
                 this.props.handleFileDropFN(this.props.midiID, e.dataTransfer.files);
             } else {
                 this.props.handleFileDrop(e.dataTransfer.files);
