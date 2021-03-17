@@ -1,19 +1,24 @@
-import React from "react";
+import React, { Component } from "react";
 
-const SideNav = (props) => {
-	const width = 200;
-	const height = 100;
-	const [xPosition, setX] = React.useState(-width);
 
-	const toggleMenu = () => {
-		if (xPosition < 0) {
-			setX(0);
+
+
+class SideNav extends Component {
+
+	constructor(props) {
+		super(props);
+		this.state = { xPosition: 0, width: 300, height: 100 };
+	}
+
+	toggleMenu = () => {
+		if (this.state.xPosition < 0) {
+			this.setState({ xPosition: 0 });
 		} else {
-			setX(-width);
+			this.setState({ xPosition: -this.state.width });
 		}
-	};
+	}
 
-	const toggleBackground = () => {
+	toggleBackground = () => {
 		const bodyElt = document.querySelector("body");
 		if (!bodyElt.classList.contains('light')) {
 			bodyElt.classList.add('light');
@@ -22,34 +27,31 @@ const SideNav = (props) => {
 		}
 	}
 
-	React.useEffect(() => {
-		setX(0);
-	}, []);
-
-	return (
-		// <React.Fragment>
-		<div
-			className="side-bar"
-			style={{
-				transform: `translatex(${xPosition}px)`,
-				width: width,
-				Height: height
-			}}
-		>
-			<button
-				onClick={() => toggleMenu()}
-				className="toggle-menu"
+	render() {
+		return (
+			<div
+				className="side-bar"
 				style={{
-					transform: `translate(${width}px, 0vh)`
+					transform: `translatex(${this.state.xPosition}px)`,
+					width: this.state.width,
+					Height: this.state.height
 				}}
-			></button>
-			<div className="content">
-				<button className="action menu" onClick={toggleBackground}>{document.querySelector("body").classList.contains('light') ? 'Dark' : 'Light'}</button>
-				<button className="action menu" onClick={props.toggleMIDIFN}>{props.useMIDI ? 'Disable MIDI' : 'Enable MIDI'}</button>
+			>
+				<button
+					className="toggle-menu"
+					onClick={this.toggleMenu}
+					style={{
+						transform: `translate(${this.state.width}px, 0vh)`
+					}}
+				></button>
+				<div className="content">
+					<button className="action menu" onClick={this.toggleBackground}>Change Background</button>
+					<button className="action menu" onClick={this.props.toggleMIDIFN}>{this.props.useMIDI ? 'Disable MIDI' : 'Enable MIDI'}</button>
+				</div>
 			</div>
-		</div>
-		// </React.Fragment>
-	);
-};
+		)
+	}
+
+}
 
 export default SideNav;

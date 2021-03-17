@@ -7,7 +7,7 @@ class AppAll extends Component {
 
     constructor() {
         super();
-        this.state = { hasMIDI: undefined, useMIDI: false, render: false };
+        this.state = { hasMIDI: undefined, useMIDI: true };
     }
 
     componentDidMount() {
@@ -38,7 +38,7 @@ class AppAll extends Component {
     }
 
     toggleMIDI = () => {
-        if (!this.state.loading && this.state.hasMIDI == true) {
+        if (!this.state.loading && this.state.hasMIDI === true) {
             this.setState({ useMIDI: !this.state.useMIDI }, () => { console.log('toggleMIDI:', this.state) });
             console.log('toggleMIDI:', this.state);
         }
@@ -48,10 +48,17 @@ class AppAll extends Component {
 
         console.log('render app:', this.state);
         console.log((this.state.hasMIDI && this.state.useMIDI) ? '***** USING APPMIDI *****' : '***** USING APP *****');
+
+        if (typeof this.state.hasMIDI === 'undefined') {
+            return (
+                <h2 style={{color: 'white'}}>debug 1</h2>
+            );
+        }
+
         return (
             <div>
-                {this.state.hasMIDI && <SideNav toggleMIDIFN={this.toggleMIDI} useMIDI={this.state.useMIDI}/>}
-                {(this.state.hasMIDI && this.state.useMIDI) ? <AppMIDI /> : <App />}
+                {this.state.hasMIDI === true ? <SideNav toggleMIDIFN={this.toggleMIDI} useMIDI={this.state.useMIDI}/>:null}
+                {(this.state.hasMIDI === true && this.state.useMIDI === true) ? <AppMIDI /> : <App />}
             </div>
         );
         

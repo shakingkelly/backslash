@@ -1,5 +1,5 @@
 {
-  "name": "backslash",
+  "name": "tohuwabohu",
   "version": "0.1.0",
   "main": "public/electron.js",
   "homepage": "./",
@@ -76,8 +76,8 @@
     "electron-builder": "^22.8.0"
   },
   "build": {
-    "appId": "com.example.electron-react",
-    "productName": "backslash",
+    "appId": "com.tohuwabohu.electron-react",
+    "productName": "tohuwabohu",
     "files": [
       "build/**/*",
       "node_modules/**/*"

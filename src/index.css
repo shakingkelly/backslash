@@ -506,3 +506,8 @@ border-radius: var(--radius); */
   background-color: purple;
   border-color: purple;
 }
+
+/* audio */
+.duration {
+  width: 100px;
+}
