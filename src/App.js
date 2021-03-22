@@ -24,43 +24,31 @@ class App extends Component {
 
 	constructor(props) {
 		super(props);
-		// should also have 64 sparekeys @deprecated
-		// this.spareKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\'];  // key assignment follows sort result; 23
-
 		// desktop
-		// let data = JSON.parse(localStorage.getItem('files'));
+		let data = JSON.parse(localStorage.getItem('files'));
 		// if (!data) {
-		// 	data = [{ id: 10, name: 'img', url: './asset/cave.jpg', type: 'img' },
-		// 	{ id: 20, name: 'av', url: './asset/JavaScript.mp4', type: 'av' },
-		// 	{ id: 30, name: 'txt', url: './asset/hiya.md', type: 'md', text: 'hiya' }]
+		// 	data = [{ id: 0, name: 'cave', url: './asset/cave.jpg', type: 'img' },
+		// { id: 1, name: 'vid', url: './asset/JavaScript.mp4', type: 'av' },
+		// { id: 2, name: 'tall', url: './asset/tall.png', type: 'img' },
+		// { id: 3, name: 'hiya', url: './asset/hiya.md', type: 'md', text: 'hiya' }]
 		// }
 
-		// web 
-		const data = [{ id: 10, name: 'cave', url: './asset/cave.jpg', type: 'img' },
-		{ id: 20, name: 'vid', url: './asset/JavaScript.mp4', type: 'av' },
-		{ id: 100, name: 'tall', url: './asset/tall.png', type: 'img' },
-		// { id: 101, name: 'cave', url: './asset/cave.jpg', type: 'img' },
-		// { id: 102, name: 'cave', url: './asset/cave.jpg', type: 'img' },
-		// { id: 103, name: 'cave', url: './asset/cave.jpg', type: 'img' },
-		// { id: 104, name: 'cave', url: './asset/cave.jpg', type: 'img' },
-		// { id: 105, name: 'cave', url: './asset/cave.jpg', type: 'img' },
-		// { id: 106, name: 'cave', url: './asset/cave.jpg', type: 'img' },
-		// { id: 107, name: 'cave', url: './asset/cave.jpg', type: 'img' },
-		{ id: 30, name: 'hiya', url: './asset/hiya.md', type: 'md', text: 'hiya' }]
+		// web (id needs to be the same as MIDI ver id)
+		// const data = [{ id: 0, name: 'cave', url: './asset/cave.jpg', type: 'img' },
+		// { id: 1, name: 'vid', url: './asset/JavaScript.mp4', type: 'av' },
+		// { id: 2, name: 'tall', url: './asset/tall.png', type: 'img' },
+		// { id: 3, name: 'hiya', url: './asset/hiya.md', type: 'md', text: 'hiya' }]
 
 		this.state = {
 			data: data || [],
 			selectedIndex: [],
-			id2index: { 10: 0, 20: 1, 100: 2, 30: 3 },
-			index2id: { 0: 10, 1: 20, 2: 100, 3: 30 },
-			// id2index: {},
-            // index2id: {},
+			id2index: { 0: 0, 1: 1, 2: 2, 3: 3 },
+			index2id: { 0: 0, 1: 1, 2: 2, 3: 3 },
 			showList: true,
 			listView: 'list',
 			showZone: true,
 			showGlobalCanvas: false,
-			showAudio: true,
-			nextSpare: data.length,
+			showAudio: true
 		}
 
 		console.log('===== START =====', this.state);
