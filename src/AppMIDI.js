@@ -443,7 +443,7 @@ class AppMIDI extends Component {
                         ?
                         <div>
                             <Drag>
-                                {this.state.showMIDI && <MIDIDropZone handleFileDropFN={this.addFileMIDI} handleURLDropFN={this.addURLMIDI} data={this.state.data} selectedIndex={this.state.selectedIndex}/>}
+                                {this.state.showMIDI && <MIDIDropZone handleFileDropFN={this.addFileMIDI} handleURLDropFN={this.addURLMIDI} data={this.state.data} selectedIndex={this.state.selectedIndex} id2index={this.state.id2index}/>}
                                 <HandleButton />
                                 <button className="action" onClick={this.toggleMIDIArea}>{this.state.showMIDI ? 'HIDE' : 'MIDI Ctrl'}</button>
                             </Drag>

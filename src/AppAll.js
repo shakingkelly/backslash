@@ -51,7 +51,7 @@ class AppAll extends Component {
 
         if (typeof this.state.hasMIDI === 'undefined') {
             return (
-                <h2 style={{color: 'white'}}>debug 1</h2>
+                <h2 style={{color: 'white'}}>tohuwabohu</h2>
             );
         }
 
