@@ -113,14 +113,24 @@ class AppMIDI extends Component {
 
                     // test: turn on LED of the cells associated with the sample files
                     const output = this.state.outputs[0];
-                    output.send([144, 0, 17]);
-                    output.send([144, 1, 17]);
-                    output.send([144, 2, 17]);
-                    output.send([144, 3, 17]);
-                    this.availableIDs.shift();
-                    this.availableIDs.shift();
-                    this.availableIDs.shift();
-                    this.availableIDs.shift();
+                    // output.send([144, 0, 17]);
+                    // output.send([144, 1, 17]);
+                    // output.send([144, 2, 17]);
+                    // output.send([144, 3, 17]);
+                    // this.availableIDs.shift();
+                    // this.availableIDs.shift();
+                    // this.availableIDs.shift();
+                    // this.availableIDs.shift();
+                    this.state.data.forEach((item) => {
+                        output.send([128, item.id, 17]);
+                        if (item.name) {
+                            output.send([144, item.id, 17]);
+                        }
+                        const availableIndex = this.availableIDs.indexOf(item.id);
+                        if (availableIndex !== -1) {
+                            this.availableIDs.splice(availableIndex, 1);
+                        }
+                    })
                 });
         }
     }
@@ -182,6 +192,7 @@ class AppMIDI extends Component {
 
     /** @callback [called in dropzone handleDrop] */
     addURLMIDI = (midiID, url) => {
+        console.log('[addURLMIDI] url:', url);
         const youtubeID = url.split('=')[1];
         axios.get(`https://www.googleapis.com/youtube/v3/videos?id=${youtubeID}&key=${API_KEY}&part=snippet`)
             .then((response) => {
