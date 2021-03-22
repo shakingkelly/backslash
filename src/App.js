@@ -53,6 +53,8 @@ class App extends Component {
 			selectedIndex: [],
 			id2index: { 10: 0, 20: 1, 100: 2, 30: 3 },
 			index2id: { 0: 10, 1: 20, 2: 100, 3: 30 },
+			// id2index: {},
+            // index2id: {},
 			showList: true,
 			listView: 'list',
 			showZone: true,
@@ -337,7 +339,7 @@ class App extends Component {
 
 					<div className='dropzone'>
 						<Drag>
-							{this.state.showZone && <DragAndDrop handleFileDrop={this.addFiles} handleURLDrop={this.addURL} />}
+							{this.state.showZone && <DragAndDrop handleFileDropFN={this.addFiles} handleURLDropFN={this.addURL} />}
 							<HandleButton />
 							<HotButton keyName="shift+z" buttonClass="action" actionFN={this.toggleZonge}>{this.state.showZone ? 'HIDE' : 'DROPZONE'}</HotButton>
 						</Drag>

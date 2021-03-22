@@ -35,7 +35,7 @@ class DragAndDrop extends Component {
             if (this.props.midiID !== null) {
                 this.props.handleFileDropFN(this.props.midiID, e.dataTransfer.files);
             } else {
-                this.props.handleFileDrop(e.dataTransfer.files);
+                this.props.handleFileDropFN(e.dataTransfer.files);
             }
             e.dataTransfer.clearData();
             this.dragCounter = 0;
@@ -43,7 +43,7 @@ class DragAndDrop extends Component {
             if (this.props.midiID) {
                 this.props.handleURLDropFN(this.props.midiID, e.dataTransfer.getData('text/plain'));
             } else {
-                this.props.handleURLDrop(e.dataTransfer.getData('text/plain'));
+                this.props.handleURLDropFN(e.dataTransfer.getData('text/plain'));
             }
         }
     }

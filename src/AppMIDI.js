@@ -16,7 +16,6 @@ import Recorder from './components/Recorder';
 import HotButton from './components/HotButton';
 import axios from 'axios';
 import MIDIDropZone from './components/MIDIDropZone';
-import SideNav from './components/SideNav';
 
 const API_KEY = 'AIzaSyCou-4kz6C3Cu9HJytXcYR9Ax3r3JHA1GI';
 
@@ -24,14 +23,6 @@ class AppMIDI extends Component {
 
     constructor(props) {
         super(props);
-
-        // desktop
-        // let data = JSON.parse(localStorage.getItem('files'));
-        // if (!data) {
-        // 	data = [{ id: 10, name: 'img', url: './asset/cave.jpg', type: 'img' },
-        // 	{ id: 20, name: 'av', url: './asset/JavaScript.mp4', type: 'av' },
-        // 	{ id: 30, name: 'txt', url: './asset/hiya.md', type: 'md', text: 'hiya' }]
-        // }
 
         // web 
         const emptyData = [];
@@ -48,6 +39,12 @@ class AppMIDI extends Component {
         data[2] = { id: 2, name: 'tall', url: './asset/tall.png', type: 'img' };
         data[3] = { id: 3, name: 'hiya', url: './asset/hiya.md', type: 'md', text: 'hiya' };
 
+        // desktop
+        // let data = JSON.parse(localStorage.getItem('files'));
+        // if (!data) {
+        // 	data = [...emptyData];
+        // }
+
         // there's only one type of ID which is midi button id
         // two types of index: 
         // 1. order in playlist: almost all func logic 
@@ -57,6 +54,8 @@ class AppMIDI extends Component {
             selectedIndex: [],  // playlist index/order
             id2index: { 0: 0, 1: 1, 2: 2, 3: 3 },
             index2id: { 0: 0, 1: 1, 2: 2, 3: 3 }, // midiID <=> playlist index
+            // id2index: {},
+            // index2id: {},
             showList: true,
             listView: 'grid',  // grid only 
             showZone: true,
