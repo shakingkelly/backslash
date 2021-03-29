@@ -16,7 +16,6 @@ import Recorder from './components/Recorder';
 import HotButton from './components/HotButton';
 import axios from 'axios';
 import MIDIDropZone from './components/MIDIDropZone';
-import SideNav from './components/SideNav';
 
 const API_KEY = 'AIzaSyCou-4kz6C3Cu9HJytXcYR9Ax3r3JHA1GI';
 
@@ -25,35 +24,45 @@ class AppMIDI extends Component {
     constructor(props) {
         super(props);
 
-        // desktop
-        // let data = JSON.parse(localStorage.getItem('files'));
-        // if (!data) {
-        // 	data = [{ id: 10, name: 'img', url: './asset/cave.jpg', type: 'img' },
-        // 	{ id: 20, name: 'av', url: './asset/JavaScript.mp4', type: 'av' },
-        // 	{ id: 30, name: 'txt', url: './asset/hiya.md', type: 'md', text: 'hiya' }]
-        // }
-
         // web 
-        const emptyData = [];
+        const newData = [];
         // by introducing MIDI, fix data size at max 64
         for (let i = 0; i < 8; i++) {
             for (let j = i * 16; j < i * 16 + 8; j++) {
-                emptyData.push({ id: j });
+                newData.push({ id: j });
             }
         }
 
-        const data = [...emptyData];
-        data[0] = { id: 0, name: 'cave', url: './asset/cave.jpg', type: 'img' };
-        data[1] = { id: 1, name: 'vid', url: './asset/JavaScript.mp4', type: 'av' };
-        data[2] = { id: 2, name: 'tall', url: './asset/tall.png', type: 'img' };
-        data[3] = { id: 3, name: 'hiya', url: './asset/hiya.md', type: 'md', text: 'hiya' };
+        // const data = [...emptyData];
+        // data[0] = { id: 0, name: 'cave', url: './asset/cave.jpg', type: 'img' };
+        // data[1] = { id: 1, name: 'vid', url: './asset/JavaScript.mp4', type: 'av' };
+        // data[2] = { id: 2, name: 'tall', url: './asset/tall.png', type: 'img' };
+        // data[3] = { id: 3, name: 'hiya', url: './asset/hiya.md', type: 'md', text: 'hiya' };
+
+        // desktop
+        // change infinite appending list to Array(64)
+        let data = JSON.parse(localStorage.getItem('files'));
+        if (data) {
+            let ptData = 0;
+            for (let ptNewData = 0; ptNewData < newData.length; ptNewData++) {
+                if (ptData >= data.length) {
+                    break;
+                }
+                if (newData[ptNewData].id === data[ptData].id) {
+                    newData[ptNewData] = { ...data[ptData] };
+                    ptData++;
+                }
+            }
+        }
+
+        console.log('[AppMIDI newData]', newData);
 
         // there's only one type of ID which is midi button id
         // two types of index: 
         // 1. order in playlist: almost all func logic 
         // 2. fixed order in button list: only when need data/LED change
         this.state = {
-            data: data || emptyData,
+            data: newData,
             selectedIndex: [],  // playlist index/order
             id2index: { 0: 0, 1: 1, 2: 2, 3: 3 },
             index2id: { 0: 0, 1: 1, 2: 2, 3: 3 }, // midiID <=> playlist index
@@ -104,14 +113,24 @@ class AppMIDI extends Component {
 
                     // test: turn on LED of the cells associated with the sample files
                     const output = this.state.outputs[0];
-                    output.send([144, 0, 17]);
-                    output.send([144, 1, 17]);
-                    output.send([144, 2, 17]);
-                    output.send([144, 3, 17]);
-                    this.availableIDs.shift();
-                    this.availableIDs.shift();
-                    this.availableIDs.shift();
-                    this.availableIDs.shift();
+                    // output.send([144, 0, 17]);
+                    // output.send([144, 1, 17]);
+                    // output.send([144, 2, 17]);
+                    // output.send([144, 3, 17]);
+                    // this.availableIDs.shift();
+                    // this.availableIDs.shift();
+                    // this.availableIDs.shift();
+                    // this.availableIDs.shift();
+                    this.state.data.forEach((item) => {
+                        output.send([128, item.id, 17]);
+                        if (item.name) {
+                            output.send([144, item.id, 17]);
+                        }
+                        const availableIndex = this.availableIDs.indexOf(item.id);
+                        if (availableIndex !== -1) {
+                            this.availableIDs.splice(availableIndex, 1);
+                        }
+                    })
                 });
         }
     }
@@ -125,38 +144,6 @@ class AppMIDI extends Component {
             this.changeSelectionMIDI(buttonID);
         }
     }
-
-
-    /* DROPZONE */
-    /** @callback [called in dropzone handleDrop] */
-    // addFiles = (files) => {
-    //     let data = this.state.data;
-    //     for (var i = 0; i < files.length; i++) {
-    //         const nextAvailableID = this.availableIDs.shift();
-    //         if (!nextAvailableID) {
-    //             console.log('no vacancy!');
-    //             break;
-    //         }
-    //         let type = '';
-    //         let newData = { id: nextAvailableID, name: files[i].name, url: files[i].path, type: type };
-    //         if (files[i].name.endsWith(".jpg") || files[i].name.endsWith(".png") || files[i].name.endsWith(".gif") || files[i].name.endsWith(".bmp")) {
-    //             newData.type = 'img';
-    //         } else if (files[i].name.endsWith(".md") || files[i].name.endsWith(".txt")) {
-    //             newData.type = 'md';
-    //             files[i].text().then(result => newData.text = result);
-    //         } else if (files[i].name.endsWith(".mp3") || files[i].name.endsWith(".mp4") || files[i].name.endsWith(".webm") || files[i].name.endsWith(".wav") || files[i].name.endsWith(".mov") || files[i].name.endsWith(".m4v")) {
-    //             newData.type = 'av';
-    //         } else {
-    //             console.log('[addFiles] file type not supported!');
-    //             continue;
-    //         }
-    //         this.state.outputs[0].send([128, nextAvailableID, 17]);
-    //         this.state.outputs[0].send([144, nextAvailableID, 17]);
-    //         data[this.id2indexMIDI(nextAvailableID)] = newData;
-    //     }
-    //     localStorage.setItem('files', JSON.stringify(data));
-    //     this.setState({ data: data });
-    // }
 
     /** @callback [called in dropzone handleDropFN] */
     // MIDI, only add single file in one drag
@@ -186,12 +173,26 @@ class AppMIDI extends Component {
         // if cell if previously occupied, overwrite with new file
         data[this.id2indexMIDI(midiID)] = newData;
         console.log('[addFileMIDI]', midiID, data[this.id2indexMIDI(midiID)]);
-        localStorage.setItem('files', JSON.stringify(data));
+        // localStorage.setItem('files', JSON.stringify(data));
+        // compress Array(64)
+        let compressedData = [];
+        data.forEach((item) => {
+            if (item.name) {
+                compressedData.push(item);
+            }
+        })
+        // sort by id 
+        compressedData.sort(function (first, second) {
+            return first.id - second.id;
+        });
+        console.log('compressedData:', compressedData);
+        localStorage.setItem('files', JSON.stringify(compressedData));
         this.setState({ data: data });
     }
 
     /** @callback [called in dropzone handleDrop] */
     addURLMIDI = (midiID, url) => {
+        console.log('[addURLMIDI] url:', url);
         const youtubeID = url.split('=')[1];
         axios.get(`https://www.googleapis.com/youtube/v3/videos?id=${youtubeID}&key=${API_KEY}&part=snippet`)
             .then((response) => {
@@ -204,8 +205,21 @@ class AppMIDI extends Component {
                     this.availableIDs.slice(pos, 1);
                 }
                 let data = this.state.data;
-                data[this.id2indexMIDI(midiID)] = { id: data.length, name: youtubeTitle, url: url, type: 'av' };
-                localStorage.setItem('files', JSON.stringify(data));
+                data[this.id2indexMIDI(midiID)] = { id: midiID, name: youtubeTitle, url: url, type: 'av' };
+                // localStorage.setItem('files', JSON.stringify(data));
+                // compress Array(64)
+                let compressedData = [];
+                data.forEach((item) => {
+                    if (item.name) {
+                        compressedData.push(item);
+                    }
+                })
+                // sort by id 
+                compressedData.sort(function (first, second) {
+                    return first.id - second.id;
+                });
+                console.log('compressedData:', compressedData);
+                localStorage.setItem('files', JSON.stringify(compressedData));
                 this.setState({ data: data });
             })
     }
@@ -220,35 +234,9 @@ class AppMIDI extends Component {
             }
         }
         localStorage.clear();
-        this.setState({ data: emptyData, selectedIndex: [] })
+        // this.setState({ data: emptyData, selectedIndex: [] })
+        this.setState({ data: [], selectedIndex: [] });
     }
-
-    // no need to delete, just overwrite
-    // also no delete button (doge)
-    // deleteFromLS = id => event => {
-    //     if (this.state.selectedIndex.length > 0) {
-    //         console.log('[deleteFromLS] disabled when showing preview!')
-    //     } else {
-    //         // here all is playlist index 
-    //         let data = this.state.data;
-    //         let id2index = this.state.id2index;
-    //         let index2id = {};
-    //         const index = id2index[id];
-    //         delete id2index[id];
-    //         for (var key in id2index) {
-    //             if (id2index[key] > index) {
-    //                 id2index[key]--;
-    //             }
-    //         }
-    //         for (var key in id2index) {
-    //             index2id[id2index[key]] = key;
-    //         }
-    //         // here is fixed button idex
-    //         data[this.id2indexMIDI(id)] = {id: id};
-    //         this.setState({ data: data, id2index: id2index, index2id: index2id });
-    //         localStorage.setItem('files', JSON.stringify(data));
-    //     }
-    // }
 
     toggleZone = (keyName, e, handle) => {
         if (e) { console.log('[toggleZone:Hotkeys]', keyName, e, handle); }
@@ -375,7 +363,7 @@ class AppMIDI extends Component {
     clearPreview = (keyName, e, handle) => {
         if (e) { console.log('[clearPreview:Hotkeys]', keyName, e, handle); }
         for (let i = 0; i < 8; i++) {
-            for (let j = i * 16; j < i * 16 + 8; j++) { 
+            for (let j = i * 16; j < i * 16 + 8; j++) {
                 const dataID = j;
                 const dataIndex = this.state.id2index[dataID];
                 const playlistIndex = this.state.id2index[dataID];
@@ -439,11 +427,11 @@ class AppMIDI extends Component {
                         </Drag>
                     </div>
 
-                    {this.state.midiMode  
+                    {this.state.midiMode
                         ?
                         <div>
                             <Drag>
-                                {this.state.showMIDI && <MIDIDropZone handleFileDropFN={this.addFileMIDI} handleURLDropFN={this.addURLMIDI} data={this.state.data} selectedIndex={this.state.selectedIndex}/>}
+                                {this.state.showMIDI && <MIDIDropZone handleFileDropFN={this.addFileMIDI} handleURLDropFN={this.addURLMIDI} data={this.state.data} selectedIndex={this.state.selectedIndex} id2index={this.state.id2index} />}
                                 <HandleButton />
                                 <button className="action" onClick={this.toggleMIDIArea}>{this.state.showMIDI ? 'HIDE' : 'MIDI Ctrl'}</button>
                             </Drag>

@@ -118,6 +118,10 @@ Editor.js:
 save: ctrl+s  
 download: ctrl+d  
 
+## MIDI Ctrl Mode
+![midishot](midishot.png)
+Supported controller: [MidiPlus SmartPad](https://www.amazon.com/midiplus-Smartpad-USB-MIDI-Controller/dp/B00WU6FDNG)
+
 ## Folder Structure
 ```
 .
