@@ -7,7 +7,7 @@ class SideNav extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = { xPosition: 0, width: 300, height: 100 };
+		this.state = { xPosition: -300, width: 300, height: 100 };
 	}
 
 	toggleMenu = () => {
